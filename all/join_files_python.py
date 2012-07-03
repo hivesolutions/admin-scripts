@@ -705,10 +705,12 @@ def join_files_walker(arguments, directory_name, names):
     """
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [directory_name + "/" + name for name in names
+        if not os.path.isdir(directory_name + "/" + name)]
 
     # filters the names with non valid file extensions
-    valid_complete_names_extensions = [name for name in valid_complete_names if name.split(".")[-2] == "join" and name.split(".")[-1] == "json"]
+    valid_complete_names_extensions = [name for name in valid_complete_names
+        if name.split(".")[-2] == "join" and name.split(".")[-1] == "json"]
 
     # iterates over all the valid complete names with extension filter
     for valid_complete_name_extension in valid_complete_names_extensions:
@@ -837,14 +839,12 @@ def main():
         # retrieves the configuration values
         recursive = configuration[RECURSIVE_VALUE]
 
-        # in case the recursive flag is set
-        if recursive:
-            # joins the files in recursive mode
-            join_files_recursive(path)
-        # otherwise it's a "normal" iteration
-        else:
-            # joins the files (for one file)
-            join_files(path)
+        # in case the recursive flag is set, joins the files in
+        # recursive mode (multiple files)
+        if recursive: join_files_recursive(path)
+        # otherwise it's a "normal" iteration and joins the
+        # files (for only one file)
+        else: join_files(path)
 
 if __name__ == "__main__":
     main()

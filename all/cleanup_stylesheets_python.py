@@ -819,7 +819,15 @@ def main():
             configuration_file_path = value
 
     # retrieves the configurations from the command line arguments
-    configurations = _retrieve_configurations(recursive, windows_newline, fix_extra_newlines, property_order, rules_skip, file_extensions, configuration_file_path)
+    configurations = _retrieve_configurations(
+        recursive,
+        windows_newline,
+        fix_extra_newlines,
+        property_order,
+        rules_skip,
+        file_extensions,
+        configuration_file_path
+    )
 
     # iterates over all the configurations, executing them
     for configuration in configurations:
@@ -831,14 +839,27 @@ def main():
         rules_skip = configuration[RULES_SKIP_VALUE]
         file_extensions = configuration[FILE_EXTENSIONS_VALUE]
 
-        # in case the recursive flag is set
+        # in case the recursive flag is set, removes the trailing
+        # spaces in recursive mode
         if recursive:
-            # removes the trailing spaces in recursive mode
-            cleanup_stylesheets_recursive(path, windows_newline, fix_extra_newlines, property_order, rules_skip, file_extensions)
-        # otherwise it's a "normal" iteration
+            cleanup_stylesheets_recursive(
+                path,
+                windows_newline,
+                fix_extra_newlines,
+                property_order,
+                rules_skip,
+                file_extensions
+            )
+        # otherwise it's a "normal" iteration, removes the trailing
+        # spaces (for only one file)
         else:
-            # removes the trailing spaces (for one file)
-            cleanup_stylesheets(path, windows_newline, fix_extra_newlines, property_order, rules_skip)
+            cleanup_stylesheets(
+                path,
+                windows_newline,
+                fix_extra_newlines,
+                property_order,
+                rules_skip
+            )
 
 if __name__ == "__main__":
     main()

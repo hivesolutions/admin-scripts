@@ -242,18 +242,27 @@ def convert_encoding_walker(arguments, directory_name, names):
     source_encoding, target_encoding, windows_newline, replacements_list, file_extensions = arguments
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [directory_name + "/" + name
+        for name in names if not os.path.isdir(directory_name + "/" + name)]
 
     # filters the names with non valid file extensions
-    valid_complete_names_extensions = [name for name in valid_complete_names if file_extensions == None or name.split(".")[-1] in file_extensions]
+    valid_complete_names_extensions = [name for name in valid_complete_names
+        if file_extensions == None or name.split(".")[-1] in file_extensions]
 
     # iterates over all the valid complete names with extension filter
     for valid_complete_name_extension in valid_complete_names_extensions:
         # print a message
-        print "Convert encoding in file: %s (%s to %s)" % (valid_complete_name_extension, source_encoding, target_encoding)
+        print "Convert encoding in file: %s (%s to %s)" %\
+            (valid_complete_name_extension, source_encoding, target_encoding)
 
         # converts the encoding for the (path) name
-        convert_encoding(valid_complete_name_extension, source_encoding, target_encoding, windows_newline, replacements_list)
+        convert_encoding(
+            valid_complete_name_extension,
+            source_encoding,
+            target_encoding,
+            windows_newline,
+            replacements_list
+        )
 
 def convert_encoding_recursive(directory_path, source_encoding, target_encoding, windows_newline, replacements_list = None, file_extensions = None):
     """
@@ -275,7 +284,11 @@ def convert_encoding_recursive(directory_path, source_encoding, target_encoding,
     @param file_extensions: The list of file extensions to be used.
     """
 
-    os.path.walk(directory_path, convert_encoding_walker, (source_encoding, target_encoding, windows_newline, replacements_list, file_extensions))
+    os.path.walk(
+        directory_path,
+        convert_encoding_walker,
+        (source_encoding, target_encoding, windows_newline, replacements_list, file_extensions)
+    )
 
 def _retrieve_configurations(recursive, source_encoding, target_encoding, windows_newline, replacements_list, file_extensions, configuration_file_path):
     """
@@ -406,7 +419,15 @@ def main():
             configuration_file_path = value
 
     # retrieves the configurations from the command line arguments
-    configurations = _retrieve_configurations(recursive, source_encoding, target_encoding, windows_newline, replacements_list, file_extensions, configuration_file_path)
+    configurations = _retrieve_configurations(
+        recursive,
+        source_encoding,
+        target_encoding,
+        windows_newline,
+        replacements_list,
+        file_extensions,
+        configuration_file_path
+    )
 
     # iterates over all the configurations, executing them
     for configuration in configurations:
@@ -418,14 +439,27 @@ def main():
         replacements_list = configuration[REPLACEMENTS_LIST_VALUE]
         file_extensions = configuration[FILE_EXTENSIONS_VALUE]
 
-        # in case the recursive flag is set
+        # in case the recursive flag is set must converts the files
+        # using the recursive mode
         if recursive:
-            # converts the encoding in recursive mode
-            convert_encoding_recursive(path, source_encoding, target_encoding, windows_newline, replacements_list, file_extensions)
-        # otherwise it's a "normal" iteration
+            convert_encoding_recursive(
+                path,
+                source_encoding,
+                target_encoding,
+                windows_newline,
+                replacements_list,
+                file_extensions
+            )
+        # otherwise it's a "normal" iteration, must converts the
+        # encoding (for only one file)
         else:
-            # converts the encoding (for one file)
-            convert_encoding(path, source_encoding, target_encoding, windows_newline, replacements_list)
+            convert_encoding(
+                path,
+                source_encoding,
+                target_encoding,
+                windows_newline,
+                replacements_list
+            )
 
 if __name__ == "__main__":
     main()
