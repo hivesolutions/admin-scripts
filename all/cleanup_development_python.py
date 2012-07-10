@@ -139,7 +139,13 @@ def run():
         sys.stdout.flush()
 
         # opens a sub-process for script execution (and waits for the end of it)
-        process = subprocess.Popen(arguments, stdin = sys.stdin, stdout = sys.stdout, stderr = sys.stderr, shell = shell_value)
+        process = subprocess.Popen(
+            arguments,
+            stdin = sys.stdin,
+            stdout = sys.stdout,
+            stderr = sys.stderr,
+            shell = shell_value
+        )
         process.wait()
         sys.stdout.flush()
 
