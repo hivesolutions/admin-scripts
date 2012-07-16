@@ -53,10 +53,10 @@ SCRIPTS_LIST = [
 """ The list of scripts to be executed """
 
 SCRIPTS_CONFIGURATION_MAP = {
-    "cleanup_stylesheets_python.py" : "cleanup_stylesheets_development.py",
-    "convert_encoding_python.py" : "convert_encoding_development.py",
-    "join_files_python.py" : "join_files_development.py",
-    "remove_trailing_spaces_python.py" : "remove_trailing_spaces_development.py"
+    "cleanup_stylesheets.py" : "cleanup_stylesheets_development.py",
+    "convert_encoding.py" : "convert_encoding_development.py",
+    "join_files.py" : "join_files_development.py",
+    "remove_trailing_spaces.py" : "remove_trailing_spaces_development.py"
 }
 """ The map associating the script name with the name of the configuration file """
 
