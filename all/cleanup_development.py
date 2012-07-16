@@ -45,10 +45,10 @@ USAGE_MESSAGE="cleanup-development-python path [extra_argument_1, extra_argument
 """ The usage message """
 
 SCRIPTS_LIST = [
-    "cleanup_stylesheets_python.py",
-    "convert_encoding_python.py",
-    "join_files_python.py",
-    "remove_trailing_spaces_python.py"
+    "cleanup_stylesheets.py",
+    "convert_encoding.py",
+    "join_files.py",
+    "remove_trailing_spaces.py"
 ]
 """ The list of scripts to be executed """
 
