@@ -81,7 +81,8 @@ configurations = (
             "csproj",
             "sln",
             "strings",
-            "conf"
+            "conf",
+            "rst"
         )
     },
     {
