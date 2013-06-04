@@ -43,8 +43,10 @@ import paramiko
 import cStringIO
 
 user_home = os.path.expanduser("~")
-dropbox_home = os.path.join(user_home, "Dropbox", "Home")
+dropbox_base = os.path.join(user_home, "Dropbox")
+dropbox_home = os.path.join(dropbox_base, "Home")
 sys.path.append(user_home)
+sys.path.append(dropbox_base)
 sys.path.append(dropbox_home)
 servers = __import__("servers")
 
