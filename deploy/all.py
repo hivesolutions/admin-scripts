@@ -43,10 +43,12 @@ import paramiko
 import cStringIO
 
 user_home = os.path.expanduser("~")
-dropbox_home = os.path.join(user_home, "Dropbox")
+dropbox_home = os.path.join(user_home, "Dropbox", "Home")
 sys.path.append(user_home)
 sys.path.append(dropbox_home)
 servers = __import__("servers")
+
+DEBUG = False
 
 DNS_SERVERS = (
     "node1.bemisc.com",
@@ -69,27 +71,27 @@ DNS_CONFIG = {
 
 DHCP_CONFIG = {}
 
-DEBUG = True
-
 def print_host(hostname, message):
     print "[" + hostname + "] " + message
 
 def command(ssh, command):
     stdin, stdout, stderr = ssh.exec_command(command)
-    data_out = stdout.read()
-    data_err = stderr.read()
+    data_out = stdout.readlines()
+    data_err = stderr.readlines()
 
     stream_out = cStringIO.StringIO()
     stream_err = cStringIO.StringIO()
 
-    stream_out.write(data_out)
-    stream_err.write(data_err)
+    for line in data_out: stream_out.write(line + "\n")
+    for line in data_err: stderr.write(line + "\n")
 
     stream_out.seek(0)
     stream_err.seek(0)
 
-    if DEBUG: print data_out.rstrip() + "\n",
-    if DEBUG: print data_err.rstrip() + "\n",
+    if DEBUG:
+        for line in data_out: print line
+
+    for line in data_err: print line
 
     return stdin, stream_out, stream_err
 
