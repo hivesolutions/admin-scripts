@@ -120,3 +120,5 @@ def command_shell(ssh, command):
 
 def print_host(hostname, message):
     print "[" + hostname + "] " + message
+
+cmd = command

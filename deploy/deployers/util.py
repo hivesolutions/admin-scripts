@@ -40,9 +40,12 @@ __license__ = "GNU General Public License (GPL), Version 3"
 import common
 
 def uptime(ssh):
-    _stdin, stdout, _stderr = common.command(ssh, "uptime")
+    _stdin, stdout, _stderr = common.cmd(ssh, "uptime")
     data = stdout.read()
     data = data.strip()
     up, _users, _load = data.split(",", 2)
     _time, up, up_value, up_unit = up.split(" ")
     return up_value + " " + up_unit
+
+def reboot(ssh):
+    common.cmd(ssh, "reboot")

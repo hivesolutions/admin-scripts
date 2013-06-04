@@ -37,10 +37,10 @@ __copyright__ = "Copyright (c) 2008-2012 Hive Solutions Lda."
 __license__ = "GNU General Public License (GPL), Version 3"
 """ The license for the module """
 
+import scripts
 import deployers
 
-if __name__ == "__main__":
-    #main()
+def tobias():
     hostname = "172.16.0.147"
     ssh = deployers.get_ssh(hostname)
     #deployers.deploy_keys(ssh)
@@ -56,4 +56,6 @@ if __name__ == "__main__":
         dns_server_1 = "172.16.0.11",
         dns_server_2 = "172.16.0.12"
     )
-    #deploy_omni(ssh)
+
+if __name__ == "__main__":
+    scripts.run_local(scripts.reboot)

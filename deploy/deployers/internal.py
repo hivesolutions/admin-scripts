@@ -41,10 +41,10 @@ import apt
 import common
 
 def deploy_repo(ssh, path = "/opt/repo.extra"):
-    common.command(ssh, "mkdir -p " + path)
-    common.command(ssh, "cd " + path + "; wget https://raw.github.com/hivesolutions/bootstrap/master/lib/bootstrap.py")
-    common.command(ssh, "cd " + path + "; python bootstrap.py --download")
-    common.command(ssh, "cd " + path + "; python bootstrap.py --bootstrap")
+    common.cmd(ssh, "mkdir -p " + path)
+    common.cmd(ssh, "cd " + path + "; wget https://raw.github.com/hivesolutions/bootstrap/master/lib/bootstrap.py")
+    common.cmd(ssh, "cd " + path + "; python bootstrap.py --download")
+    common.cmd(ssh, "cd " + path + "; python bootstrap.py --bootstrap")
 
 def deploy_colony(ssh, path = "/opt/repo.extra"):
     deploy_repo(ssh, path = path)

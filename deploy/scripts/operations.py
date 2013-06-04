@@ -39,6 +39,14 @@ __license__ = "GNU General Public License (GPL), Version 3"
 
 import deployers
 
+LOCAL_SERVERS = (
+    "servidor1.hive",
+    "servidor2.hive",
+    "servidor3.hive",
+    "servidor4.hive",
+    "servidor5.hive"
+)
+
 DNS_SERVERS = (
     "node1.bemisc.com",
     "node2.bemisc.com",
@@ -64,29 +72,49 @@ DNS_CONFIG = {
 
 DHCP_CONFIG = {}
 
-def service_update():
+def run(method):
+    for hostname in deployers.servers.SERVERS_MAP:
+        method(hostname)
+
+def run_local(method):
+    for hostname in deployers.servers.SERVERS_MAP:
+        if not hostname in LOCAL_SERVERS: continue
+        method(hostname)
+
+def reboot(hostname):
+    ssh = deployers.get_ssh(hostname)
+    deployers.reboot(ssh)
+
+def upgrade(hostname):
+    ssh = deployers.get_ssh(hostname)
+    deployers.update_apt(ssh)
+
+def service_update(hostname):
     """
     Runs a series of typical service update operation in the
     servers range for the hive infra-structure.
 
     These operations are safe to be run in any occasion.
+
+    @type hostname: String
+    @param hostname: The name of the host to be used for this
+    operation, this should be a fully qualified name.
     """
 
-    for hostname in deployers.servers.SERVERS_MAP:
-        ssh = deployers.get_ssh(hostname)
-        uptime_s = deployers.uptime(ssh)
-        deployers.print_host(hostname, uptime_s)
+    ssh = deployers.get_ssh(hostname)
+    uptime_s = deployers.uptime(ssh)
+    deployers.print_host(hostname, uptime_s)
 
-        if hostname in DNS_SERVERS:
-            config = DNS_CONFIG.get(hostname, {})
-            deployers.update_dns(ssh, **config)
-            deployers.print_host(hostname, "updated dns")
+    if hostname in DNS_SERVERS:
+        config = DNS_CONFIG.get(hostname, {})
+        deployers.update_dns(ssh, **config)
+        deployers.print_host(hostname, "updated dns")
 
-        if hostname in DHCP_SERVERS:
-            config = DHCP_CONFIG.get(hostname, {})
-            deployers.update_dhcp(ssh, **config)
-            deployers.print_host(hostname, "updated dhcp")
+    if hostname in DHCP_SERVERS:
+        config = DHCP_CONFIG.get(hostname, {})
+        deployers.update_dhcp(ssh, **config)
+        deployers.print_host(hostname, "updated dhcp")
 
-        if hostname in APT_SERVERS:
-            deployers.update_apt(ssh)
-            deployers.print_host(hostname, "software upgraded")
+    if hostname in APT_SERVERS:
+        deployers.update_apt(ssh)
+        deployers.print_host(hostname, "software upgraded")
