@@ -43,7 +43,7 @@ if __name__ == "__main__":
     #main()
     hostname = "172.16.0.147"
     ssh = deployers.get_ssh(hostname)
-    #deploy_keys(ssh)
+    #deployers.deploy_keys(ssh)
     deployers.setup_environment(
         ssh,
         hostname = "tobias.hive",

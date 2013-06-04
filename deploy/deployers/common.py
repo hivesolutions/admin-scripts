@@ -44,11 +44,16 @@ import cStringIO
 
 DEBUG = True
 
+base_dir = os.path.dirname(__file__)
+base_dir = os.path.normpath(base_dir)
+root_dir = os.path.join(base_dir, "..")
+root_dir = os.path.normpath(root_dir)
+templates_home = os.path.join(root_dir, "templates")
+
 user_home = os.path.expanduser("~")
 dropbox_base = os.path.join(user_home, "Dropbox")
 dropbox_home = os.path.join(dropbox_base, "Home")
 ssh_home = os.path.join(dropbox_home, "ssh")
-templates_home = os.path.join(dropbox_home, "templates")
 
 if not user_home in sys.path: sys.path.append(user_home)
 if not dropbox_base in sys.path: sys.path.append(dropbox_base)

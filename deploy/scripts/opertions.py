@@ -65,6 +65,13 @@ DNS_CONFIG = {
 DHCP_CONFIG = {}
 
 def service_update():
+    """
+    Runs a series of typical service update operation in the
+    servers range for the hive infra-structure.
+
+    These operations are safe to be run in any occasion.
+    """
+
     for hostname in deployers.servers.SERVERS_MAP:
         ssh = deployers.get_ssh(hostname)
         uptime_s = deployers.uptime(ssh)
