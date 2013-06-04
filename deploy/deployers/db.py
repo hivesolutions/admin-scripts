@@ -43,10 +43,10 @@ import common
 
 def mysql_dump(ssh, database = "master", path = None, username = None, password = None):
     timestamp = int(time.time())
-    path = path or "/tmp/%s_%d.sql" % (database, timestamp)
+    path = path or "/tmp/%s_%d.sql.gz" % (database, timestamp)
     common.cmd(
         ssh,
-        "mysqldump --opt --user=%s --password=%s %s > %s" %\
+        "mysqldump --opt --user=%s --password=%s %s | gzip > %s" %\
             (username, password, database, path)
     )
     return path

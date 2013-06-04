@@ -41,21 +41,6 @@ import deployers
 
 config = deployers.config
 
-def run(method):
-    for hostname in config.ALL_SERVERS:
-        method(hostname)
-
-def run_local(method):
-    for hostname in config.LOCAL_SERVERS:
-        method(hostname)
-
-def run_machine(method):
-    for hostname in config.MACHINE_SERVERS:
-        method(hostname)
-
-def omni_backup(method):
-    deployers.mysql_dump()
-
 def reboot(hostname):
     ssh = deployers.get_ssh(hostname)
     deployers.reboot(ssh)

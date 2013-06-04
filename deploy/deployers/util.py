@@ -49,3 +49,11 @@ def uptime(ssh):
 
 def reboot(ssh):
     common.cmd(ssh, "reboot")
+
+def get(ssh, remote_path, local_path, remove = False):
+    ftp = ssh.open_sftp()
+    try:
+        ftp.get(remote_path, local_path)
+        if remove: ftp.remove(remote_path)
+    finally:
+        ftp.close()

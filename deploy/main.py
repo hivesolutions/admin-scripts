@@ -58,4 +58,6 @@ def tobias(hostname):
 
 if __name__ == "__main__":
     #tobias("172.16.0.125")
-    scripts.run_machine(scripts.upgrade)
+    #scripts.run_machine(scripts.upgrade)
+    #scripts.omni_backup("node2.startomni.com")
+    scripts.cleermob_backup("servidor5.hive")

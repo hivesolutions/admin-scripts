@@ -19,6 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Hive Administration Scripts. If not, see <http://www.gnu.org/licenses/>.
 
+__author__ = "João Magalhães <joamag@hive.pt>"
+""" The author(s) of the module """
+
 __version__ = "1.0.0"
 """ The version of the module """
 
@@ -34,12 +37,28 @@ __copyright__ = "Copyright (c) 2008-2012 Hive Solutions Lda."
 __license__ = "GNU General Public License (GPL), Version 3"
 """ The license for the module """
 
-import common
-import consulting
-import omni
-import operations
+import os
+import time
 
-from common import *
-from consulting import *
-from omni import *
-from operations import *
+import deployers
+
+config = deployers.config
+
+def omni_backup(hostname):
+    file_name = "omni_%d.sql.gz" % int(time.time())
+    omni_path = os.path.join(config.BACKUPS_PATH, "omni")
+    local_path = os.path.join(omni_path, file_name)
+    if not os.path.exists(omni_path): os.makedirs(omni_path)
+
+    ssh = deployers.get_ssh(hostname)
+    deployers.print_host(hostname, "dumping database...")
+    remote_path = deployers.mysql_dump(
+        ssh,
+        database = config.OMNI_DB_NAME,
+        username = config.OMNI_DB_USERNAME,
+        password = config.OMNI_DB_PASSWORD
+    )
+    deployers.print_host(hostname, "dumped database")
+    deployers.print_host(hostname, "transferring file...")
+    deployers.get(ssh, remote_path, local_path, remove = True)
+    deployers.print_host(hostname, "file transfered")
