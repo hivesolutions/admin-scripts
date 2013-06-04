@@ -39,9 +39,12 @@ __license__ = "GNU General Public License (GPL), Version 3"
 
 import common
 
+def restart_service(ssh, service):
+    common.command(ssh, "service " + service + " restart")
+
 def update_service(ssh, base_dir, service):
     common.command(ssh, "cd " + base_dir + "; git pull")
-    common.command(ssh, "service " + service + " restart")
+    restart_service(ssh, service)
 
 def update_dns(ssh, base_dir = "/etc/bind/dns_registers", service = "bind9"):
     update_service(ssh, base_dir = base_dir, service = service)
