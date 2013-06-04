@@ -60,20 +60,22 @@ if not dropbox_base in sys.path: sys.path.append(dropbox_base)
 if not dropbox_home in sys.path: sys.path.append(dropbox_home)
 
 servers = __import__("servers")
+config = servers
 
-def get_ssh(hostname, shell = True):
+def get_ssh(hostname):
     username, password = servers.SERVERS_MAP.get(hostname, (None, None))
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    print_host(hostname, "connecting...")
     ssh.connect(
         hostname,
         username = username,
         password = password
     )
-    if shell: ssh.invoke_shell()
+    print_host(hostname, "connected")
     return ssh
 
-def command(ssh, command, shell = True):
+def command(ssh, command, shell = False):
     if shell: return command_shell(ssh, command)
     else: return command_single(ssh, command)
 

@@ -40,10 +40,9 @@ __license__ = "GNU General Public License (GPL), Version 3"
 import scripts
 import deployers
 
-def tobias():
-    hostname = "172.16.0.147"
+def tobias(hostname):
     ssh = deployers.get_ssh(hostname)
-    #deployers.deploy_keys(ssh)
+    deployers.deploy_keys(ssh)
     deployers.setup_environment(
         ssh,
         hostname = "tobias.hive",
@@ -58,4 +57,5 @@ def tobias():
     )
 
 if __name__ == "__main__":
-    scripts.run_local(scripts.upgrade)
+    #tobias("172.16.0.125")
+    scripts.run_machine(scripts.upgrade)

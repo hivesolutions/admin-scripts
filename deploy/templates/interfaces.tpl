@@ -11,4 +11,7 @@ iface eth0 inet static
         netmask {{ net.netmask }}
         broadcast {{ net.broadcast }}
         network {{ net.network }}
+        dns-nameservers {% for dns_server in net.dns_servers %}{{ dns_server }} {% endfor %}
+        dns-search {{ net.domain }}
+        dns-domain {{ net.domain }}
         gateway {{ net.gateway }}

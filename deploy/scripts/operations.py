@@ -39,51 +39,22 @@ __license__ = "GNU General Public License (GPL), Version 3"
 
 import deployers
 
-LOCAL_SERVERS = (
-    "servidor1.hive",
-    "servidor2.hive",
-    "servidor3.hive",
-    "servidor4.hive",
-    "servidor5.hive"
-)
-
-DNS_SERVERS = (
-    "node1.bemisc.com",
-    "node2.bemisc.com",
-    "node3.bemisc.com",
-    "servidor1.hive",
-    "servidor2.hive"
-)
-
-DHCP_SERVERS = (
-    "servidor1.hive"
-)
-
-APT_SERVERS = (
-    "node1.bemisc.com",
-    "node2.bemisc.com",
-    "node3.bemisc.com",
-    "servidor1.hive",
-    "servidor2.hive"
-)
-
-DNS_CONFIG = {
-    "node1.bemisc.com" : {
-        "base_dir" : "/var/named/chroot/etc/bind/dns_registers",
-        "service" : "named"
-    }
-}
-
-DHCP_CONFIG = {}
+config = deployers.config
 
 def run(method):
-    for hostname in deployers.servers.SERVERS_MAP:
+    for hostname in config.ALL_SERVERS:
         method(hostname)
 
 def run_local(method):
-    for hostname in deployers.servers.SERVERS_MAP:
-        if not hostname in LOCAL_SERVERS: continue
+    for hostname in config.LOCAL_SERVERS:
         method(hostname)
+
+def run_machine(method):
+    for hostname in config.MACHINE_SERVERS:
+        method(hostname)
+
+def omni_backup(method):
+    deployers.mysql_dump()
 
 def reboot(hostname):
     ssh = deployers.get_ssh(hostname)
@@ -114,16 +85,15 @@ def service_update(hostname):
     uptime_s = deployers.uptime(ssh)
     deployers.print_host(hostname, uptime_s)
 
-    if hostname in DNS_SERVERS:
-        config = DNS_CONFIG.get(hostname, {})
+    if hostname in config.DNS_SERVERS:
+        config = config.DNS_CONFIG.get(hostname, {})
         deployers.update_dns(ssh, **config)
         deployers.print_host(hostname, "updated dns registers")
 
-    if hostname in DHCP_SERVERS:
-        config = DHCP_CONFIG.get(hostname, {})
+    if hostname in config.DHCP_SERVERS:
+        config = config.DHCP_CONFIG.get(hostname, {})
         deployers.update_dhcp(ssh, **config)
         deployers.print_host(hostname, "updated dhcp registers")
 
-    if hostname in APT_SERVERS:
-        deployers.update_apt(ssh)
-        deployers.print_host(hostname, "software upgraded")
+    deployers.update_apt(ssh)
+    deployers.print_host(hostname, "software upgraded")

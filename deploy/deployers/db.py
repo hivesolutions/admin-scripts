@@ -19,6 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Hive Administration Scripts. If not, see <http://www.gnu.org/licenses/>.
 
+__author__ = "João Magalhães <joamag@hive.pt>"
+""" The author(s) of the module """
+
 __version__ = "1.0.0"
 """ The version of the module """
 
@@ -34,18 +37,16 @@ __copyright__ = "Copyright (c) 2008-2012 Hive Solutions Lda."
 __license__ = "GNU General Public License (GPL), Version 3"
 """ The license for the module """
 
-import apt
-import common
-import db
-import internal
-import service
-import system
-import util
+import time
 
-from apt import *
-from common import *
-from db import *
-from internal import *
-from service import *
-from system import *
-from util import *
+import common
+
+def mysql_dump(ssh, database = "master", path = None, username = None, password = None):
+    timestamp = int(time.time())
+    path = path or "/tmp/%s_%d.sql" % (database, timestamp)
+    common.cmd(
+        ssh,
+        "mysqldump --opt --user=%s --password=%s %s > %s" %\
+            (username, password, database, path)
+    )
+    return path
