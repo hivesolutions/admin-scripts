@@ -42,7 +42,7 @@ import sys
 import paramiko
 import cStringIO
 
-DEBUG = True
+DEBUG = False
 
 base_dir = os.path.dirname(__file__)
 base_dir = os.path.normpath(base_dir)

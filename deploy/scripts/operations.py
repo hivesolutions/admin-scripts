@@ -88,11 +88,15 @@ def run_local(method):
 def reboot(hostname):
     ssh = deployers.get_ssh(hostname)
     deployers.reboot(ssh)
+    deployers.print_host(hostname, "reboot order sent")
 
 def upgrade(hostname):
     ssh = deployers.get_ssh(hostname)
+    deployers.print_host(hostname, "system upgrading...")
     deployers.update_apt(ssh)
+    deployers.print_host(hostname, "system upgraded")
     deployers.reboot(ssh)
+    deployers.print_host(hostname, "reboot order sent")
 
 def service_update(hostname):
     """
@@ -113,12 +117,12 @@ def service_update(hostname):
     if hostname in DNS_SERVERS:
         config = DNS_CONFIG.get(hostname, {})
         deployers.update_dns(ssh, **config)
-        deployers.print_host(hostname, "updated dns")
+        deployers.print_host(hostname, "updated dns registers")
 
     if hostname in DHCP_SERVERS:
         config = DHCP_CONFIG.get(hostname, {})
         deployers.update_dhcp(ssh, **config)
-        deployers.print_host(hostname, "updated dhcp")
+        deployers.print_host(hostname, "updated dhcp registers")
 
     if hostname in APT_SERVERS:
         deployers.update_apt(ssh)
