@@ -64,6 +64,10 @@ DHCP_SERVERS = (
     "servidor1.hive"
 )
 
+APT_SERVERS = (
+    "servidor1.hive"
+)
+
 DNS_CONFIG = {
     "node1.bemisc.com" : {
         "base_dir" : "/var/named/chroot/etc/bind/dns_registers",
@@ -85,7 +89,7 @@ def command(ssh, command):
     stream_err = cStringIO.StringIO()
 
     for line in data_out: stream_out.write(line + "\n")
-    for line in data_err: stderr.write(line + "\n")
+    for line in data_err: stream_err.write(line + "\n")
 
     stream_out.seek(0)
     stream_err.seek(0)
@@ -115,6 +119,11 @@ def update_dns(ssh, base_dir = "/etc/bind/dns_registers", service = "bind9"):
 def update_dhcp(ssh, base_dir = "/etc/dhcp/config", service = "isc-dhcp-server"):
     update_service(ssh, base_dir = base_dir, service = service)
 
+def update_apt(ssh, upgrade = True, dist_upgrade = True):
+    command(ssh, "apt-get -y update")
+    if upgrade: command(ssh, "apt-get -y upgrade")
+    if dist_upgrade: command(ssh, "apt-get -y dist-upgrade")
+
 def main():
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -137,5 +146,9 @@ def main():
             config = DHCP_CONFIG.get(hostname, {})
             update_dhcp(ssh, **config)
             print_host(hostname, "updated dhcp")
+
+        if hostname in APT_SERVERS:
+            update_apt(ssh)
+            print_host(hostname, "software upgraded")
 
 if __name__ == "__main__": main()
