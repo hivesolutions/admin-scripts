@@ -60,7 +60,11 @@ DHCP_SERVERS = (
 )
 
 APT_SERVERS = (
-    "servidor1.hive"
+    "node1.bemisc.com",
+    "node2.bemisc.com",
+    "node3.bemisc.com",
+    "servidor1.hive",
+    "servidor2.hive"
 )
 
 DNS_CONFIG = {
@@ -88,6 +92,7 @@ def reboot(hostname):
 def upgrade(hostname):
     ssh = deployers.get_ssh(hostname)
     deployers.update_apt(ssh)
+    deployers.reboot(ssh)
 
 def service_update(hostname):
     """

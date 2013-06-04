@@ -58,4 +58,4 @@ def tobias():
     )
 
 if __name__ == "__main__":
-    scripts.run_local(scripts.reboot)
+    scripts.run_local(scripts.upgrade)
