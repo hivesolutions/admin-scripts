@@ -5,6 +5,5 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/admin_scripts/all</path>
 <path>/admin_scripts/config</path>
-<path>/admin_scripts/deploy</path>
 </pydev_pathproperty>
 </pydev_project>
