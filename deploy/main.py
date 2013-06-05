@@ -40,7 +40,7 @@ __license__ = "GNU General Public License (GPL), Version 3"
 import scripts
 import deployers
 
-def tobias(hostname):
+def start_machine(hostname):
     ssh = deployers.get_ssh(hostname)
     deployers.deploy_keys(ssh)
     deployers.setup_environment(
@@ -57,7 +57,8 @@ def tobias(hostname):
     )
 
 if __name__ == "__main__":
-    #tobias("172.16.0.125")
+    pass
+    #start_machine("172.16.0.125")
     #scripts.run_machine(scripts.upgrade)
     #scripts.omni_backup("node2.startomni.com")
-    scripts.cleermob_backup("servidor5.hive")
+    #scripts.cleermob_backup("servidor5.hive")
