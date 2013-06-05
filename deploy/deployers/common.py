@@ -40,6 +40,7 @@ __license__ = "GNU General Public License (GPL), Version 3"
 import os
 import sys
 import paramiko
+import datetime
 import cStringIO
 
 DEBUG = False
@@ -122,5 +123,15 @@ def command_shell(ssh, command):
 
 def print_host(hostname, message):
     print "[" + hostname + "] " + message
+
+def get_date_s():
+    date_time = datetime.datetime.now()
+    date_s = date_time.strftime("%Y%m%d")
+    return date_s
+
+def get_date_time_s():
+    date_time = datetime.datetime.now()
+    date_time_s = date_time.strftime("%Y%m%d%H%M")
+    return date_time_s
 
 cmd = command

@@ -38,14 +38,14 @@ __license__ = "GNU General Public License (GPL), Version 3"
 """ The license for the module """
 
 import os
-import time
 
 import deployers
 
 config = deployers.config
 
 def cleermob_backup(hostname):
-    file_name = "cleermob_%d.sql.gz" % int(time.time())
+    date_s = deployers.get_date_s()
+    file_name = "cleermob_%s.sql.gz" % date_s
     cleermob_path = os.path.join(config.BACKUPS_PATH, "cleermob")
     local_path = os.path.join(cleermob_path, file_name)
     if not os.path.exists(cleermob_path): os.makedirs(cleermob_path)

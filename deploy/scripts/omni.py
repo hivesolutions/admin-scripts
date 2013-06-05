@@ -38,14 +38,14 @@ __license__ = "GNU General Public License (GPL), Version 3"
 """ The license for the module """
 
 import os
-import time
 
 import deployers
 
 config = deployers.config
 
 def omni_backup(hostname):
-    file_name = "omni_%d.sql.gz" % int(time.time())
+    date_s = deployers.get_date_s()
+    file_name = "omni_%s.sql.gz" % date_s
     omni_path = os.path.join(config.BACKUPS_PATH, "omni")
     local_path = os.path.join(omni_path, file_name)
     if not os.path.exists(omni_path): os.makedirs(omni_path)
