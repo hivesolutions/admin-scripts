@@ -42,7 +42,7 @@ import sys
 import getopt
 import StringIO
 
-USAGE_MESSAGE="remove-trailing-spaces-python path [-r] [-t] [-n] [-u] [-e file_extension_1, file_extension_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = "remove-trailing-spaces-python path [-r] [-t] [-n] [-u] [-e file_extension_1, file_extension_2, ...] [-c configuration_file]"
 """ The usage message """
 
 SPACE_TAB = "    "
@@ -147,7 +147,7 @@ def remove_trailing_newlines(file_path, windows_newline = True):
 
     try:
         # creates a string buffer for buffering
-        string_buffer = StringIO.StringIO();
+        string_buffer = StringIO.StringIO()
 
         # reads the file lines
         file_lines = file.readlines()
