@@ -41,7 +41,7 @@ import os
 import sys
 import subprocess
 
-USAGE_MESSAGE="cleanup-development-python path [extra_argument_1, extra_argument_2, ...]"
+USAGE_MESSAGE = "cleanup-development-python path [extra_argument_1, extra_argument_2, ...]"
 """ The usage message """
 
 SCRIPTS_LIST = [
