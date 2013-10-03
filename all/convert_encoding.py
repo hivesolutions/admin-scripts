@@ -188,43 +188,45 @@ def convert_encoding(file_path, source_encoding, target_encoding, windows_newlin
     @param replacements_list: The list of replacements to perform.
     """
 
-    # normalizes the file path
+    # normalizes the file path and uses it as the path to
+    # open the reference to it (in reading mode)
     file_path_normalized = normalize_path(file_path)
-
-    # opens the file for reading
     file = open(file_path_normalized, "r")
 
     try:
-        # reads the file
-        string_value = file.read()
-
+        # reads the complete string contents from the file and
         # checks if the file already has the target encoding
+        string_value = file.read()
         has_target_encoding = has_encoding(string_value, target_encoding)
 
-        # decodes the string value from the specified source encoding
-        string_value_decoded = not has_target_encoding and string_value.decode(source_encoding) or string_value
-
-        # encodes the string value into the specified target encoding
-        string_value_encoded = not has_target_encoding and string_value_decoded.encode(target_encoding) or string_value_decoded
+        # decodes the string value from the specified source encoding, this
+        # operation may fail as the source encoding may only be a guess on
+        # the true encoding of the file, the encodes the string value again
+        # in the target encoding for the file
+        string_value_decoded = not has_target_encoding and\
+            string_value.decode(source_encoding) or string_value
+        string_value_encoded = not has_target_encoding and\
+            string_value_decoded.encode(target_encoding) or string_value_decoded
 
         # applies the replacements
-        string_value_encoded_replaced = replacements_list and apply_replacements_list(string_value_encoded, replacements_list) or string_value_encoded
+        string_value_encoded_replaced = replacements_list and\
+            apply_replacements_list(string_value_encoded, replacements_list) or\
+            string_value_encoded
 
         # applies the windows newline if specified
-        string_value_encoded_replaced = windows_newline and string_value_encoded_replaced.replace("\n", "\r\n") or string_value_encoded_replaced
+        string_value_encoded_replaced = windows_newline and\
+            string_value_encoded_replaced.replace("\n", "\r\n") or\
+            string_value_encoded_replaced
     finally:
         # closes the file for reading
         file.close()
 
-    # opens the file for writing
+    # opens the file for writing then writes the file string value
+    # with the proper string values replaced and re-encoded into the
+    # target character encoding (as expected)
     file = open(file_path_normalized, "wb")
-
-    try:
-        # writes the final string value to the file
-        file.write(string_value_encoded_replaced)
-    finally:
-        # closes the file for writing
-        file.close()
+    try: file.write(string_value_encoded_replaced)
+    finally: file.close()
 
 def convert_encoding_walker(arguments, directory_name, names):
     """
@@ -250,19 +252,30 @@ def convert_encoding_walker(arguments, directory_name, names):
         if file_extensions == None or name.split(".")[-1] in file_extensions]
 
     # iterates over all the valid complete names with extension filter
+    # ot convert the respective file into the target encoding
     for valid_complete_name_extension in valid_complete_names_extensions:
-        # print a message
+        # prints a message about the file that is not going to be converted
+        # into the proper target encoding as defined in the specification
         print "Convert encoding in file: %s (%s to %s)" %\
-            (valid_complete_name_extension, source_encoding, target_encoding)
+            (
+                 valid_complete_name_extension,
+                 source_encoding,
+                 target_encoding
+            )
 
-        # converts the encoding for the (path) name
-        convert_encoding(
-            valid_complete_name_extension,
-            source_encoding,
-            target_encoding,
-            windows_newline,
-            replacements_list
-        )
+        try:
+            # converts the encoding for the provided (path) name according to
+            # a set of defined options, for various reasons this operation may
+            # fail if such thing happens the operation is skipped
+            convert_encoding(
+                valid_complete_name_extension,
+                source_encoding,
+                target_encoding,
+                windows_newline,
+                replacements_list
+            )
+        except:
+            pass
 
 def convert_encoding_recursive(directory_path, source_encoding, target_encoding, windows_newline, replacements_list = None, file_extensions = None):
     """
