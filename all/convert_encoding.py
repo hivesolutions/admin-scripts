@@ -275,7 +275,12 @@ def convert_encoding_walker(arguments, directory_name, names):
                 replacements_list
             )
         except:
-            pass
+            print >> sys.stderr, "Failed coverting encoding in file: %s (%s to %s)" %\
+            (
+                 valid_complete_name_extension,
+                 source_encoding,
+                 target_encoding
+            )
 
 def convert_encoding_recursive(directory_path, source_encoding, target_encoding, windows_newline, replacements_list = None, file_extensions = None):
     """
