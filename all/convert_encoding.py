@@ -275,7 +275,7 @@ def convert_encoding_walker(arguments, directory_name, names):
                 replacements_list
             )
         except:
-            print >> sys.stderr, "Failed coverting encoding in file: %s (%s to %s)" %\
+            print >> sys.stderr, "WARNING: failed converting encoding in file: %s (%s to %s)" %\
             (
                  valid_complete_name_extension,
                  source_encoding,

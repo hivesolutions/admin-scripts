@@ -165,7 +165,8 @@ def get_property_index(property_line, property_order, line_number):
     # in case the property is not in the order
     if not property_name in property_order:
         # warns about the missing property name
-        print "WARNING: order for property %s not defined at line %d" % (property_name, line_number)
+        print >> sys.stderr, "WARNING: order for property %s not defined at line %d" %\
+            (property_name, line_number)
 
         # uses the greatest index
         return len(property_order)
@@ -285,7 +286,7 @@ def process_property_line(property_line, line_number):
     # in case the property line is empty, when stripped
     if not property_line.strip():
         # print a warning
-        print "WARNING: empty stylesheet property at line %s" % line_number
+        print >> sys.stderr, "WARNING: empty stylesheet property at line %s" % line_number
 
         # returns immediately
         return property_line
@@ -335,7 +336,7 @@ def process_color_definition(property_line, line_number):
         exception_string = unicode(exception)
 
         # prints a warning
-        print "WARNING: %s near line %d" % (exception_string, line_number)
+        print >> sys.stderr, "WARNING: %s near line %d" % (exception_string, line_number)
 
     # returns the property line
     return property_line
@@ -450,7 +451,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # in case the comment mode is already on
             if comments_started:
                 # prints a warning
-                print "WARNING: found opening comment inside open comment at line %d" % line_number
+                print >> sys.stderr, "WARNING: found opening comment inside open comment at line %d" % line_number
 
             # increments the comments started counter
             comments_started += 1
@@ -458,7 +459,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         elif COMMENT_END_TOKEN in line:
             if not comments_started:
                 # raises an error
-                print "ERROR: found closing comment without corresponding opening at line %d" % line_number
+                print >> sys.stderr, "ERROR: found closing comment without corresponding opening at line %d" % line_number
 
             # decrements the comments started counter
             comments_started -= 1
@@ -499,7 +500,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # in case the rule set does not contain any property
                 if rule_started and not rule_lines:
                     # logs a warning
-                    print "WARNING: empty stylesheet rule at line %d" % line_number
+                    print >> sys.stderr, "WARNING: empty stylesheet rule at line %d" % line_number
 
                 # updates the flag to signal the rule has ended
                 rule_started = False
@@ -558,13 +559,13 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # otherwise in case this is an extra newline
             elif not needs_newline and newlines > 1:
                 # logs a warning about this extra newline
-                print "WARNING: found extra newline at line %d" % line_number
+                print >> sys.stderr, "WARNING: found extra newline at line %d" % line_number
 
             # disables the needs newline flag
             needs_newline = False
         else:
             # warns about the statement outside a valid rule
-            print "WARNING: found statement outside rule at line %d" % line_number
+            print >> sys.stderr, "WARNING: found statement outside rule at line %d" % line_number
 
         # writes the line
         write_line(output_buffer, line, windows_newline)
