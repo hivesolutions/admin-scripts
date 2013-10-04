@@ -73,7 +73,7 @@ configurations = (
             "border-collapse",
             "border-color",
             "border-left",
-            "border-left-color"
+            "border-left-color",
             "border-left-style",
             "border-left-width",
             "border-radius",
@@ -131,7 +131,7 @@ configurations = (
             "font",
             "height",
             "hyphens",
-            "-ms-hyphens"
+            "-ms-hyphens",
             "-moz-hyphens",
             "-webkit-hyphens",
             "left",
@@ -186,6 +186,9 @@ configurations = (
             "speak-punctuation",
             "speech-rate",
             "stress",
+            "tab-size",
+            "-o-tab-size",
+            "-moz-tab-size",
             "table-layout",
             "text-align",
             "text-decoration",
