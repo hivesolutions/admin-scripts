@@ -677,7 +677,7 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
 
     # iterates over all the valid complete names with extension filter
     for valid_complete_name in valid_complete_names:
-        print "Cleaning stylesheet file: %s" % valid_complete_names
+        print "Cleaning stylesheet file: %s" % valid_complete_name
 
         # removes the cleanups the stylesheet for the (path) name
         cleanup_stylesheets(
