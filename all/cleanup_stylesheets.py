@@ -163,7 +163,7 @@ def get_property_index(property_line, property_order, line_number):
     # runs a second split operation that limits the number of splits
     # in the line to two so that no extra problems are raised and then
     # retrieves the name of the current property
-    property_line_splitted = property_line.split(":", 2)
+    property_line_splitted = property_line.split(":", 1)
     property_name, _property_value = property_line_splitted
     property_name = property_name.strip()
 
@@ -234,6 +234,7 @@ def write_lines(output_buffer, lines, windows_newline):
     """
     Writes the provided lines to the output buffer, considering the windows
     newline option.
+
     @type output_buffer: StringBuffer
     @param output_buffer: The output buffer.
     @type lines: List
@@ -250,7 +251,8 @@ def write_lines(output_buffer, lines, windows_newline):
 def write_line(output_buffer, line, windows_newline):
     """
     Writes the provided line to the output buffer, considering the windows
-    newline option.
+    newline option. This is considered a normalization operation.
+
     @type output_buffer: StringBuffer
     @param output_buffer: The output buffer.
     @type lines: List
@@ -259,19 +261,17 @@ def write_line(output_buffer, line, windows_newline):
     @param windows_newline: If the windows newline should be used.
     """
 
-    # right strips the line
+    # right strips the line so that no extra space characters
+    # are present in the line and then writes the line to the
+    # string buffer (flush operation)
     line = line.rstrip()
-
-    # writes the line to the string buffer
     output_buffer.write(line)
 
-    # in case the newline mode is of type windows
-    if windows_newline:
-        # writes the carriage return character and the new line character
-        output_buffer.write("\r\n")
-    else:
-        # writes the new line character
-        output_buffer.write("\n")
+    # in case the newline mode is of type windows writes the
+    # typical carriage return new line values otherwise writes
+    # the unix simpler value with just a newline character
+    if windows_newline: output_buffer.write("\r\n")
+    else: output_buffer.write("\n")
 
 def process_property_lines(property_lines, line_number):
     """
