@@ -443,7 +443,8 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
     # initializes the needs newline flag
     needs_newline = False
 
-    # for each of the input lines
+    # for each of the input lines it's going to run the iteration
+    # loop and match it against the proper rules
     for line in lines:
         # increments the line number
         line_number += 1
@@ -581,6 +582,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         write_line(output_buffer, line, windows_newline)
 
     # in case there is a mismatch in open and closed rules
+    # must raise an exception indicating the problem
     if not open_rule_count == 0:
         raise Exception("mismatched rules found")
 
