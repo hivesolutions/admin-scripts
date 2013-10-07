@@ -145,12 +145,13 @@ def get_property_index(property_line, property_order, line_number):
     """
 
     # splits the property name, to retrieve the property value
+    # this first splits tries to find also the number of values
+    # present in the current line
     property_line_splitted = property_line.split(":")
 
-    # in case the property line did not correctly split
-    if len(property_line_splitted) < 2:
-        # returns immediately
-        return len(property_order)
+    # in case the property line did not correctly split must
+    # returns immediately with the provided property order
+    if len(property_line_splitted) < 2: return len(property_order)
 
     # in case the length of the splitted line is greater than
     # expected print a warning message indicating the problem
@@ -158,12 +159,11 @@ def get_property_index(property_line, property_order, line_number):
         # warns about the extra values in the line and then returns
         # with the length of the property order
         print "WARNING: extra values found at line %d" % line_number
-        return len(property_order)
 
-    # unpacks the property line
+    # runs a second split operation that limits the number of splits
+    # in the line to two so that no extra problems are raised
+    property_line_splitted = property_line.split(":", 2)
     property_name, _property_value = property_line_splitted
-
-    # strips the property name of unnecessary tokens
     property_name = property_name.strip()
 
     # in case the property name is empty
