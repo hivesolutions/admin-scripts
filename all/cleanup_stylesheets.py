@@ -292,25 +292,33 @@ def process_property_lines(property_lines, line_number):
     return processed_property_lines
 
 def process_property_line(property_line, line_number):
-    # in case the property line is empty, when stripped
+    # in case the property line is empty, when stripped the property
+    # is considered to be empty (warning required) logs the message
+    # and then returns the line itself (no processing)
     if not property_line.strip():
-        # print a warning
         print "WARNING: empty stylesheet property at line %s" % line_number
-
-        # returns immediately
         return property_line
+
+    # strips the line to the right so that no newline characters
+    # exist (much simpler to manage lines without newlines)
+    property_line = property_line.rstrip()
 
     # ensures the property line is correctly indented and
     # the property name and value are correctly separated
     property_line = PROPERTY_LINE_REGEX.sub(PROPERTY_LINE_REPLACEMENT_VALUE, property_line)
 
     # ensures the property line and an ending semicolon
-    property_line = property_line.endswith(";\n") and property_line or property_line.replace("\n", ";\n")
+    # adding it to the property line in case it does not
+    # exists (for processing)
+    is_valid = property_line.endswith(";")
+    if not is_valid: property_line += ";"
 
-    # replaces the urls
+    # replaces the urls so that no double quotes are used in
+    # them and instead the value is used directly
     property_line = URL_REGEX.sub(URL_REPLACEMENT_VALUE, property_line)
 
-    # processes the color definitions
+    # processes the color definitions, so that the complete
+    # color value is used in the processing
     property_line = process_color_definition(property_line, line_number)
 
     # returns the processed property line
@@ -323,10 +331,9 @@ def process_color_definition(property_line, line_number):
     # tries to retrieve the line match group
     line_groups = line_match and line_match.groups() or None
 
-    # in case no line groups are defined
-    if not line_groups:
-        # returns immediately
-        return property_line
+    # in case no line groups are defined, returns
+    # the current property line immediately
+    if not line_groups: return property_line
 
     # unpacks the line groups
     property_name, pre_color, color, post_color = line_groups
@@ -870,9 +877,9 @@ def main():
         recursive = configuration[RECURSIVE_VALUE]
         windows_newline = configuration[WINDOWS_NEWLINE_VALUE]
         fix_extra_newlines = configuration[FIX_EXTRA_NEWLINES_VALUE]
-        property_order = configuration[PROPERTY_ORDER_VALUE]
-        rules_skip = configuration[RULES_SKIP_VALUE]
-        file_extensions = configuration[FILE_EXTENSIONS_VALUE]
+        property_order = configuration[PROPERTY_ORDER_VALUE] or ()
+        rules_skip = configuration[RULES_SKIP_VALUE] or ()
+        file_extensions = configuration[FILE_EXTENSIONS_VALUE] or ()
 
         # in case the recursive flag is set, removes the trailing
         # spaces in recursive mode
