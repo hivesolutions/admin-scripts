@@ -481,7 +481,7 @@ def main():
         tab_to_spaces = configuration[TAB_TO_SPACES_VALUE]
         trailing_newlines = configuration[TRAILING_NEWLINES_VALUE]
         windows_newline = configuration[WINDOWS_NEWLINE_VALUE]
-        file_extensions = configuration[FILE_EXTENSIONS_VALUE]
+        file_extensions = configuration[FILE_EXTENSIONS_VALUE] or ()
 
         # in case the recursive flag is set
         if recursive:

@@ -456,8 +456,8 @@ def main():
         source_encoding = configuration[SOURCE_ENCODING_VALUE]
         target_encoding = configuration[TARGET_ENCODING_VALUE]
         windows_newline = configuration[WINDOWS_NEWLINE_VALUE]
-        replacements_list = configuration[REPLACEMENTS_LIST_VALUE]
-        file_extensions = configuration[FILE_EXTENSIONS_VALUE]
+        replacements_list = configuration[REPLACEMENTS_LIST_VALUE] or ()
+        file_extensions = configuration[FILE_EXTENSIONS_VALUE] or ()
 
         # in case the recursive flag is set must converts the files
         # using the recursive mode
