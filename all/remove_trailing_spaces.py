@@ -465,7 +465,14 @@ def main():
             configuration_file_path = value
 
     # retrieves the configurations from the command line arguments
-    configurations = _retrieve_configurations(recursive, tab_to_spaces, trailing_newlines, windows_newline, file_extensions, configuration_file_path)
+    configurations = _retrieve_configurations(
+        recursive,
+        tab_to_spaces,
+        trailing_newlines,
+        windows_newline,
+        file_extensions,
+        configuration_file_path
+    )
 
     # iterates over all the configurations, executing them
     for configuration in configurations:
