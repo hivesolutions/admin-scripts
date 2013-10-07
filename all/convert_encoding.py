@@ -161,12 +161,12 @@ def apply_replacements_list(string_buffer, replacements_list):
     @param replacements_list: The list of replacements to apply.
     """
 
-    # for each replacement to be performed
+    # iterates over all the replacements to be performed and applies
+    # each of them to the provided string "buffer"
     for replacement in replacements_list:
-        # unpacks the replacement tuple
+        # unpacks the replacement tuple so that the source and the target
+        # strings may be retrieved, and then performs the replacements
         replacement_from, replacement_to = replacement
-
-        # performs the replacements
         string_buffer = string_buffer.replace(replacement_from, replacement_to)
 
     # returns the replaced string buffer
@@ -208,7 +208,8 @@ def convert_encoding(file_path, source_encoding, target_encoding, windows_newlin
         string_value_encoded = not has_target_encoding and\
             string_value_decoded.encode(target_encoding) or string_value_decoded
 
-        # applies the replacements
+        # applies the replacements if they're requested to be applied
+        # so that the final string value is "normalized"
         string_value_encoded_replaced = replacements_list and\
             apply_replacements_list(string_value_encoded, replacements_list) or\
             string_value_encoded
