@@ -214,7 +214,8 @@ def convert_encoding(file_path, source_encoding, target_encoding, windows_newlin
             apply_replacements_list(string_value_encoded, replacements_list) or\
             string_value_encoded
 
-        # applies the windows newline if specified
+        # applies the windows newline if specified, it does so by replacing
+        # the simple newline character with the windows specific newline
         string_value_encoded_replaced = windows_newline and\
             string_value_encoded_replaced.replace("\n", "\r\n") or\
             string_value_encoded_replaced
