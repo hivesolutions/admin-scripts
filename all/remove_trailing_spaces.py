@@ -291,26 +291,32 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
     tab_to_spaces, trailing_newlines, windows_newline, file_extensions = arguments
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [
+        directory_name + "/" + name for name in names\
+        if not os.path.isdir(directory_name + "/" + name)
+    ]
 
     # filters the names with non valid file extensions
-    valid_complete_names_extensions = [name for name in valid_complete_names if file_extensions == None or name.split(".")[-1] in file_extensions]
+    valid_complete_names = [
+        os.path.normpath(name) for name in valid_complete_names\
+        if file_extensions == None or name.split(".")[-1] in file_extensions
+    ]
 
     # iterates over all the valid complete names with extension filter
-    for valid_complete_name_extension in valid_complete_names_extensions:
+    for valid_complete_name in valid_complete_names:
         # print a message
-        print "Removing trail in file: %s" % valid_complete_name_extension
+        print "Removing trail in file: %s" % valid_complete_name
 
         # removes the trailing spaces for the (path) name
-        remove_trailing_spaces(valid_complete_name_extension, tab_to_spaces, windows_newline)
+        remove_trailing_spaces(valid_complete_name, tab_to_spaces, windows_newline)
 
         # in case the trailing newlines flag is active
         if trailing_newlines:
             # prints a message
-            print "Removing trail newlines in file: %s" % (valid_complete_name_extension,)
+            print "Removing trail newlines in file: %s" % (valid_complete_name,)
 
             # removes the trailing newlines for the(path) name
-            remove_trailing_newlines(valid_complete_name_extension, windows_newline)
+            remove_trailing_newlines(valid_complete_name, windows_newline)
 
 def remove_trailing_spaces_recursive(directory_path, tab_to_spaces, trailing_newlines, windows_newline, file_extensions = None):
     """

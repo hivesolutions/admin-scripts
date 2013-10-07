@@ -42,6 +42,7 @@ import re
 import sys
 import getopt
 import StringIO
+import traceback
 
 USAGE_MESSAGE="cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-c configuration_file]"
 """ The usage message """
@@ -151,6 +152,14 @@ def get_property_index(property_line, property_order, line_number):
         # returns immediately
         return len(property_order)
 
+    # in case the length of the splitted line is greater than
+    # expected print a warning message indicating the problem
+    if len(property_line_splitted) > 2:
+        # warns about the extra values in the line and then returns
+        # with the length of the property order
+        print "WARNING: extra values found at line %d" % line_number
+        return len(property_order)
+
     # unpacks the property line
     property_name, _property_value = property_line_splitted
 
@@ -165,7 +174,7 @@ def get_property_index(property_line, property_order, line_number):
     # in case the property is not in the order
     if not property_name in property_order:
         # warns about the missing property name
-        print >> sys.stderr, "WARNING: order for property %s not defined at line %d" %\
+        print "WARNING: order for property %s not defined at line %d" %\
             (property_name, line_number)
 
         # uses the greatest index
@@ -286,7 +295,7 @@ def process_property_line(property_line, line_number):
     # in case the property line is empty, when stripped
     if not property_line.strip():
         # print a warning
-        print >> sys.stderr, "WARNING: empty stylesheet property at line %s" % line_number
+        print "WARNING: empty stylesheet property at line %s" % line_number
 
         # returns immediately
         return property_line
@@ -336,7 +345,7 @@ def process_color_definition(property_line, line_number):
         exception_string = unicode(exception)
 
         # prints a warning
-        print >> sys.stderr, "WARNING: %s near line %d" % (exception_string, line_number)
+        print "WARNING: %s near line %d" % (exception_string, line_number)
 
     # returns the property line
     return property_line
@@ -451,7 +460,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # in case the comment mode is already on
             if comments_started:
                 # prints a warning
-                print >> sys.stderr, "WARNING: found opening comment inside open comment at line %d" % line_number
+                print "WARNING: found opening comment inside open comment at line %d" % line_number
 
             # increments the comments started counter
             comments_started += 1
@@ -459,7 +468,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         elif COMMENT_END_TOKEN in line:
             if not comments_started:
                 # raises an error
-                print >> sys.stderr, "ERROR: found closing comment without corresponding opening at line %d" % line_number
+                print "ERROR: found closing comment without corresponding opening at line %d" % line_number
 
             # decrements the comments started counter
             comments_started -= 1
@@ -500,7 +509,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # in case the rule set does not contain any property
                 if rule_started and not rule_lines:
                     # logs a warning
-                    print >> sys.stderr, "WARNING: empty stylesheet rule at line %d" % line_number
+                    print "WARNING: empty stylesheet rule at line %d" % line_number
 
                 # updates the flag to signal the rule has ended
                 rule_started = False
@@ -559,13 +568,13 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # otherwise in case this is an extra newline
             elif not needs_newline and newlines > 1:
                 # logs a warning about this extra newline
-                print >> sys.stderr, "WARNING: found extra newline at line %d" % line_number
+                print "WARNING: found extra newline at line %d" % line_number
 
             # disables the needs newline flag
             needs_newline = False
         else:
             # warns about the statement outside a valid rule
-            print >> sys.stderr, "WARNING: found statement outside rule at line %d" % line_number
+            print "WARNING: found statement outside rule at line %d" % line_number
 
         # writes the line
         write_line(output_buffer, line, windows_newline)
@@ -615,11 +624,12 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
         # retrieves the string value
         string_value = string_buffer.getvalue()
     except Exception, exception:
-        # retrieves the exception string
+        # retrieves the exception string and uses it in the log
+        # message to be printed to the standard output, then logs
+        # the complete traceback messages to the same output
         exception_string = unicode(exception)
-
-        # logs the exception
         print "ERROR: %s. Skipping file %s" % (exception_string, file_path_normalized)
+        traceback.print_exc(file = sys.stdout)
 
         # skips writing to the file
         return
@@ -654,18 +664,29 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
     windows_newline, fix_extra_newlines, property_order, rules_skip, file_extensions = arguments
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [
+        directory_name + "/" + name for name in names\
+        if not os.path.isdir(directory_name + "/" + name)
+    ]
 
-    # filters the names with non valid file extensions
-    valid_complete_names_extensions = [name for name in valid_complete_names if file_extensions == None or name.split(".")[-1] in file_extensions]
+    # filters the names with non valid file extensions so that
+    valid_complete_names = [
+        os.path.normpath(name) for name in valid_complete_names\
+        if file_extensions == None or name.split(".")[-1] in file_extensions
+    ]
 
     # iterates over all the valid complete names with extension filter
-    for valid_complete_name_extension in valid_complete_names_extensions:
-        # print a message
-        print "Cleaning stylesheet file: %s" % valid_complete_name_extension
+    for valid_complete_name in valid_complete_names:
+        print "Cleaning stylesheet file: %s" % valid_complete_names
 
         # removes the cleanups the stylesheet for the (path) name
-        cleanup_stylesheets(valid_complete_name_extension, windows_newline, fix_extra_newlines, property_order, rules_skip)
+        cleanup_stylesheets(
+            valid_complete_name,
+            windows_newline,
+            fix_extra_newlines,
+            property_order,
+            rules_skip
+        )
 
 def cleanup_stylesheets_recursive(directory_path, windows_newline, fix_extra_newlines, property_order = [], rules_skip = [], file_extensions = None):
     """

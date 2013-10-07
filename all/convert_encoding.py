@@ -248,17 +248,17 @@ def convert_encoding_walker(arguments, directory_name, names):
         for name in names if not os.path.isdir(directory_name + "/" + name)]
 
     # filters the names with non valid file extensions
-    valid_complete_names_extensions = [name for name in valid_complete_names
+    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names
         if file_extensions == None or name.split(".")[-1] in file_extensions]
 
     # iterates over all the valid complete names with extension filter
     # ot convert the respective file into the target encoding
-    for valid_complete_name_extension in valid_complete_names_extensions:
+    for valid_complete_name in valid_complete_names:
         # prints a message about the file that is not going to be converted
         # into the proper target encoding as defined in the specification
         print "Convert encoding in file: %s (%s to %s)" %\
             (
-                 valid_complete_name_extension,
+                 valid_complete_name,
                  source_encoding,
                  target_encoding
             )
@@ -268,7 +268,7 @@ def convert_encoding_walker(arguments, directory_name, names):
             # a set of defined options, for various reasons this operation may
             # fail if such thing happens the operation is skipped
             convert_encoding(
-                valid_complete_name_extension,
+                valid_complete_name,
                 source_encoding,
                 target_encoding,
                 windows_newline,
@@ -277,7 +277,7 @@ def convert_encoding_walker(arguments, directory_name, names):
         except:
             print >> sys.stderr, "WARNING: failed converting encoding in file: %s (%s to %s)" %\
             (
-                 valid_complete_name_extension,
+                 valid_complete_name,
                  source_encoding,
                  target_encoding
             )
