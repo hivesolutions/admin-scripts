@@ -197,7 +197,7 @@ def convert_encoding(file_path, source_encoding, target_encoding, windows_newlin
         # reads the complete string contents from the file and
         # checks if the file already has the target encoding
         string_value = file.read()
-        string_value = string_value.replace("\r\n", "\n") 
+        string_value = string_value.replace("\r\n", "\n")
         has_target_encoding = has_encoding(string_value, target_encoding)
 
         # decodes the string value from the specified source encoding, this
