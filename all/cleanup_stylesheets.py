@@ -576,7 +576,8 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # warns about the statement outside a valid rule
             print "WARNING: found statement outside rule at line %d" % line_number
 
-        # writes the line
+        # writes the line to the output buffer taking into
+        # account the windows newline control flag
         write_line(output_buffer, line, windows_newline)
 
     # in case there is a mismatch in open and closed rules
@@ -611,17 +612,27 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
     @param rules_skip: The list of specific rules to skip.
     """
 
-    # opens the file for reading
+    # opens the file for reading in text mode so that the
+    # lines are read in normalized mode
     file = open(file_path_normalized, "r")
 
     try:
-        # creates a string buffer for buffering
+        # creates a string buffer for the output buffer that
+        # is going to be used as an in memory file (faster)
         string_buffer = StringIO.StringIO();
 
-        # applies the property cleaning
-        string_buffer = cleanup_properties(file, windows_newline, fix_extra_newlines, property_order, rules_skip)
+        # applies the property cleaning, this should run the
+        # complete set of rules and clean the file
+        string_buffer = cleanup_properties(
+            file,
+            windows_newline,
+            fix_extra_newlines,
+            property_order,
+            rules_skip
+        )
 
-        # retrieves the string value
+        # retrieves the string value from the output
+        # buffer to be written to the file
         string_value = string_buffer.getvalue()
     except Exception, exception:
         # retrieves the exception string and uses it in the log
