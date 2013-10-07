@@ -161,15 +161,15 @@ def get_property_index(property_line, property_order, line_number):
         print "WARNING: extra values found at line %d" % line_number
 
     # runs a second split operation that limits the number of splits
-    # in the line to two so that no extra problems are raised
+    # in the line to two so that no extra problems are raised and then
+    # retrieves the name of the current property
     property_line_splitted = property_line.split(":", 2)
     property_name, _property_value = property_line_splitted
     property_name = property_name.strip()
 
-    # in case the property name is empty
-    if not property_name:
-        # raises an exception
-        raise Exception("property name is empty")
+    # in case the property name is empty, raises an exception indicating
+    # the problem to be handled at the top layers
+    if not property_name: raise Exception("property name is empty")
 
     # in case the property is not in the order
     if not property_name in property_order:
