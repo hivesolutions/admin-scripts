@@ -82,7 +82,8 @@ configurations = (
             "sln",
             "strings",
             "conf",
-            "rst"
+            "rst",
+            "liquid"
         )
     },
     {

@@ -77,7 +77,8 @@ configurations = (
             "csproj",
             "sln",
             "strings",
-            "conf"
+            "conf",
+            "luquid"
         )
     },
     {
