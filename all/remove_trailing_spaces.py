@@ -250,13 +250,10 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
             # writes the stripped line to the string buffer
             string_buffer.write(line_stripped)
 
-            # in case the newline mode is of type windows
-            if windows_newline:
-                # writes the carriage return character and the new line character
-                string_buffer.write("\r\n")
-            else:
-                # writes the new line character
-                string_buffer.write("\n")
+            # writes the proper line ending sequence taking into
+            # account if the windows newline should be used or not
+            if windows_newline: string_buffer.write("\r\n")
+            else: string_buffer.write("\n")
     finally:
         # closes the file for reading
         file.close()
