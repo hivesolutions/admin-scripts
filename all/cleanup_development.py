@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2012 Hive Solutions Lda.
+# Copyright (c) 2008-2014 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -31,7 +31,7 @@ __revision__ = "$LastChangedRevision$"
 __date__ = "$LastChangedDate$"
 """ The last change date of the module """
 
-__copyright__ = "Copyright (c) 2008-2012 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2014 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "GNU General Public License (GPL), Version 3"
@@ -117,7 +117,10 @@ def run():
 
         # creates both the script and the configuration paths
         script_path = os.path.join(directory_path, script)
-        configuration_path = os.path.join(directory_path, CONFIGURATION_RELATIVE_PATH + "/" + script_configuration_file_name)
+        configuration_path = os.path.join(
+            directory_path,
+            os.path.join(CONFIGURATION_RELATIVE_PATH, script_configuration_file_name)
+        )
 
         # resolves both paths as absolute
         script_path = os.path.abspath(script_path)
