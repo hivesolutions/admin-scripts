@@ -78,7 +78,8 @@ configurations = (
             "sln",
             "strings",
             "conf",
-            "luquid"
+            "luquid",
+            "go"
         )
     },
     {

@@ -83,7 +83,8 @@ configurations = (
             "strings",
             "conf",
             "rst",
-            "liquid"
+            "liquid",
+            "go"
         )
     },
     {
