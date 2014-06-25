@@ -80,7 +80,8 @@ configurations = (
             "conf",
             "luquid",
             "go"
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     },
     {
         "recursive" : True,
@@ -95,7 +96,8 @@ configurations = (
         ),
         "file_extensions" : (
             "py",
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     },
     {
         "recursive" : True,
@@ -110,7 +112,8 @@ configurations = (
         ),
         "file_extensions" : (
             "rb",
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     },
     {
         "recursive" : True,
@@ -125,7 +128,8 @@ configurations = (
         ),
         "file_extensions" : (
             "css",
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     },
     {
         "recursive" : True,
@@ -140,7 +144,8 @@ configurations = (
         ),
         "file_extensions" : (
             "prefs",
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     },
     {
         "recursive" : True,
@@ -158,6 +163,7 @@ configurations = (
             "drg",
             "am",
             "m4"
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     }
 )

@@ -62,24 +62,6 @@ WINDOWS_PLATFORMS_VALUE = (
 )
 """ The windows platform value """
 
-RECURSIVE_VALUE = "recursive"
-""" The recursive value """
-
-SOURCE_ENCODING_VALUE = "source_encoding"
-""" The source encoding value """
-
-TARGET_ENCODING_VALUE = "target_encoding"
-""" The target encoding value """
-
-WINDOWS_NEWLINE_VALUE = "windows_newline"
-""" The windows newline value """
-
-REPLACEMENTS_LIST_VALUE = "replacements_list"
-""" The replacements list value """
-
-FILE_EXTENSIONS_VALUE = "file_extensions"
-""" The file extensions value """
-
 def normalize_path(path):
     """
     Normalizes the given path, using the characteristics
@@ -244,7 +226,14 @@ def convert_encoding_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    source_encoding, target_encoding, windows_newline, replacements_list, file_extensions = arguments
+    source_encoding, target_encoding, windows_newline,\
+    replacements_list, file_extensions, file_exclusion = arguments
+
+    # removes the complete set of names that are meant to be excluded from the
+    # current set names to be visit (avoid visiting them)
+    for exclusion in file_exclusion:
+        if not exclusion in names: continue
+        names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
     valid_complete_names = [directory_name + "/" + name
@@ -285,7 +274,15 @@ def convert_encoding_walker(arguments, directory_name, names):
                  target_encoding
             )
 
-def convert_encoding_recursive(directory_path, source_encoding, target_encoding, windows_newline, replacements_list = None, file_extensions = None):
+def convert_encoding_recursive(
+    directory_path,
+    source_encoding,
+    target_encoding,
+    windows_newline,
+    replacements_list = None,
+    file_extensions = None,
+    file_exclusion = None
+):
     """
     Converts the file encoding in recursive mode.
     All the options are arguments to be passed to the
@@ -303,15 +300,33 @@ def convert_encoding_recursive(directory_path, source_encoding, target_encoding,
     @param replacements_list: The list of replacements to perform.
     @type file_extensions: List
     @param file_extensions: The list of file extensions to be used.
+    @type file_exclusion: List
+    @param file_exclusion: The list of file exclusion to be used.
     """
 
     os.path.walk(
         directory_path,
         convert_encoding_walker,
-        (source_encoding, target_encoding, windows_newline, replacements_list, file_extensions)
+        (
+            source_encoding,
+            target_encoding,
+            windows_newline,
+            replacements_list,
+            file_extensions,
+            file_exclusion
+        )
     )
 
-def _retrieve_configurations(recursive, source_encoding, target_encoding, windows_newline, replacements_list, file_extensions, configuration_file_path):
+def _retrieve_configurations(
+    recursive,
+    source_encoding,
+    target_encoding,
+    windows_newline,
+    replacements_list,
+    file_extensions,
+    file_exclusion,
+    configuration_file_path
+):
     """
     Retrieves the configuration maps for the given arguments.
 
@@ -327,6 +342,8 @@ def _retrieve_configurations(recursive, source_encoding, target_encoding, window
     @param replacements_list: The list of replacements to perform.
     @type file_extensions: List
     @param file_extensions: The list of file extensions to be used.
+    @type file_exclusion: List
+    @param file_exclusion: The list of file exclusion to be used.
     @type configuration_file_path: String
     @param configuration_file_path: The path to the configuration file.
     """
@@ -368,11 +385,12 @@ def _retrieve_configurations(recursive, source_encoding, target_encoding, window
         base_configuration = {}
 
         # sets the base configuration map attributes
-        base_configuration[RECURSIVE_VALUE] = recursive
-        base_configuration[SOURCE_ENCODING_VALUE] = source_encoding
-        base_configuration[TARGET_ENCODING_VALUE] = target_encoding
-        base_configuration[REPLACEMENTS_LIST_VALUE] = replacements_list
-        base_configuration[FILE_EXTENSIONS_VALUE] = file_extensions
+        base_configuration["recursive"] = recursive
+        base_configuration["source_encoding"] = source_encoding
+        base_configuration["target_encoding"] = target_encoding
+        base_configuration["replacements_list"] = replacements_list
+        base_configuration["file_extensions"] = file_extensions
+        base_configuration["file_exclusion"] = file_exclusion
 
         # creates the configurations tuple with the base configurations
         configurations = (
@@ -407,6 +425,7 @@ def main():
     windows_newline = None
     replacements_list = None
     file_extensions = None
+    file_exclusion = None
     configuration_file_path = None
 
     try:
@@ -436,6 +455,8 @@ def main():
             replacements_list = [value.strip() for value in value.split(",")]
         elif option == "-e":
             file_extensions = [value.strip() for value in value.split(",")]
+        elif option == "-w":
+            file_exclusion = [value.strip() for value in value.split(",")]
         elif option == "-c":
             configuration_file_path = value
 
@@ -447,18 +468,20 @@ def main():
         windows_newline,
         replacements_list,
         file_extensions,
+        file_exclusion,
         configuration_file_path
     )
 
     # iterates over all the configurations, executing them
     for configuration in configurations:
         # retrieves the configuration values
-        recursive = configuration[RECURSIVE_VALUE]
-        source_encoding = configuration[SOURCE_ENCODING_VALUE]
-        target_encoding = configuration[TARGET_ENCODING_VALUE]
-        windows_newline = configuration[WINDOWS_NEWLINE_VALUE]
-        replacements_list = configuration[REPLACEMENTS_LIST_VALUE] or ()
-        file_extensions = configuration[FILE_EXTENSIONS_VALUE] or ()
+        recursive = configuration["recursive"]
+        source_encoding = configuration["source_encoding"]
+        target_encoding = configuration["target_encoding"]
+        windows_newline = configuration["windows_newline"]
+        replacements_list = configuration["replacements_list"] or ()
+        file_extensions = configuration["file_extensions"] or ()
+        file_exclusion = configuration["file_exclusion"] or ()
 
         # in case the recursive flag is set must converts the files
         # using the recursive mode
@@ -469,7 +492,8 @@ def main():
                 target_encoding,
                 windows_newline,
                 replacements_list,
-                file_extensions
+                file_extensions,
+                file_exclusion
             )
         # otherwise it's a "normal" iteration, must converts the
         # encoding (for only one file)
