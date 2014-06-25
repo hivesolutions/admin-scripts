@@ -42,7 +42,7 @@ import sys
 import getopt
 import StringIO
 
-USAGE_MESSAGE = "remove-trailing-spaces-python path [-r] [-t] [-n] [-u] [-e file_extension_1, file_extension_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = "remove-trailing-spaces-python path [-r] [-t] [-n] [-u] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
 SPACE_TAB = "    "
@@ -65,21 +65,6 @@ WINDOWS_PLATFORMS_VALUE = (
     DOS_PLATFORM_VALUE
 )
 """ The windows platform value """
-
-RECURSIVE_VALUE = "recursive"
-""" The recursive value """
-
-TAB_TO_SPACES_VALUE = "tab_to_spaces"
-""" The tab to spaces value """
-
-TRAILING_NEWLINES_VALUE = "trailing_newlines"
-""" The trailing newlines value """
-
-WINDOWS_NEWLINE_VALUE = "windows_newline"
-""" The windows newline value """
-
-FILE_EXTENSIONS_VALUE = "file_extensions"
-""" The file extensions value """
 
 def normalize_path(path):
     """
@@ -285,7 +270,14 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    tab_to_spaces, trailing_newlines, windows_newline, file_extensions = arguments
+    tab_to_spaces, trailing_newlines, windows_newline,\
+    file_extensions, file_exclusion = arguments
+
+    # removes the complete set of names that are meant to be excluded from the
+    # current set names to be visit (avoid visiting them)
+    for exclusion in file_exclusion:
+        if not exclusion in names: continue
+        names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
     valid_complete_names = [
@@ -315,7 +307,14 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
             # removes the trailing newlines for the(path) name
             remove_trailing_newlines(valid_complete_name, windows_newline)
 
-def remove_trailing_spaces_recursive(directory_path, tab_to_spaces, trailing_newlines, windows_newline, file_extensions = None):
+def remove_trailing_spaces_recursive(
+    directory_path,
+    tab_to_spaces,
+    trailing_newlines,
+    windows_newline,
+    file_extensions = None,
+    file_exclusion = None
+):
     """
     Removes the trailing spaces in recursive mode.
     All the options are arguments to be passed to the
@@ -332,11 +331,31 @@ def remove_trailing_spaces_recursive(directory_path, tab_to_spaces, trailing_new
     @param windows_newline: If the windows newline should be used.
     @type file_extensions: List
     @param file_extensions: The list of file extensions to be used.
+    @type file_exclusion: List
+    @param file_exclusion: The list of file exclusion to be used.
     """
 
-    os.path.walk(directory_path, remove_trailing_spaces_walker, (tab_to_spaces, trailing_newlines, windows_newline, file_extensions))
+    os.path.walk(
+        directory_path,
+        remove_trailing_spaces_walker,
+        (
+            tab_to_spaces,
+            trailing_newlines,
+            windows_newline,
+            file_extensions,
+            file_exclusion
+        )
+    )
 
-def _retrieve_configurations(recursive, tab_to_spaces, trailing_newlines, windows_newline, file_extensions, configuration_file_path):
+def _retrieve_configurations(
+    recursive,
+    tab_to_spaces,
+    trailing_newlines,
+    windows_newline,
+    file_extensions,
+    file_exclusion,
+    configuration_file_path
+):
     """
     Retrieves the configuration maps for the given arguments.
 
@@ -351,6 +370,8 @@ def _retrieve_configurations(recursive, tab_to_spaces, trailing_newlines, window
     @param windows_newline: If the windows newline should be used.
     @type file_extensions: List
     @param file_extensions: The list of file extensions to be used.
+    @type file_exclusion: List
+    @param file_exclusion: The list of file exclusion to be used.
     @type configuration_file_path: String
     @param configuration_file_path: The path to the configuration file.
     """
@@ -392,11 +413,12 @@ def _retrieve_configurations(recursive, tab_to_spaces, trailing_newlines, window
         base_configuration = {}
 
         # sets the base configuration map attributes
-        base_configuration[RECURSIVE_VALUE] = recursive
-        base_configuration[TAB_TO_SPACES_VALUE] = tab_to_spaces
-        base_configuration[TRAILING_NEWLINES_VALUE] = trailing_newlines
-        base_configuration[WINDOWS_NEWLINE_VALUE] = windows_newline
-        base_configuration[FILE_EXTENSIONS_VALUE] = file_extensions
+        base_configuration["recursive"] = recursive
+        base_configuration["tab_to_spaces"] = tab_to_spaces
+        base_configuration["trailing_newlines"] = trailing_newlines
+        base_configuration["windows_newline"] = windows_newline
+        base_configuration["file_extensions"] = file_extensions
+        base_configuration["file_exclusion"] = file_exclusion
 
         # creates the configurations tuple with the base configurations
         configurations = (
@@ -431,6 +453,7 @@ def main():
     trailing_newlines = False
     windows_newline = True
     file_extensions = None
+    file_exclusion = None
     configuration_file_path = None
 
     try:
@@ -458,6 +481,8 @@ def main():
             windows_newline = False
         elif option == "-e":
             file_extensions = [value.strip() for value in value.split(",")]
+        elif option == "-w":
+            file_exclusion = [value.strip() for value in value.split(",")]
         elif option == "-c":
             configuration_file_path = value
 
@@ -468,22 +493,31 @@ def main():
         trailing_newlines,
         windows_newline,
         file_extensions,
+        file_exclusion,
         configuration_file_path
     )
 
     # iterates over all the configurations, executing them
     for configuration in configurations:
         # retrieves the configuration values
-        recursive = configuration[RECURSIVE_VALUE]
-        tab_to_spaces = configuration[TAB_TO_SPACES_VALUE]
-        trailing_newlines = configuration[TRAILING_NEWLINES_VALUE]
-        windows_newline = configuration[WINDOWS_NEWLINE_VALUE]
-        file_extensions = configuration[FILE_EXTENSIONS_VALUE] or ()
+        recursive = configuration["recursive"]
+        tab_to_spaces = configuration["tab_to_spaces"]
+        trailing_newlines = configuration["trailing_newlines"]
+        windows_newline = configuration["windows_newline"]
+        file_extensions = configuration["file_extensions"] or ()
+        file_exclusion = configuration["file_exclusion"] or ()
 
         # in case the recursive flag is set
         if recursive:
             # removes the trailing spaces in recursive mode
-            remove_trailing_spaces_recursive(path, tab_to_spaces, trailing_newlines, windows_newline, file_extensions)
+            remove_trailing_spaces_recursive(
+                path,
+                tab_to_spaces,
+                trailing_newlines,
+                windows_newline,
+                file_extensions,
+                file_exclusion
+            )
         # otherwise it's a "normal" iteration
         else:
             # removes the trailing spaces (for one file)

@@ -746,10 +746,12 @@ def _retrieve_configurations(
     @param fix_extra_newlines: If the extra newlines should be fixed.
     @type property_order: List
     @param property_order: The list with the explicit order of property names.
-    @type file_extensions: List
-    @param file_extensions: The list of file extensions to be used.
     @type rules_skip: List
     @param rules_skip: The list of specific rules to skip.
+    @type file_extensions: List
+    @param file_extensions: The list of file extensions to be used.
+    @type file_exclusion: List
+    @param file_exclusion: The list of file extensions to be excluded.
     @type configuration_file_path: String
     @param configuration_file_path: The path to the configuration file.
     """

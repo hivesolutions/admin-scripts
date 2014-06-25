@@ -55,7 +55,7 @@ def javascript_minify(string_value):
     "Minifies" the given string value assuming it
     contains javascript code in it.
     The heuristics used in the minification should not
-    change the normal behaviour of the file.
+    change the normal behavior of the file.
 
     @type string_value: String
     @param string_value: The string containing the value
@@ -403,7 +403,7 @@ def _css_slimmer(css):
 
 
 
-USAGE_MESSAGE="join-files-python path [-r] [-c configuration_file]"
+USAGE_MESSAGE="join-files-python path [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
 RELATIVE_BASE_PATH = "/.."
@@ -423,9 +423,6 @@ WINDOWS_PLATFORMS_VALUE = (
     DOS_PLATFORM_VALUE
 )
 """ The windows platform value """
-
-RECURSIVE_VALUE = "recursive"
-""" The recursive value """
 
 def normalize_path(path):
     """
@@ -704,6 +701,15 @@ def join_files_walker(arguments, directory_name, names):
     @param names: The list of names in the current directory.
     """
 
+    # unpacks the arguments tuple
+    file_exclusion, = arguments
+
+    # removes the complete set of names that are meant to be excluded from the
+    # current set names to be visit (avoid visiting them)
+    for exclusion in file_exclusion:
+        if not exclusion in names: continue
+        names.remove(exclusion)
+
     # retrieves the valid names for the names list (removes directory entries)
     valid_complete_names = [directory_name + "/" + name for name in names
         if not os.path.isdir(directory_name + "/" + name)]
@@ -722,7 +728,7 @@ def join_files_walker(arguments, directory_name, names):
         # joins the files for the (path) name
         join_files(valid_complete_name)
 
-def join_files_recursive(directory_path):
+def join_files_recursive(directory_path, file_exclusion):
     """
     Joins the files in recursive mode.
     All the options are arguments to be passed to the
@@ -730,16 +736,21 @@ def join_files_recursive(directory_path):
 
     @type directory_path: String
     @param directory_path: The path to the (entry point) directory.
+    @type file_exclusion: List
+    @param file_exclusion: The list of file exclusion to be used.
     """
 
-    os.path.walk(directory_path, join_files_walker, ())
+    os.path.walk(directory_path, join_files_walker, (file_exclusion,))
 
-def _retrieve_configurations(recursive, configuration_file_path):
+def _retrieve_configurations(recursive, file_exclusion, configuration_file_path):
     """
     Retrieves the configuration maps for the given arguments.
 
     @type recursive: bool
     @param recursive: If the removing should be recursive.
+    @type file_exclsuion:
+    @type file_exclusion: List
+    @param file_exclusion: The list of file extensions to be excluded.
     @type configuration_file_path: String
     @param configuration_file_path: The path to the configuration file.
     """
@@ -781,7 +792,8 @@ def _retrieve_configurations(recursive, configuration_file_path):
         base_configuration = {}
 
         # sets the base configuration map attributes
-        base_configuration[RECURSIVE_VALUE] = recursive
+        base_configuration["recursive"] = recursive
+        base_configuration["file_exclusion"] = file_exclusion
 
         # creates the configurations tuple with the base configurations
         configurations = (
@@ -811,6 +823,7 @@ def main():
     # sets the default values for the parameters
     path = sys.argv[1]
     recursive = False
+    file_exclusion = None
     configuration_file_path = None
 
     try:
@@ -830,20 +843,27 @@ def main():
     for option, value in options:
         if option == "-r":
             recursive = True
+        elif option == "-w":
+            file_exclusion = [value.strip() for value in value.split(",")]
         elif option == "-c":
             configuration_file_path = value
 
     # retrieves the configurations from the command line arguments
-    configurations = _retrieve_configurations(recursive, configuration_file_path)
+    configurations = _retrieve_configurations(
+        recursive,
+        file_exclusion,
+        configuration_file_path
+    )
 
     # iterates over all the configurations, executing them
     for configuration in configurations:
         # retrieves the configuration values
-        recursive = configuration[RECURSIVE_VALUE]
+        recursive = configuration["recursive"]
+        file_exclusion = configuration["file_exclusion"]
 
         # in case the recursive flag is set, joins the files in
         # recursive mode (multiple files)
-        if recursive: join_files_recursive(path)
+        if recursive: join_files_recursive(path, file_exclusion)
         # otherwise it's a "normal" iteration and joins the
         # files (for only one file)
         else: join_files(path)

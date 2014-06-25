@@ -39,6 +39,7 @@ __license__ = "GNU General Public License (GPL), Version 3"
 
 configurations = (
     {
-        "recursive" : True
+        "recursive" : True,
+        "file_exclusion" : ("android-sdk",)
     },
 )

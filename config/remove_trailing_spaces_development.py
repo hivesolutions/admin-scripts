@@ -85,7 +85,8 @@ configurations = (
             "rst",
             "liquid",
             "go"
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     },
     {
         "recursive" : True,
@@ -97,6 +98,7 @@ configurations = (
             "drg",
             "am",
             "m4"
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     }
 )
