@@ -234,6 +234,7 @@ configurations = (
         ),
         "file_extensions" : (
             "css",
-        )
+        ),
+        "file_exclusion" : ("android-sdk",)
     },
 )

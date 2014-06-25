@@ -44,7 +44,7 @@ import getopt
 import StringIO
 import traceback
 
-USAGE_MESSAGE="cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-c configuration_file]"
+USAGE_MESSAGE="cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
 RELATIVE_BASE_PATH = "/.."
@@ -64,39 +64,6 @@ WINDOWS_PLATFORMS_VALUE = (
     DOS_PLATFORM_VALUE
 )
 """ The windows platform value """
-
-RECURSIVE_VALUE = "recursive"
-""" The recursive value """
-
-FIX_EXTRA_NEWLINES_VALUE = "fix_extra_newlines"
-""" The fix extra newlines value """
-
-WINDOWS_NEWLINE_VALUE = "windows_newline"
-""" The windows newline value """
-
-PROPERTY_ORDER_VALUE = "property_order"
-""" The property order value """
-
-RULES_SKIP_VALUE = "rules_skip"
-""" The rules skip value """
-
-FILE_EXTENSIONS_VALUE = "file_extensions"
-""" The file extensions value """
-
-RULE_START_CHARACTER = "{"
-""" The rule start character """
-
-RULE_END_CHARACTER = "}"
-""" The rule end character """
-
-SELECTOR_SEPARATOR_CHARACTER = ","
-""" The rule separator character """
-
-COMMENT_START_TOKEN = "/*"
-""" The comment start token """
-
-COMMENT_END_TOKEN = "*/"
-""" The comment end token """
 
 COLOR_REGEX_VALUE = r"(.*:)(.*#)([0-9a-fA-F]+)(.*)"
 """ The color regex value """
@@ -460,11 +427,11 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         get_comparison_key = lambda property_line: get_property_index(property_line, property_order, line_number)
 
         # in case the line contains a single line comment
-        if COMMENT_START_TOKEN in line and COMMENT_END_TOKEN in line:
+        if "/*" in line and "*/" in line:
             # does nothing, will write the line as is
             pass
         # in case the line contains a the start of multiline comment
-        elif COMMENT_START_TOKEN in line:
+        elif "/*" in line:
             # in case the comment mode is already on
             if comments_started:
                 # prints a warning
@@ -473,7 +440,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # increments the comments started counter
             comments_started += 1
         # in case the line contains the end of multiline comment
-        elif COMMENT_END_TOKEN in line:
+        elif "*/" in line:
             if not comments_started:
                 # raises an error
                 print "ERROR: found closing comment without corresponding opening at line %d" % line_number
@@ -492,11 +459,11 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # after an at rule, a newline must follow
             needs_newline = True
         # in case the line contains a full rule specification
-        elif RULE_START_CHARACTER in line and RULE_END_CHARACTER in line:
+        elif "{" in line and "}" in line:
             # does nothing, will just write line as is
             needs_newline = True
         # in case this is a rule start line
-        elif RULE_START_CHARACTER in line:
+        elif "{" in line:
             # increments the open rule count
             open_rule_count += 1
 
@@ -508,7 +475,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # signals the rule started flag,
                 # in case the rule is no to be skipped
                 rule_started = not skip_rule(line, rules_skip)
-        elif RULE_END_CHARACTER in line:
+        elif "}" in line:
             # decrements the open rule count
             open_rule_count -= 1
 
@@ -561,7 +528,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # skips outputting the line to the buffer
             continue
         # in case this is part of rule selector declaration
-        elif SELECTOR_SEPARATOR_CHARACTER in line:
+        elif "," in line:
             # does nothing, will just write line as is
             pass
         # in case the between rules mode is active
@@ -681,7 +648,14 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    windows_newline, fix_extra_newlines, property_order, rules_skip, file_extensions = arguments
+    windows_newline, fix_extra_newlines, property_order,\
+    rules_skip, file_extensions, file_exclusion = arguments
+
+    # removes the complete set of names that are meant to be excluded from the
+    # current set names to be visit (avoid visiting them)
+    for exclusion in file_exclusion:
+        if not exclusion in names: continue
+        names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
     valid_complete_names = [
@@ -708,7 +682,15 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
             rules_skip
         )
 
-def cleanup_stylesheets_recursive(directory_path, windows_newline, fix_extra_newlines, property_order = [], rules_skip = [], file_extensions = None):
+def cleanup_stylesheets_recursive(
+    directory_path,
+    windows_newline,
+    fix_extra_newlines,
+    property_order = [],
+    rules_skip = [],
+    file_extensions = None,
+    file_exclusion = None
+):
     """
     Cleans up stylesheets in recursive mode.
     All the options are arguments to be passed to the
@@ -726,11 +708,33 @@ def cleanup_stylesheets_recursive(directory_path, windows_newline, fix_extra_new
     @param rules_skip: The list of specific rules to skip.
     @type file_extensions: List
     @param file_extensions: The list of file extensions to be used.
+    @type file_exclusion: List
+    @param file_exclusion: The list of file exclusion to be used.
     """
 
-    os.path.walk(directory_path, cleanup_stylesheets_walker, (windows_newline, fix_extra_newlines, property_order, rules_skip, file_extensions))
+    os.path.walk(
+        directory_path,
+        cleanup_stylesheets_walker,
+        (
+            windows_newline,
+            fix_extra_newlines,
+            property_order,
+            rules_skip,
+            file_extensions,
+            file_exclusion
+        )
+    )
 
-def _retrieve_configurations(recursive, windows_newline, fix_extra_newlines, property_order, rules_skip, file_extensions, configuration_file_path):
+def _retrieve_configurations(
+    recursive,
+    windows_newline,
+    fix_extra_newlines,
+    property_order,
+    rules_skip,
+    file_extensions,
+    file_exclusion,
+    configuration_file_path
+):
     """
     Retrieves the configuration maps for the given arguments.
 
@@ -787,12 +791,13 @@ def _retrieve_configurations(recursive, windows_newline, fix_extra_newlines, pro
         base_configuration = {}
 
         # sets the base configuration map attributes
-        base_configuration[RECURSIVE_VALUE] = recursive
-        base_configuration[WINDOWS_NEWLINE_VALUE] = windows_newline
-        base_configuration[FIX_EXTRA_NEWLINES_VALUE] = fix_extra_newlines
-        base_configuration[PROPERTY_ORDER_VALUE] = property_order
-        base_configuration[RULES_SKIP_VALUE] = rules_skip
-        base_configuration[FILE_EXTENSIONS_VALUE] = file_extensions
+        base_configuration["recursive"] = recursive
+        base_configuration["windows_newline"] = windows_newline
+        base_configuration["fix_extra_newlines"] = fix_extra_newlines
+        base_configuration["property_order"] = property_order
+        base_configuration["rules_skip"] = rules_skip
+        base_configuration["file_extensions"] = file_extensions
+        base_configuration["file_exclusion"] = file_exclusion
 
         # creates the configurations tuple with the base configurations
         configurations = (
@@ -828,6 +833,7 @@ def main():
     property_order = None
     rules_skip = None
     file_extensions = None
+    file_exclusion = None
     configuration_file_path = None
 
     try:
@@ -857,6 +863,8 @@ def main():
             rules_skip = [value.strip() for value in value.split(",")]
         elif option == "-e":
             file_extensions = [value.strip() for value in value.split(",")]
+        elif option == "-w":
+            file_exclusion = [value.strip() for value in value.split(",")]
         elif option == "-c":
             configuration_file_path = value
 
@@ -868,18 +876,20 @@ def main():
         property_order,
         rules_skip,
         file_extensions,
+        file_exclusion,
         configuration_file_path
     )
 
     # iterates over all the configurations, executing them
     for configuration in configurations:
         # retrieves the configuration values
-        recursive = configuration[RECURSIVE_VALUE]
-        windows_newline = configuration[WINDOWS_NEWLINE_VALUE]
-        fix_extra_newlines = configuration[FIX_EXTRA_NEWLINES_VALUE]
-        property_order = configuration[PROPERTY_ORDER_VALUE] or ()
-        rules_skip = configuration[RULES_SKIP_VALUE] or ()
-        file_extensions = configuration[FILE_EXTENSIONS_VALUE] or ()
+        recursive = configuration["recursive"]
+        windows_newline = configuration["windows_newline"]
+        fix_extra_newlines = configuration["fix_extra_newlines"]
+        property_order = configuration["property_order"] or ()
+        rules_skip = configuration["rules_skip"] or ()
+        file_extensions = configuration["file_extensions"] or ()
+        file_exclusion = configuration["file_exclusion"] or ()
 
         # in case the recursive flag is set, removes the trailing
         # spaces in recursive mode
@@ -890,7 +900,8 @@ def main():
                 fix_extra_newlines,
                 property_order,
                 rules_skip,
-                file_extensions
+                file_extensions,
+                file_exclusion
             )
         # otherwise it's a "normal" iteration, removes the trailing
         # spaces (for only one file)
