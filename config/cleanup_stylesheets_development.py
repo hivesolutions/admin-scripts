@@ -180,6 +180,7 @@ configurations = (
             "resize",
             "richness",
             "right",
+            "size",
             "speak",
             "speak-header",
             "speak-numeral",
