@@ -253,12 +253,12 @@ class JavascriptMinify:
             self.theB = self._next()
 
             if self.theB == '/' and (self.theA == '(' or self.theA == ',' or
-                                     self.theA == '=' or self.theA == ':' or
-                                     self.theA == '[' or self.theA == '?' or
-                                     self.theA == '!' or self.theA == '&' or
-                                     self.theA == '|' or self.theA == ';' or
-                                     self.theA == '{' or self.theA == '}' or
-                                     self.theA == '\n'):
+                self.theA == '=' or self.theA == ':' or
+                self.theA == '[' or self.theA == '?' or
+                self.theA == '!' or self.theA == '&' or
+                self.theA == '|' or self.theA == ';' or
+                self.theA == '{' or self.theA == '}' or
+                self.theA == '\n'):
                 self._out_a()
                 self._out_b()
 
@@ -521,8 +521,8 @@ def join_files(file_path):
     # from the files map
     for file_key, file_value in files_map.items():
         # creates the string buffer for temporary
-        # file holding
-        string_buffer = legacy.StringIO()
+        # file holding, this is bytes based
+        string_buffer = legacy.BytesIO()
 
         # retrieves the current value attributes
         # (setting default values)
@@ -617,10 +617,9 @@ def gzip_contents(contents_string, file_name = None):
     # creates a new string buffer
     string_buffer = legacy.StringIO()
 
-    # writes the magic header
+    # writes the magic header and then writes the
+    # compression method as part of binary header
     string_buffer.write("\x1f\x8b")
-
-    # writes the compression method
     string_buffer.write("\x08")
 
     # writes the flag values
@@ -825,10 +824,9 @@ def main():
     try:
         options, _arguments = getopt.getopt(sys.argv[2:], "rc:", [])
     except getopt.GetoptError:
-        # prints a message
+        # prints a series of messages about the
+        # correct usage of the command line
         print("Invalid number of arguments")
-
-        # prints the usage message
         print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
