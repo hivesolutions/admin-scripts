@@ -217,7 +217,7 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
     file_path_normalized = normalize_path(file_path)
 
     # opens the file for reading
-    file = open(file_path_normalized, "r")
+    file = open(file_path_normalized, "rb")
 
     try:
         # creates a string buffer for buffering
@@ -229,8 +229,8 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
             line_stripped = line.rstrip()
 
             # in case the tab must be replaced with spaces
+            # performs the operations with the proper way
             if tab_to_spaces:
-                # replaces the tab characters with spaces
                 line_stripped = line_stripped.replace(b"\t", SPACE_TAB)
 
             # writes the stripped line to the string buffer
@@ -246,8 +246,6 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
 
     # retrieves the string value from the string buffer
     string_value = string_buffer.getvalue()
-    
-    print(repr(string_value))
 
     # opens the file for writing
     file = open(file_path_normalized, "wb")
