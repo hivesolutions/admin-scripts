@@ -52,13 +52,12 @@ setuptools.setup(
     zip_safe = False,
     packages = [
         "admin_scripts",
-        "admin_scripts.base"
+        "admin_scripts.base",
+        "admin_scripts.config",
+        "admin_scripts.extra"
     ],
     package_dir = {
         "" : os.path.normpath("src")
-    },
-    package_data = {
-        "admin_scripts" : ["config/development/*"]
     },
     entry_points = {
         "console_scripts" : [

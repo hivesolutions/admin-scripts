@@ -43,13 +43,13 @@ import getopt
 
 import legacy
 
-USAGE_MESSAGE = "convert-encoding-python path [-r] [-s source_encoding] [-t target_encoding] [-u] [-x replacement_from_1, replacement_to_1, replacement_from_2, replacement_to_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = "encoding path [-r] [-s source_encoding] [-t target_encoding] [-u] [-x replacement_from_1, replacement_to_1, replacement_from_2, replacement_to_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
 RELATIVE_BASE_PATH = "/.."
 """ The relative base path """
 
-LONG_PATH_PREFIX = "\\\\?\\".decode("utf-8")
+LONG_PATH_PREFIX = legacy.UNICODE("\\\\?\\")
 """ The windows long path prefix """
 
 NT_PLATFORM_VALUE = "nt"
