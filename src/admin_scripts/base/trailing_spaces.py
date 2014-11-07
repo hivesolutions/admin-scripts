@@ -52,7 +52,7 @@ SPACE_TAB = b"    "
 RELATIVE_BASE_PATH = "/.."
 """ The relative base path """
 
-LONG_PATH_PREFIX = legacy.u("\\\\?\\")
+LONG_PATH_PREFIX = "\\\\?\\".decode("utf-8")
 """ The windows long path prefix """
 
 NT_PLATFORM_VALUE = "nt"

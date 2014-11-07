@@ -410,7 +410,7 @@ USAGE_MESSAGE="join-files-python path [-r] [-w exclusion_1, exclusion_2, ...] [-
 RELATIVE_BASE_PATH = "/.."
 """ The relative base path """
 
-LONG_PATH_PREFIX = legacy.u("\\\\?\\")
+LONG_PATH_PREFIX = "\\\\?\\".decode("utf-8")
 """ The windows long path prefix """
 
 NT_PLATFORM_VALUE = "nt"
