@@ -430,11 +430,11 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         get_comparison_key = lambda property_line: get_property_index(property_line, property_order, line_number)
 
         # in case the line contains a single line comment
-        if "/*" in line and "*/" in line:
+        if b"/*" in line and b"*/" in line:
             # does nothing, will write the line as is
             pass
         # in case the line contains a the start of multiline comment
-        elif "/*" in line:
+        elif b"/*" in line:
             # in case the comment mode is already on
             if comments_started:
                 # prints a warning
@@ -443,7 +443,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # increments the comments started counter
             comments_started += 1
         # in case the line contains the end of multiline comment
-        elif "*/" in line:
+        elif b"*/" in line:
             if not comments_started:
                 # raises an error
                 print("ERROR: found closing comment without corresponding opening at line %d" % line_number)
@@ -462,11 +462,11 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # after an at rule, a newline must follow
             needs_newline = True
         # in case the line contains a full rule specification
-        elif "{" in line and "}" in line:
+        elif b"{" in line and b"}" in line:
             # does nothing, will just write line as is
             needs_newline = True
         # in case this is a rule start line
-        elif "{" in line:
+        elif b"{" in line:
             # increments the open rule count
             open_rule_count += 1
 
@@ -478,7 +478,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # signals the rule started flag,
                 # in case the rule is no to be skipped
                 rule_started = not skip_rule(line, rules_skip)
-        elif "}" in line:
+        elif b"}" in line:
             # decrements the open rule count
             open_rule_count -= 1
 
@@ -593,13 +593,9 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
 
     # opens the file for reading in text mode so that the
     # lines are read in normalized mode
-    file = open(file_path_normalized, "r")
+    file = open(file_path_normalized, "rb")
 
     try:
-        # creates a string buffer for the output buffer that
-        # is going to be used as an in memory file (faster)
-        string_buffer = legacy.StringIO();
-
         # applies the property cleaning, this should run the
         # complete set of rules and clean the file
         string_buffer = cleanup_properties(
@@ -627,15 +623,11 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
         # closes the file for reading
         file.close()
 
-    # opens the file for writing
+    # opens the file for writing and then otputs the
+    # final normalized stylesheet contents into it
     file = open(file_path_normalized, "wb")
-
-    try:
-        # writes the string value to the file
-        file.write(string_value)
-    finally:
-        # closes the file for writing
-        file.close()
+    try: file.write(string_value)
+    finally: file.close()
 
 def cleanup_stylesheets_walker(arguments, directory_name, names):
     """
