@@ -45,7 +45,8 @@ import time
 import json
 import struct
 import getopt
-import StringIO
+
+import legacy
 
 DEFAULT_COMPRESSION_LEVEL = 9
 """ The default compression level """
@@ -67,8 +68,8 @@ def javascript_minify(string_value):
     # creates a new string buffer with the given
     # string value (for the input) and then creates
     # new empty string buffer for the result
-    string_buffer = StringIO.StringIO(string_value)
-    string_buffer_result = StringIO.StringIO()
+    string_buffer = legacy.StringIO(string_value)
+    string_buffer_result = legacy.StringIO()
 
     # creates a new javascript minify object
     # and runs the minification
@@ -521,7 +522,7 @@ def join_files(file_path):
     for file_key, file_value in files_map.items():
         # creates the string buffer for temporary
         # file holding
-        string_buffer = StringIO.StringIO()
+        string_buffer = legacy.StringIO()
 
         # retrieves the current value attributes
         # (setting default values)
@@ -619,7 +620,7 @@ def gzip_contents(contents_string, file_name = None):
     """
 
     # creates a new string buffer
-    string_buffer = StringIO.StringIO()
+    string_buffer = legacy.StringIO()
 
     # writes the magic header
     string_buffer.write("\x1f\x8b")
@@ -631,7 +632,7 @@ def gzip_contents(contents_string, file_name = None):
     file_name and string_buffer.write("\x08") or string_buffer.write("\x00")
 
     # writes the timestamp value
-    string_buffer.write(struct.pack("<L", long(time.time())))
+    string_buffer.write(struct.pack("<L", legacy.LONG(time.time())))
 
     # writes some extra heading values
     # (includes operating system)
@@ -740,7 +741,7 @@ def join_files_recursive(directory_path, file_exclusion):
     @param file_exclusion: The list of file exclusion to be used.
     """
 
-    os.path.walk(directory_path, join_files_walker, (file_exclusion,))
+    legacy.walk(directory_path, join_files_walker, (file_exclusion,))
 
 def _retrieve_configurations(recursive, file_exclusion, configuration_file_path):
     """

@@ -40,7 +40,8 @@ __license__ = "GNU General Public License (GPL), Version 3"
 import os
 import sys
 import getopt
-import StringIO
+
+import legacy
 
 USAGE_MESSAGE = "remove-trailing-spaces-python path [-r] [-t] [-n] [-u] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
@@ -132,7 +133,7 @@ def remove_trailing_newlines(file_path, windows_newline = True):
 
     try:
         # creates a string buffer for buffering
-        string_buffer = StringIO.StringIO()
+        string_buffer = legacy.StringIO()
 
         # reads the file lines
         file_lines = file.readlines()
@@ -220,7 +221,7 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
 
     try:
         # creates a string buffer for buffering
-        string_buffer = StringIO.StringIO()
+        string_buffer = legacy.StringIO()
 
         # iterates over all the lines in the file
         for line in file:
@@ -335,7 +336,7 @@ def remove_trailing_spaces_recursive(
     @param file_exclusion: The list of file exclusion to be used.
     """
 
-    os.path.walk(
+    legacy.walk(
         directory_path,
         remove_trailing_spaces_walker,
         (

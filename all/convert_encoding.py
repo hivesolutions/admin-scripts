@@ -41,6 +41,8 @@ import os
 import sys
 import getopt
 
+import legacy
+
 USAGE_MESSAGE = "convert-encoding-python path [-r] [-s source_encoding] [-t target_encoding] [-u] [-x replacement_from_1, replacement_to_1, replacement_from_2, replacement_to_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
@@ -308,7 +310,7 @@ def convert_encoding_recursive(
     @param file_exclusion: The list of file exclusion to be used.
     """
 
-    os.path.walk(
+    legacy.walk(
         directory_path,
         convert_encoding_walker,
         (

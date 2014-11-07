@@ -41,7 +41,6 @@ import os
 import re
 import sys
 import getopt
-import StringIO
 import traceback
 
 import legacy
@@ -318,7 +317,7 @@ def process_color_definition(property_line, line_number):
 
         # assembles the line with the fixed color
         property_line = "".join(line_groups)
-    except Exception, exception:
+    except Exception as exception:
         # converts the exception to string
         exception_string = legacy.UNICODE(exception)
 
@@ -401,7 +400,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
     number_original_lines = len(lines)
 
     # creates a string buffer for buffering
-    output_buffer = StringIO.StringIO();
+    output_buffer = legacy.StringIO();
 
     # initializes the rule started flag
     rule_started = False
@@ -599,7 +598,7 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
     try:
         # creates a string buffer for the output buffer that
         # is going to be used as an in memory file (faster)
-        string_buffer = StringIO.StringIO();
+        string_buffer = legacy.StringIO();
 
         # applies the property cleaning, this should run the
         # complete set of rules and clean the file
@@ -614,7 +613,7 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
         # retrieves the string value from the output
         # buffer to be written to the file
         string_value = string_buffer.getvalue()
-    except Exception, exception:
+    except Exception as exception:
         # retrieves the exception string and uses it in the log
         # message to be printed to the standard output, then logs
         # the complete traceback messages to the same output
@@ -716,7 +715,7 @@ def cleanup_stylesheets_recursive(
     @param file_exclusion: The list of file exclusion to be used.
     """
 
-    os.path.walk(
+    legacy.walk(
         directory_path,
         cleanup_stylesheets_walker,
         (
