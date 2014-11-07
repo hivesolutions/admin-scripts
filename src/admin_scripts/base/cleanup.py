@@ -41,24 +41,26 @@ import os
 import sys
 import subprocess
 
-USAGE_MESSAGE = "cleanup-development-python path [extra_argument_1, extra_argument_2, ...]"
+USAGE_MESSAGE = "cleanup path [extra_argument_1, extra_argument_2, ...]"
 """ The usage message """
 
 SCRIPTS_LIST = [
-    "cleanup_stylesheets.py",
-    "convert_encoding.py",
-    "join_files.py",
-    "remove_trailing_spaces.py"
+    "stylesheets.py",
+    "encoding.py",
+    "join.py",
+    "trailing_spaces.py"
 ]
 """ The list of scripts to be executed """
 
 SCRIPTS_CONFIGURATION_MAP = {
-    "cleanup_stylesheets.py" : "cleanup_stylesheets_development.py",
-    "convert_encoding.py" : "convert_encoding_development.py",
-    "join_files.py" : "join_files_development.py",
-    "remove_trailing_spaces.py" : "remove_trailing_spaces_development.py"
+    "stylesheets.py" : "development/stylesheets.py",
+    "encoding.py" : "development/encoding.py",
+    "join.py" : "development/join.py",
+    "trailing_spaces.py" : "development/trailing_spaces.py"
 }
-""" The map associating the script name with the name of the configuration file """
+""" The map associating the script name with the name
+of the configuration file, so that during execution
+the proper values are passed to each script """
 
 CONFIGURATION_RELATIVE_PATH = "../config/"
 """ The relative path to the configuration directory """
@@ -109,7 +111,8 @@ def run():
     # sets the shell value to be used in the process
     shell_value = os.name in WINDOWS_PLATFORMS_VALUE and True or False
 
-    # iterates over all the scripts for execution
+    # iterates over all the scripts for execution, passing
+    # the proper script values into each script for execution
     for script in SCRIPTS_LIST:
         # retrieves the script configuration file name
         script_configuration_file_name = SCRIPTS_CONFIGURATION_MAP[script]
