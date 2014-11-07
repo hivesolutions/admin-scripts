@@ -39,6 +39,8 @@ __license__ = "GNU General Public License (GPL), Version 3"
 
 import re
 
+import legacy
+
 CSS_COMMENTS = re.compile(r"/\*.*?\*/", re.MULTILINE|re.DOTALL)
 HEX_COLOR = re.compile(r"#\w{2}\w{2}\w{2}")
 
@@ -53,7 +55,7 @@ def uniqify(all):
         u[each]=1
     return u.keys()
 
-def simplifyHexColours(text):
+def simplify_hex_colors(text):
     """
     Replace all color declarations where pairs repeat.
     I.e. #FFFFFF => #FFF; #CCEEFF => #CEF
@@ -74,10 +76,16 @@ def simplifyHexColours(text):
 
 def css_slimmer(css):
     """
-    remove repeating whitespace ( \t\n)
+    Remove repeating whitespace characters like tab, newline
+    or any other characters.
     """
 
-    #css = css_comments.sub("", css) # remove comments
+    # verifies the data type of the provided string
+    # value in case it's bytes it must be decoded
+    # using the pre-defined fallback decoder
+    is_bytes = type(css) == legacy.BYTES
+    if is_bytes: css = css.decode("utf-8")
+
     remove_next_comment = 1
     for css_comment in CSS_COMMENTS.findall(css):
         if css_comment[-3:]=='\*/':
@@ -98,11 +106,15 @@ def css_slimmer(css):
     css = re.sub(r'}\s(#|\w)', r'}\1', css)
     css = re.sub(r';}', r'}', css) # no need for the ; before end of attributes
     css = re.sub(r'}//-->', r'}\n//-->', css)
-    css = simplifyHexColours(css)
+    css = simplify_hex_colors(css)
 
-    # voice-family hack. The declation: '''voice-family: "\"}\""''' requires
+    # voice-family hack. The declration: '''voice-family: "\"}\""''' requires
     # that extra space between the ':' and the first '"' which _css_slimmer()
     # removed. Put it back (http://real.issuetrackerproduct.com/0168)
     css = re.sub(r'voice-family:"\\"}\\""', r'voice-family: "\\"}\\""', css)
+    css.strip()
 
-    return css.strip()
+    # re-encodes the value into the default encoding so that it
+    # becomes ready to be written into a bytes buffer object
+    css = css.encode("utf-8")
+    return css
