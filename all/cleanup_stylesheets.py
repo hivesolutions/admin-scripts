@@ -88,7 +88,7 @@ URL_REGEX = re.compile(URL_REGEX_VALUE)
 """ The url regex """
 
 URL_REPLACEMENT_VALUE = "url(\g<1>)"
-""" The url replacemente regex value """
+""" The url replacement regex value """
 
 PROPERTY_LINE_REGEX_VALUE = r"^[ ]*([\w\-]*)[ ]*:[ ]*(\S*)"
 """ The property line regex value """
@@ -393,48 +393,44 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
     @param rules_skip: The list of specific rules to skip.
     """
 
-    # reads the input lines
+    # reads the input lines and counts the number of lines
+    # in the buffer setting it as the number of "original" lines
     lines = input_buffer.readlines()
-
-    # counts the original lines
     number_original_lines = len(lines)
 
-    # creates a string buffer for buffering
+    # creates a string buffer that will hold the output of the
+    # cleanup operation over the current stylesheet file
     output_buffer = legacy.StringIO();
 
-    # initializes the rule started flag
+    # initializes a series of state variables that will control
+    # the way the parser/generator will work through the file
     rule_started = False
-
-    # initializes the line number
     line_number = 0
-
-    # initializes the open rule count
     open_rule_count = 0
-
-    # initializes the newlines counter
     newlines = 0
-
-    # initializes the comments started counter
     comments_started = 0
-
-    # initializes the needs newline flag
     needs_newline = False
 
     # for each of the input lines it's going to run the iteration
     # loop and match it against the proper rules
     for line in lines:
-        # increments the line number
+        # decodes the current line as a processing using unicode
+        # characters is required for correct results
+        line = line.decode("utf-8")
+
+        # increments the line number as one more line is going
+        # to be processes through the current iteration
         line_number += 1
 
         # updates the comparison key function
         get_comparison_key = lambda property_line: get_property_index(property_line, property_order, line_number)
 
         # in case the line contains a single line comment
-        if b"/*" in line and b"*/" in line:
+        if "/*" in line and "*/" in line:
             # does nothing, will write the line as is
             pass
         # in case the line contains a the start of multiline comment
-        elif b"/*" in line:
+        elif "/*" in line:
             # in case the comment mode is already on
             if comments_started:
                 # prints a warning
@@ -443,7 +439,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # increments the comments started counter
             comments_started += 1
         # in case the line contains the end of multiline comment
-        elif b"*/" in line:
+        elif "*/" in line:
             if not comments_started:
                 # raises an error
                 print("ERROR: found closing comment without corresponding opening at line %d" % line_number)
@@ -462,11 +458,11 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # after an at rule, a newline must follow
             needs_newline = True
         # in case the line contains a full rule specification
-        elif b"{" in line and b"}" in line:
+        elif "{" in line and "}" in line:
             # does nothing, will just write line as is
             needs_newline = True
         # in case this is a rule start line
-        elif b"{" in line:
+        elif "{" in line:
             # increments the open rule count
             open_rule_count += 1
 
@@ -478,15 +474,15 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # signals the rule started flag,
                 # in case the rule is no to be skipped
                 rule_started = not skip_rule(line, rules_skip)
-        elif b"}" in line:
+        elif "}" in line:
             # decrements the open rule count
             open_rule_count -= 1
 
             # in case this is an actual rule
             if open_rule_count == 0:
                 # in case the rule set does not contain any property
+                # must log an information message about the empty rule
                 if rule_started and not rule_lines:
-                    # logs a warning
                     print("WARNING: empty stylesheet rule at line %d" % line_number)
 
                 # updates the flag to signal the rule has ended
@@ -507,10 +503,9 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # writes the final newline
                 fix_extra_newlines and write_line(output_buffer, "\n", windows_newline)
 
-                # resets the newlines counter
-                newlines = 0
-
+                # resets the newlines counter and then
                 # enables the needs newline flag
+                newlines = 0
                 needs_newline = True
 
                 # skips further processing
@@ -518,11 +513,9 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         # in case this line is part of a valid rule set
         elif rule_started:
             if fix_extra_newlines:
-                # strips the line
+                # strips the line and then appends the line
+                # to the rule set in case it's not a newline
                 line_stripped = line.strip()
-
-                # appends the line to the rule set
-                # in case it's not a newline
                 line_stripped and rule_lines.append(line)
             else:
                 # appends the line to the rule set
@@ -607,8 +600,10 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
         )
 
         # retrieves the string value from the output
-        # buffer to be written to the file
+        # buffer to be written to the file and then
+        # encodes it using the default encoding of css
         string_value = string_buffer.getvalue()
+        string_value = string_value.encode("utf-8")
     except Exception as exception:
         # retrieves the exception string and uses it in the log
         # message to be printed to the standard output, then logs
