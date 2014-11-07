@@ -484,15 +484,11 @@ def join_files(file_path):
     # normalizes the file path
     file_path_normalized = normalize_path(file_path)
 
-    # opens the file for reading
+    # opens the file for reading and then reads the
+    # complete set of data contained in it
     file = open(file_path_normalized, "rb")
-
-    try:
-        # reads the complete file contents
-        file_contents = file.read()
-    finally:
-        # closes the file for reading
-        file.close()
+    try: file_contents = file.read()
+    finally: file.close()
 
     # loads the file contents, retrieving the
     # map of files to be created from joining
