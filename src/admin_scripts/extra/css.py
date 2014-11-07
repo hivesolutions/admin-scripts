@@ -55,7 +55,7 @@ def uniqify(all):
 
 def simplifyHexColours(text):
     """
-    Replace all colour declarations where pairs repeat.
+    Replace all color declarations where pairs repeat.
     I.e. #FFFFFF => #FFF; #CCEEFF => #CEF
     and #EFEFEF, #EFCDI9 avoided.
     """
