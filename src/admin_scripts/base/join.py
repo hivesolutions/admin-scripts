@@ -265,26 +265,26 @@ def gzip_contents(contents_string, file_name = None):
     """
 
     # creates a new string buffer
-    string_buffer = legacy.StringIO()
+    string_buffer = legacy.BytesIO()
 
     # writes the magic header and then writes the
     # compression method as part of binary header
-    string_buffer.write("\x1f\x8b")
-    string_buffer.write("\x08")
+    string_buffer.write(b"\x1f\x8b")
+    string_buffer.write(b"\x08")
 
     # writes the flag values
-    file_name and string_buffer.write("\x08") or string_buffer.write("\x00")
+    file_name and string_buffer.write(b"\x08") or string_buffer.write(b"\x00")
 
     # writes the timestamp value
     string_buffer.write(struct.pack("<L", legacy.LONG(time.time())))
 
     # writes some extra heading values
     # (includes operating system)
-    string_buffer.write("\x02")
-    string_buffer.write("\xff")
+    string_buffer.write(b"\x02")
+    string_buffer.write(b"\xff")
 
     # writes the file name
-    file_name and string_buffer.write(file_name + "\0")
+    file_name and string_buffer.write(file_name + b"\0")
 
     # compresses the contents with the zlib
     contents_string_compressed = zlib.compress(contents_string, DEFAULT_COMPRESSION_LEVEL)
