@@ -51,7 +51,7 @@ USAGE_MESSAGE="cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_
 RELATIVE_BASE_PATH = "/.."
 """ The relative base path """
 
-LONG_PATH_PREFIX = u"\\\\?\\"
+LONG_PATH_PREFIX = legacy.u("\\\\?\\")
 """ The windows long path prefix """
 
 NT_PLATFORM_VALUE = "nt"

@@ -46,13 +46,13 @@ import legacy
 USAGE_MESSAGE = "remove-trailing-spaces-python path [-r] [-t] [-n] [-u] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
-SPACE_TAB = "    "
+SPACE_TAB = b"    "
 """ The space tab string """
 
 RELATIVE_BASE_PATH = "/.."
 """ The relative base path """
 
-LONG_PATH_PREFIX = u"\\\\?\\"
+LONG_PATH_PREFIX = legacy.u("\\\\?\\")
 """ The windows long path prefix """
 
 NT_PLATFORM_VALUE = "nt"
@@ -221,7 +221,7 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
 
     try:
         # creates a string buffer for buffering
-        string_buffer = legacy.StringIO()
+        string_buffer = legacy.BytesIO()
 
         # iterates over all the lines in the file
         for line in file:
@@ -231,21 +231,23 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
             # in case the tab must be replaced with spaces
             if tab_to_spaces:
                 # replaces the tab characters with spaces
-                line_stripped = line_stripped.replace("\t", SPACE_TAB)
+                line_stripped = line_stripped.replace(b"\t", SPACE_TAB)
 
             # writes the stripped line to the string buffer
             string_buffer.write(line_stripped)
 
             # writes the proper line ending sequence taking into
             # account if the windows newline should be used or not
-            if windows_newline: string_buffer.write("\r\n")
-            else: string_buffer.write("\n")
+            if windows_newline: string_buffer.write(b"\r\n")
+            else: string_buffer.write(b"\n")
     finally:
         # closes the file for reading
         file.close()
 
     # retrieves the string value from the string buffer
     string_value = string_buffer.getvalue()
+    
+    print(repr(string_value))
 
     # opens the file for writing
     file = open(file_path_normalized, "wb")
