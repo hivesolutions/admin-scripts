@@ -151,6 +151,8 @@ def apply_replacements_list(string_buffer, replacements_list):
         # unpacks the replacement tuple so that the source and the target
         # strings may be retrieved, and then performs the replacements
         replacement_from, replacement_to = replacement
+        replacement_from = legacy.bytes(replacement_from)
+        replacement_to = legacy.bytes(replacement_to)
         string_buffer = string_buffer.replace(replacement_from, replacement_to)
 
     # returns the replaced string buffer
@@ -175,13 +177,13 @@ def convert_encoding(file_path, source_encoding, target_encoding, windows_newlin
     # normalizes the file path and uses it as the path to
     # open the reference to it (in reading mode)
     file_path_normalized = normalize_path(file_path)
-    file = open(file_path_normalized, "r")
+    file = open(file_path_normalized, "rb")
 
     try:
         # reads the complete string contents from the file and
         # checks if the file already has the target encoding
         string_value = file.read()
-        string_value = string_value.replace("\r\n", "\n")
+        string_value = string_value.replace(b"\r\n", b"\n")
         has_target_encoding = has_encoding(string_value, target_encoding)
 
         # decodes the string value from the specified source encoding, this
@@ -202,10 +204,10 @@ def convert_encoding(file_path, source_encoding, target_encoding, windows_newlin
         # applies the windows newline if specified, it does so by replacing
         # the simple newline character with the windows specific newline
         string_value_encoded_replaced = windows_newline and\
-            string_value_encoded_replaced.replace("\n", "\r\n") or\
+            string_value_encoded_replaced.replace(b"\n", b"\r\n") or\
             string_value_encoded_replaced
     finally:
-        # closes the file for reading
+        # closes the file for reading (as it's not longer required)
         file.close()
 
     # opens the file for writing then writes the file string value
