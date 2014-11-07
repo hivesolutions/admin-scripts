@@ -723,7 +723,7 @@ def join_files_walker(arguments, directory_name, names):
     # iterates over all the valid complete names with extension filter
     for valid_complete_name in valid_complete_names:
         # print a message
-        print "Joining files defined in file: %s" % valid_complete_name
+        print("Joining files defined in file: %s" % valid_complete_name)
 
         # joins the files for the (path) name
         join_files(valid_complete_name)
@@ -812,10 +812,10 @@ def main():
     # is not sufficient
     if len(sys.argv) < 2:
         # prints a message
-        print "Invalid number of arguments"
+        print("Invalid number of arguments")
 
         # prints the usage message
-        print "Usage: " + USAGE_MESSAGE
+        print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
         sys.exit(2)
@@ -830,10 +830,10 @@ def main():
         options, _arguments = getopt.getopt(sys.argv[2:], "rc:", [])
     except getopt.GetoptError:
         # prints a message
-        print "Invalid number of arguments"
+        print("Invalid number of arguments")
 
         # prints the usage message
-        print "Usage: " + USAGE_MESSAGE
+        print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
         sys.exit(2)

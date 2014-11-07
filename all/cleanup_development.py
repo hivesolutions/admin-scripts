@@ -93,10 +93,10 @@ def run():
     # is not sufficient
     if len(sys.argv) < 2:
         # prints a message
-        print "Invalid number of arguments"
+        print("Invalid number of arguments")
 
         # prints the usage message
-        print "Usage: " + USAGE_MESSAGE
+        print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
         sys.exit(2)
@@ -136,9 +136,9 @@ def run():
         arguments.extend(extra_arguments)
 
         # prints a message and flushes the standard output
-        print "------------------------------------------------------------------------"
-        print "Executing script file: %s" % script
-        print "------------------------------------------------------------------------"
+        print("------------------------------------------------------------------------")
+        print("Executing script file: %s" % script)
+        print("------------------------------------------------------------------------")
         sys.stdout.flush()
 
         # opens a sub-process for script execution (and waits for the end of it)
@@ -153,9 +153,9 @@ def run():
         sys.stdout.flush()
 
         # print a message and flushes the standard output
-        print "------------------------------------------------------------------------"
-        print "Finished executing script file: %s" % script
-        print "------------------------------------------------------------------------"
+        print("------------------------------------------------------------------------")
+        print("Finished executing script file: %s" % script)
+        print("------------------------------------------------------------------------")
         sys.stdout.flush()
 
 if __name__ == "__main__":

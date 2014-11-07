@@ -248,12 +248,14 @@ def convert_encoding_walker(arguments, directory_name, names):
     for valid_complete_name in valid_complete_names:
         # prints a message about the file that is not going to be converted
         # into the proper target encoding as defined in the specification
-        print "Convert encoding in file: %s (%s to %s)" %\
+        print(
+            "Convert encoding in file: %s (%s to %s)" %\
             (
                  valid_complete_name,
                  source_encoding,
                  target_encoding
             )
+        )
 
         try:
             # converts the encoding for the provided (path) name according to
@@ -267,11 +269,13 @@ def convert_encoding_walker(arguments, directory_name, names):
                 replacements_list
             )
         except:
-            print >> sys.stderr, "WARNING: failed converting encoding in file: %s (%s to %s)" %\
-            (
-                 valid_complete_name,
-                 source_encoding,
-                 target_encoding
+            sys.stderr.write(
+                "WARNING: failed converting encoding in file: %s (%s to %s)" %\
+                (
+                     valid_complete_name,
+                     source_encoding,
+                     target_encoding
+                )
             )
 
 def convert_encoding_recursive(
@@ -409,10 +413,10 @@ def main():
     # is not sufficient
     if len(sys.argv) < 2:
         # prints a message
-        print "Invalid number of arguments"
+        print("Invalid number of arguments")
 
         # prints the usage message
-        print "Usage: " + USAGE_MESSAGE
+        print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
         sys.exit(2)
@@ -432,10 +436,10 @@ def main():
         options, _arguments = getopt.getopt(sys.argv[2:], "rs:t:x:e:c:", [])
     except getopt.GetoptError:
         # prints a message
-        print "Invalid number of arguments"
+        print("Invalid number of arguments")
 
         # prints the usage message
-        print "Usage: " + USAGE_MESSAGE
+        print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
         sys.exit(2)

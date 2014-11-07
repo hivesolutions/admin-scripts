@@ -44,6 +44,8 @@ import getopt
 import StringIO
 import traceback
 
+import legacy
+
 USAGE_MESSAGE="cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
@@ -125,7 +127,7 @@ def get_property_index(property_line, property_order, line_number):
     if len(property_line_splitted) > 2:
         # warns about the extra values in the line and then returns
         # with the length of the property order
-        print "WARNING: extra values found at line %d" % line_number
+        print("WARNING: extra values found at line %d" % line_number)
 
     # runs a second split operation that limits the number of splits
     # in the line to two so that no extra problems are raised and then
@@ -141,8 +143,10 @@ def get_property_index(property_line, property_order, line_number):
     # in case the property is not in the order
     if not property_name in property_order:
         # warns about the missing property name
-        print "WARNING: order for property %s not defined at line %d" %\
+        print(
+            "WARNING: order for property %s not defined at line %d" %\
             (property_name, line_number)
+        )
 
         # uses the greatest index
         return len(property_order)
@@ -263,7 +267,7 @@ def process_property_line(property_line, line_number):
     # is considered to be empty (warning required) logs the message
     # and then returns the line itself (no processing)
     if not property_line.strip():
-        print "WARNING: empty stylesheet property at line %s" % line_number
+        print("WARNING: empty stylesheet property at line %s" % line_number)
         return property_line
 
     # strips the line to the right so that no newline characters
@@ -316,10 +320,10 @@ def process_color_definition(property_line, line_number):
         property_line = "".join(line_groups)
     except Exception, exception:
         # converts the exception to string
-        exception_string = unicode(exception)
+        exception_string = legacy.UNICODE(exception)
 
         # prints a warning
-        print "WARNING: %s near line %d" % (exception_string, line_number)
+        print("WARNING: %s near line %d" % (exception_string, line_number))
 
     # returns the property line
     return property_line
@@ -435,7 +439,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # in case the comment mode is already on
             if comments_started:
                 # prints a warning
-                print "WARNING: found opening comment inside open comment at line %d" % line_number
+                print("WARNING: found opening comment inside open comment at line %d" % line_number)
 
             # increments the comments started counter
             comments_started += 1
@@ -443,7 +447,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         elif "*/" in line:
             if not comments_started:
                 # raises an error
-                print "ERROR: found closing comment without corresponding opening at line %d" % line_number
+                print("ERROR: found closing comment without corresponding opening at line %d" % line_number)
 
             # decrements the comments started counter
             comments_started -= 1
@@ -484,7 +488,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # in case the rule set does not contain any property
                 if rule_started and not rule_lines:
                     # logs a warning
-                    print "WARNING: empty stylesheet rule at line %d" % line_number
+                    print("WARNING: empty stylesheet rule at line %d" % line_number)
 
                 # updates the flag to signal the rule has ended
                 rule_started = False
@@ -543,13 +547,13 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # otherwise in case this is an extra newline
             elif not needs_newline and newlines > 1:
                 # logs a warning about this extra newline
-                print "WARNING: found extra newline at line %d" % line_number
+                print("WARNING: found extra newline at line %d" % line_number)
 
             # disables the needs newline flag
             needs_newline = False
         else:
             # warns about the statement outside a valid rule
-            print "WARNING: found statement outside rule at line %d" % line_number
+            print("WARNING: found statement outside rule at line %d" % line_number)
 
         # writes the line to the output buffer taking into
         # account the windows newline control flag
@@ -614,8 +618,8 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
         # retrieves the exception string and uses it in the log
         # message to be printed to the standard output, then logs
         # the complete traceback messages to the same output
-        exception_string = unicode(exception)
-        print "ERROR: %s. Skipping file %s" % (exception_string, file_path_normalized)
+        exception_string = legacy.UNICODE(exception)
+        print("ERROR: %s. Skipping file %s" % (exception_string, file_path_normalized))
         traceback.print_exc(file = sys.stdout)
 
         # skips writing to the file
@@ -671,7 +675,7 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
 
     # iterates over all the valid complete names with extension filter
     for valid_complete_name in valid_complete_names:
-        print "Cleaning stylesheet file: %s" % valid_complete_name
+        print("Cleaning stylesheet file: %s" % valid_complete_name)
 
         # removes the cleanups the stylesheet for the (path) name
         cleanup_stylesheets(
@@ -819,10 +823,10 @@ def main():
     # is not sufficient
     if len(sys.argv) < 2:
         # prints a message
-        print "Invalid number of arguments"
+        print("Invalid number of arguments")
 
         # prints the usage message
-        print "Usage: " + USAGE_MESSAGE
+        print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
         sys.exit(2)
@@ -842,10 +846,10 @@ def main():
         options, _arguments = getopt.getopt(sys.argv[2:], "rp:e:c:", [])
     except getopt.GetoptError:
         # prints a message
-        print "Invalid number of arguments"
+        print("Invalid number of arguments")
 
         # prints the usage message
-        print "Usage: " + USAGE_MESSAGE
+        print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
         sys.exit(2)
