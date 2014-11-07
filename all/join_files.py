@@ -490,6 +490,10 @@ def join_files(file_path):
     try: file_contents = file.read()
     finally: file.close()
 
+    # uses the default encoding for json to decode
+    # the complete set of contents in the file
+    file_contents = file_contents.decode("utf-8")
+
     # loads the file contents, retrieving the
     # map of files to be created from joining
     files_map = json.loads(file_contents)
@@ -534,40 +538,35 @@ def join_files(file_path):
         for file in files:
             # in case it's the first file
             # no need to write the separator
-            if is_first:
-                is_first = False
+            if is_first: is_first = False
             # otherwise the separator must
             # be written
-            else:
-                # writes the separator
-                string_buffer.write("\r\n")
+            else: string_buffer.write(b"\r\n")
 
             # retrieves the complete file path by joining the
             # directory path and the current "file"
             file_path = os.path.join(directory_path, file)
             file_path = os.path.abspath(file_path)
 
-            # in case the file does not exists
+            # in case the file does not exists, raises an
+            # error indicating that there was an error
             if not os.path.exists(file_path):
-                # raises a runtime error
                 raise RuntimeError("the file path does not exist for file '%s'" % file)
 
             # opens the current file for reading
-            # in binary format
+            # in binary format and reads the complete
+            # set of contents into the current buffer
             _file = open(file_path, "rb")
-
-            try:
-                # reads the file contents
-                file_contents = _file.read()
-            finally:
-                # closes the file
-                _file.close()
+            try: file_contents = _file.read()
+            finally: _file.close()
 
             # writes the file contents into the string
-            # buffer
+            # buffer, appending the contents to the same file
             string_buffer.write(file_contents)
 
-        # retrieves the string value from the buffer
+        # retrieves the string value from the buffer, this is
+        # a binary (byte based) string and should be used with
+        # the proper care to avoid unwanted results
         string_value = string_buffer.getvalue()
 
         # minifies and compresses the string value
