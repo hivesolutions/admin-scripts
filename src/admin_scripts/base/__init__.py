@@ -19,9 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Hive Administration Scripts. If not, see <http://www.gnu.org/licenses/>.
 
-__author__ = "João Magalhães <joamag@hive.pt>"
-""" The author(s) of the module """
-
 __version__ = "1.0.0"
 """ The version of the module """
 
@@ -37,8 +34,8 @@ __copyright__ = "Copyright (c) 2008-2014 Hive Solutions Lda."
 __license__ = "GNU General Public License (GPL), Version 3"
 """ The license for the module """
 
-from . import cleanup_development
-from . import cleanup_stylesheets
-from . import convert_encoding
-from . import join_files
-from admin_scripts.base import trailing_spaces
+from . import cleanup
+from . import encoding
+from . import join
+from . import stylesheets
+from . import trailing_spaces
