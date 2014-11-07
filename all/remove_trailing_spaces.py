@@ -129,11 +129,11 @@ def remove_trailing_newlines(file_path, windows_newline = True):
     file_path_normalized = normalize_path(file_path)
 
     # opens the file for reading
-    file = open(file_path_normalized, "r")
+    file = open(file_path_normalized, "rb")
 
     try:
         # creates a string buffer for buffering
-        string_buffer = legacy.StringIO()
+        string_buffer = legacy.BytesIO()
 
         # reads the file lines
         file_lines = file.readlines()
@@ -147,7 +147,7 @@ def remove_trailing_newlines(file_path, windows_newline = True):
         # iterates over all the lines in the file
         for line in file_lines:
             # in case the line is not just a newline character
-            if not line == "\n" and not line == "\r\n":
+            if not line == b"\n" and not line == b"\r\n":
                 # breaks the cycle
                 break
 
@@ -175,10 +175,10 @@ def remove_trailing_newlines(file_path, windows_newline = True):
             # in case the newline mode is of type windows
             if windows_newline:
                 # writes the carriage return character and the new line character
-                string_buffer.write("\r\n")
+                string_buffer.write(b"\r\n")
             else:
                 # writes the new line character
-                string_buffer.write("\n")
+                string_buffer.write(b"\n")
     finally:
         # closes the file for reading
         file.close()
@@ -186,15 +186,11 @@ def remove_trailing_newlines(file_path, windows_newline = True):
     # retrieves the string value from the string buffer
     string_value = string_buffer.getvalue()
 
-    # opens the file for writing
+    # opens the file for writing and outputs the complete
+    # set of normalized generated contents into it
     file = open(file_path_normalized, "wb")
-
-    try:
-        # writes the string value to the file
-        file.write(string_value)
-    finally:
-        # closes the file for writing
-        file.close()
+    try: file.write(string_value)
+    finally: file.close()
 
 def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
     """
@@ -247,15 +243,11 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
     # retrieves the string value from the string buffer
     string_value = string_buffer.getvalue()
 
-    # opens the file for writing
+    # opens the file for writing and writes the complete
+    # set of generated contents into it (output operation)
     file = open(file_path_normalized, "wb")
-
-    try:
-        # writes the string value to the file
-        file.write(string_value)
-    finally:
-        # closes the file for writing
-        file.close()
+    try: file.write(string_value)
+    finally: file.close()
 
 def remove_trailing_spaces_walker(arguments, directory_name, names):
     """
