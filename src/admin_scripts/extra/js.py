@@ -281,10 +281,16 @@ def javascript_minify(string_value):
 
     @type string_value: String
     @param string_value: The string containing the value
-    to be minified.
+    to be minified, may be an normal or byte string.
     @rtype: String
     @return: The minified string value.
     """
+
+    # verifies the data type of the provided string
+    # value in case it's bytes it must be decoded
+    # using the pre-defined fallback decoder
+    is_bytes = type(string_value) == legacy.BYTES
+    if is_bytes: string_value = string_value.decode("utf-8")
 
     # creates a new string buffer with the given
     # string value (for the input) and then creates
@@ -303,12 +309,13 @@ def javascript_minify(string_value):
 
     # in case the string value of result is valid and starts
     # with a newline character (need to strip)
-    if string_value_result and string_value_result[0] == '\n':
+    if string_value_result and string_value_result[0] == "\n":
         # removes the newline character from the string value
         string_value_result = string_value_result[1:]
 
-    # returns the string value
-    # for the result
+    # encodes the string value result using the default
+    # javascript encoding and returns it to the caller
+    string_value_result = string_value_result.encode("utf-8")
     return string_value_result
 
 def is_alpha(character):
