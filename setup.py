@@ -62,7 +62,7 @@ setuptools.setup(
     },
     entry_points = {
         "console_scripts" : [
-            "cleanup = admin_scripts.cleanup:run"
+            "cleanup = admin_scripts.base.cleanup:run"
         ]
     },
     install_requires = [
