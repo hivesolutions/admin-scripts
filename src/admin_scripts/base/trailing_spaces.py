@@ -241,6 +241,7 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
         file.close()
 
     # retrieves the string value from the string buffer
+    # this should be a bytes based buffer string
     string_value = string_buffer.getvalue()
 
     # opens the file for writing and writes the complete
