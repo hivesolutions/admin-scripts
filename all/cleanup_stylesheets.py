@@ -623,7 +623,7 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
         # closes the file for reading
         file.close()
 
-    # opens the file for writing and then otputs the
+    # opens the file for writing and then outputs the
     # final normalized stylesheet contents into it
     file = open(file_path_normalized, "wb")
     try: file.write(string_value)
