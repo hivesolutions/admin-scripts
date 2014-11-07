@@ -92,10 +92,9 @@ def run():
     # in case the number of arguments
     # is not sufficient
     if len(sys.argv) < 2:
-        # prints a message
+        # prints a series of message about the correct usage
+        # of the command line for this command
         print("Invalid number of arguments")
-
-        # prints the usage message
         print("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
