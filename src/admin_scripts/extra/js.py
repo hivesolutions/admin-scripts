@@ -172,41 +172,41 @@ class JavascriptMinify:
 
         if action <= 2:
             self.theA = self.theB
-            if self.theA == "'" or self.theA == '"':
+            if self.theA == "'" or self.theA == "\"":
                 while True:
                     self._out_a()
                     self.theA = self._get()
                     if self.theA == self.theB:
                         break
-                    if self.theA <= '\n':
+                    if self.theA <= "\n":
                         # raises a runtime error
                         raise RuntimeError("unterminated string literal")
-                    if self.theA == '\\':
+                    if self.theA == "\\":
                         self._out_a()
                         self.theA = self._get()
 
         if action <= 3:
             self.theB = self._next()
 
-            if self.theB == '/' and (self.theA == '(' or self.theA == ',' or
-                self.theA == '=' or self.theA == ':' or
-                self.theA == '[' or self.theA == '?' or
-                self.theA == '!' or self.theA == '&' or
-                self.theA == '|' or self.theA == ';' or
-                self.theA == '{' or self.theA == '}' or
-                self.theA == '\n'):
+            if self.theB == "/" and (self.theA == "(" or self.theA == "," or
+                self.theA == "=" or self.theA == ":" or
+                self.theA == "[" or self.theA == "?" or
+                self.theA == "!" or self.theA == "&" or
+                self.theA == "|" or self.theA == ";" or
+                self.theA == "{" or self.theA == "}" or
+                self.theA == "\n"):
                 self._out_a()
                 self._out_b()
 
                 # iterates continuously
                 while True:
                     self.theA = self._get()
-                    if self.theA == '/':
+                    if self.theA == "/":
                         break
-                    elif self.theA == '\\':
+                    elif self.theA == "\\":
                         self._out_a()
                         self.theA = self._get()
-                    elif self.theA <= '\n':
+                    elif self.theA <= "\n":
                         # raises a runtime error
                         raise RuntimeError("unterminated regular expression")
                     self._out_a()
@@ -220,19 +220,19 @@ class JavascriptMinify:
            replaced with spaces. Carriage returns will be replaced with linefeeds.
            Most spaces and linefeeds will be removed.
         """
-        self.theA = '\n'
+        self.theA = "\n"
         self._action(3)
 
-        while self.theA != '\0':
-            if self.theA == ' ':
+        while self.theA != "\0":
+            if self.theA == " ":
                 if is_alpha(self.theB):
                     self._action(1)
                 else:
                     self._action(2)
-            elif self.theA == '\n':
-                if self.theB in ['{', '[', '(', '+', '-']:
+            elif self.theA == "\n":
+                if self.theB in ["{", "[", "(", "+", "-"]:
                     self._action(1)
-                elif self.theB == ' ':
+                elif self.theB == " ":
                     self._action(3)
                 else:
                     if is_alpha(self.theB):
@@ -240,13 +240,13 @@ class JavascriptMinify:
                     else:
                         self._action(2)
             else:
-                if self.theB == ' ':
+                if self.theB == " ":
                     if is_alpha(self.theA):
                         self._action(1)
                     else:
                         self._action(3)
-                elif self.theB == '\n':
-                    if self.theA in ['}', ']', ')', '+', '-', '"', '\'']:
+                elif self.theB == "\n":
+                    if self.theA in ["}", "]", ")", "+", "-", "\"", "'"]:
                         self._action(1)
                     else:
                         if is_alpha(self.theA):
@@ -262,7 +262,7 @@ class JavascriptMinify:
         self.output_file = output_file
 
         #
-        self.theA = '\n'
+        self.theA = "\n"
         self.theB = None
         self.look_ahead = None
 
