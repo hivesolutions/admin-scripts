@@ -88,30 +88,25 @@ def css_slimmer(css):
 
     remove_next_comment = 1
     for css_comment in CSS_COMMENTS.findall(css):
-        if css_comment[-3:]=='\*/':
+        if css_comment[-3:]=="\*/":
             remove_next_comment=0
             continue
         if remove_next_comment:
-            css = css.replace(css_comment, '')
+            css = css.replace(css_comment, "")
         else:
             remove_next_comment = 1
 
-    css = re.sub(r'\s\s+', ' ', css) # >= 2 whitespace becomes one whitespace
-    css = re.sub(r'\s+\n', '', css) # no whitespace before end of line
-    # Remove space before and after certain chars
-    for char in ('{', '}', ':', ';', ','):
-        css = re.sub(char+r'\s', char, css)
-        css = re.sub(r'\s'+char, char, css)
-    css = re.sub(r'\s+</',r'</', css) # no extraspace before </style>
-    css = re.sub(r'}\s(#|\w)', r'}\1', css)
-    css = re.sub(r';}', r'}', css) # no need for the ; before end of attributes
-    css = re.sub(r'}//-->', r'}\n//-->', css)
-    css = simplify_hex_colors(css)
+    css = re.sub(r"\s\s+", " ", css)
+    css = re.sub(r"\s+\n", "", css)
 
-    # voice-family hack. The declration: '''voice-family: "\"}\""''' requires
-    # that extra space between the ':' and the first '"' which _css_slimmer()
-    # removed. Put it back (http://real.issuetrackerproduct.com/0168)
-    css = re.sub(r'voice-family:"\\"}\\""', r'voice-family: "\\"}\\""', css)
+    for char in ("{", "}", ":", ";", ","):
+        css = re.sub(char+r"\s", char, css)
+        css = re.sub(r"\s"+char, char, css)
+    css = re.sub(r"\s+</",r"</", css)
+    css = re.sub(r"}\s(#|\w)", r"}\1", css)
+    css = re.sub(r";}", r"}", css)
+    css = re.sub(r"}//-->", r"}\n//-->", css)
+    css = simplify_hex_colors(css)
     css.strip()
 
     # re-encodes the value into the default encoding so that it
