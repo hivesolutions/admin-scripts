@@ -129,7 +129,8 @@ def join_files(file_path):
     spaces removed.
     """
 
-    # normalizes the file path
+    # normalizes the file path value so that it
+    # represents a correct file path
     file_path_normalized = normalize_path(file_path)
 
     # opens the file for reading and then reads the
@@ -456,13 +457,11 @@ def main():
     # in case the number of arguments
     # is not sufficient
     if len(sys.argv) < 2:
-        # prints a message
+        # prints a series of message related with he
+        # correct usage of the command line and then
+        # exits the process with error indication
         print("Invalid number of arguments")
-
-        # prints the usage message
         print("Usage: " + USAGE_MESSAGE)
-
-        # exits the system in error
         sys.exit(2)
 
     # sets the default values for the parameters
@@ -475,11 +474,10 @@ def main():
         options, _arguments = getopt.getopt(sys.argv[2:], "rc:", [])
     except getopt.GetoptError:
         # prints a series of messages about the
-        # correct usage of the command line
+        # correct usage of the command line and
+        # exits the current process with an error
         print("Invalid number of arguments")
         print("Usage: " + USAGE_MESSAGE)
-
-        # exits the system in error
         sys.exit(2)
 
     # iterates over all the options, retrieving the option
