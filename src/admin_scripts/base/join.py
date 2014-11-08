@@ -119,14 +119,15 @@ def normalize_path(path):
 
 def join_files(file_path):
     """
-    Removes the extra spaces or tabs in every line of the
-    file contents.
-    The extra argument defines if the newline format used
-    should be the windows mode (carriage return and newline).
+    Runs the joining operation according to the specification
+    provided by the file located at the provided path.
+
+    The joining operation may be complex and may take some
+    time until it's completely finished.
 
     @type file_path: String
-    @param file_path: The path to the file to have the trailing
-    spaces removed.
+    @param file_path: The path to the file that contains the
+    json based specification for the joining operation.
     """
 
     # normalizes the file path value so that it
@@ -368,10 +369,10 @@ def join_files_walker(arguments, directory_name, names):
 
     # iterates over all the valid complete names with extension filter
     for valid_complete_name in valid_complete_names:
-        # print a message
+        # print a message a message about the joining
+        # operation that is going to be performed and
+        # then runs the operation with the correct path
         print("Joining files defined in file: %s" % valid_complete_name)
-
-        # joins the files for the (path) name
         join_files(valid_complete_name)
 
 def join_files_recursive(directory_path, file_exclusion):
