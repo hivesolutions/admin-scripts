@@ -801,20 +801,18 @@ def _retrieve_configurations(
 
 def main():
     """
-    Main function used for the removal of both the trailing spaces
-    and the extra newlines.
+    Main function used for the processing of the stylesheet
+    files so that a normalized form is outputted.
     """
 
     # in case the number of arguments
     # is not sufficient
     if len(sys.argv) < 2:
-        # prints a message
+        # prints a series of message about the correct
+        # usage of the command line and the exits the
+        # current process with an error code
         print("Invalid number of arguments")
-
-        # prints the usage message
         print("Usage: " + USAGE_MESSAGE)
-
-        # exits the system in error
         sys.exit(2)
 
     # sets the default values for the parameters
@@ -831,13 +829,11 @@ def main():
     try:
         options, _arguments = getopt.getopt(sys.argv[2:], "rp:e:c:", [])
     except getopt.GetoptError:
-        # prints a message
+        # prints a series of message about the correct
+        # usage of the command line and the exits the
+        # current process with an error code
         print("Invalid number of arguments")
-
-        # prints the usage message
         print("Usage: " + USAGE_MESSAGE)
-
-        # exits the system in error
         sys.exit(2)
 
     # iterates over all the options, retrieving the option
