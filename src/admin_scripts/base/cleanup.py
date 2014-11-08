@@ -85,7 +85,9 @@ WINDOWS_PLATFORMS_VALUE = (
     CE_PLATFORM_VALUE,
     DOS_PLATFORM_VALUE
 )
-""" The windows platform value """
+""" The windows platform value, that contains the
+series of constant values corresponding to the complete
+valid platform values for windows """
 
 def run():
     # retrieves the path to the "current" directory
