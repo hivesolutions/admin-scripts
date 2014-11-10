@@ -71,20 +71,7 @@ PYTHON_COMMAND = "python"
 CONFIGURATION_FLAG = "-c"
 """ The flag name for the configuration control """
 
-NT_PLATFORM_VALUE = "nt"
-""" The nt platform value """
-
-CE_PLATFORM_VALUE = "ce"
-""" The ce platform value """
-
-DOS_PLATFORM_VALUE = "dos"
-""" The dos platform value """
-
-WINDOWS_PLATFORMS_VALUE = (
-    NT_PLATFORM_VALUE,
-    CE_PLATFORM_VALUE,
-    DOS_PLATFORM_VALUE
-)
+WINDOWS_PLATFORMS = ("nt", "ce", "dos")
 """ The windows platform value, that contains the
 series of constant values corresponding to the complete
 valid platform values for windows """
@@ -111,7 +98,7 @@ def run():
 
     # retrieves the current os name and then using it
     # sets the shell value to be used in the process
-    shell_value = os.name in WINDOWS_PLATFORMS_VALUE and True or False
+    shell_value = os.name in WINDOWS_PLATFORMS and True or False
 
     # iterates over all the scripts for execution, passing
     # the proper script values into each script for execution
