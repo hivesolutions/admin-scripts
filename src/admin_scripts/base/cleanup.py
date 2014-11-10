@@ -42,7 +42,8 @@ import sys
 import subprocess
 
 USAGE_MESSAGE = "cleanup path [extra_argument_1, extra_argument_2, ...]"
-""" The usage message """
+""" The usage message to be printed when an error occurs or
+when help is requested by the end user """
 
 SCRIPTS_LIST = [
     "stylesheets.py",
@@ -50,7 +51,9 @@ SCRIPTS_LIST = [
     "join.py",
     "trailing_spaces.py"
 ]
-""" The list of scripts to be executed """
+""" The list of scripts to be executed by the complete
+cleanup operation, each of the scripts will be executed
+as a separate process in a chained process """
 
 SCRIPTS_CONFIGURATION_MAP = {
     "stylesheets.py" : "development/stylesheets.py",
