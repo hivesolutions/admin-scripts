@@ -153,6 +153,6 @@ def configuration(file_path = None, **kwargs):
     else:
         # creates the configurations tuple with the base configurations
         # coming from the keyword based arguments (as expected)
-        configurations = (kwargs)
+        configurations = (kwargs,)
 
     return configurations

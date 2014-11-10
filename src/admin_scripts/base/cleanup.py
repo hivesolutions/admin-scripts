@@ -49,7 +49,8 @@ SCRIPTS_LIST = [
     "stylesheets.py",
     "encoding.py",
     "join.py",
-    "trailing_spaces.py"
+    "trailing_spaces.py",
+    "pydev.py"
 ]
 """ The list of scripts to be executed by the complete
 cleanup operation, each of the scripts will be executed
@@ -59,7 +60,8 @@ SCRIPTS_CONFIGURATION_MAP = {
     "stylesheets.py" : "development/stylesheets.py",
     "encoding.py" : "development/encoding.py",
     "join.py" : "development/join.py",
-    "trailing_spaces.py" : "development/trailing_spaces.py"
+    "trailing_spaces.py" : "development/trailing_spaces.py",
+    "pydev.py" : "development/pydev.py"
 }
 """ The map associating the script name with the name
 of the configuration file, so that during execution
@@ -106,27 +108,31 @@ def run():
     # iterates over all the scripts for execution, passing
     # the proper script values into each script for execution
     for script in SCRIPTS_LIST:
-        # retrieves the script configuration file name
-        script_configuration_file_name = SCRIPTS_CONFIGURATION_MAP[script]
+        # retrieves the script configuration file name in case
+        # no configuration path is found no value is provided
+        script_configuration_file_name = SCRIPTS_CONFIGURATION_MAP.get(script, None)
 
         # creates both the script and the configuration paths
+        # note that there's a path normalization process
         script_path = os.path.join(directory_path, script)
         configuration_path = os.path.join(
             directory_path,
             os.path.join(CONFIGURATION_RELATIVE_PATH, script_configuration_file_name)
-        )
+        ) if script_configuration_file_name else None
 
-        # resolves both paths as absolute
-        script_path = os.path.abspath(script_path)
-        configuration_path = os.path.abspath(configuration_path)
+        # resolves both paths as absolute so that the proper value
+        # is passed to the underlying command line execution
+        if not script_path == None: script_path = os.path.abspath(script_path)
+        if not configuration_path == None: configuration_path = os.path.abspath(configuration_path)
 
         # creates the arguments list from the various
         # processed arguments
         arguments = [PYTHON_COMMAND]
         arguments.append(script_path)
         arguments.append(target_path)
-        arguments.append(CONFIGURATION_FLAG)
-        arguments.append(configuration_path)
+        if configuration_path:
+            arguments.append(CONFIGURATION_FLAG)
+            arguments.append(configuration_path)
         arguments.extend(extra_arguments)
 
         # prints a message and flushes the standard output
