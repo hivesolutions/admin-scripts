@@ -50,9 +50,6 @@ import admin_scripts.extra as extra
 USAGE_MESSAGE="cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
-RELATIVE_BASE_PATH = "/.."
-""" The relative base path """
-
 LONG_PATH_PREFIX = legacy.UNICODE("\\\\?\\")
 """ The windows long path prefix """
 

@@ -43,11 +43,10 @@ import getopt
 
 import legacy
 
+import admin_scripts.extra as extra
+
 USAGE_MESSAGE = "encoding path [-r] [-s source_encoding] [-t target_encoding] [-u] [-x replacement_from_1, replacement_to_1, replacement_from_2, replacement_to_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
-
-RELATIVE_BASE_PATH = "/.."
-""" The relative base path """
 
 LONG_PATH_PREFIX = legacy.UNICODE("\\\\?\\")
 """ The windows long path prefix """
@@ -325,89 +324,6 @@ def convert_encoding_recursive(
         )
     )
 
-def _retrieve_configurations(
-    recursive,
-    source_encoding,
-    target_encoding,
-    windows_newline,
-    replacements_list,
-    file_extensions,
-    file_exclusion,
-    configuration_file_path
-):
-    """
-    Retrieves the configuration maps for the given arguments.
-
-    @type recursive: bool
-    @param recursive: If the removing should be recursive.
-    @type source_encoding: String
-    @param source_encoding: The source encoding from which the file is to be
-    converted.
-    @type target_encoding: String
-    @param target_encoding: The target encoding to which the file is to be
-    converted to.
-    @type replacements_list: List
-    @param replacements_list: The list of replacements to perform.
-    @type file_extensions: List
-    @param file_extensions: The list of file extensions to be used.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
-    @type configuration_file_path: String
-    @param configuration_file_path: The path to the configuration file.
-    """
-
-    # in case the configuration file path is defined
-    if configuration_file_path:
-        # creates the base path from the file paths
-        base_path = os.path.dirname(os.path.realpath(__file__)) + RELATIVE_BASE_PATH
-
-        # retrieves the real base path
-        real_base_path = os.path.realpath(base_path)
-
-        # retrieves the configuration directory from the configuration
-        # file path (the directory is going to be used to include the module)
-        configuration_directory_path = os.path.dirname(configuration_file_path)
-
-        # in case the configuration directory path is not an absolute path
-        if not os.path.isabs(configuration_directory_path):
-            # creates the (complete) configuration directory path prepending the manager path
-            configuration_directory_path = real_base_path + "/" + configuration_directory_path
-
-        # in case the configuration directory path is valid inserts it into the system path
-        configuration_directory_path and sys.path.insert(0, configuration_directory_path)
-
-        # retrieves the configuration file base path from the configuration file path
-        configuration_file_base_path = os.path.basename(configuration_file_path)
-
-        # retrieves the configuration module name and the configuration module extension by splitting the
-        # configuration base path into base name and extension
-        configuration_module_name, _configuration_module_extension = os.path.splitext(configuration_file_base_path)
-
-        # imports the configuration module
-        configuration = __import__(configuration_module_name)
-
-        # retrieves the configurations from the configuration module
-        configurations = configuration.configurations
-    else:
-        # creates the base configuration map
-        base_configuration = {}
-
-        # sets the base configuration map attributes
-        base_configuration["recursive"] = recursive
-        base_configuration["source_encoding"] = source_encoding
-        base_configuration["target_encoding"] = target_encoding
-        base_configuration["replacements_list"] = replacements_list
-        base_configuration["file_extensions"] = file_extensions
-        base_configuration["file_exclusion"] = file_exclusion
-
-        # creates the configurations tuple with the base configurations
-        configurations = (
-            base_configuration,
-        )
-
-    # returns the configurations tuple
-    return configurations
-
 def main():
     """
     Main function used for the encoding conversion.
@@ -469,15 +385,15 @@ def main():
             configuration_file_path = value
 
     # retrieves the configurations from the command line arguments
-    configurations = _retrieve_configurations(
-        recursive,
-        source_encoding,
-        target_encoding,
-        windows_newline,
-        replacements_list,
-        file_extensions,
-        file_exclusion,
-        configuration_file_path
+    configurations = extra.configuration(
+        file_path = configuration_file_path,
+        recursive = recursive,
+        source_encoding = source_encoding,
+        target_encoding = target_encoding,
+        windows_newline = windows_newline,
+        replacements_list = replacements_list,
+        file_extensions = file_extensions,
+        file_exclusion = file_exclusion
     )
 
     # iterates over all the configurations, executing them
