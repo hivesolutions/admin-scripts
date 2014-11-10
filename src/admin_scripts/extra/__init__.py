@@ -40,4 +40,4 @@ from . import lib
 
 from .css import css_slimmer
 from .js import javascript_minify
-from .lib import configuration
+from .lib import normalize_path, configuration

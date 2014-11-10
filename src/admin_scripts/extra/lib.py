@@ -40,6 +40,75 @@ __license__ = "GNU General Public License (GPL), Version 3"
 import os
 import sys
 
+import legacy
+
+NT_PLATFORM = "nt"
+""" The nt platform reference string value to be
+used in operative system detection """
+
+DOS_PLATFORM = "dos"
+""" The dos platform used as a fallback reference
+value for operation system detection mechanisms """
+
+WINDOWS_PLATFORMS = (NT_PLATFORM, DOS_PLATFORM)
+""" The windows platform values that may be used
+to detect any environment running any version of windows """
+
+LONG_PATH_PREFIX = legacy.UNICODE("\\\\?\\")
+""" The windows long path prefix, used for special
+construction of path values in windows """
+
+def normalize_path(path):
+    """
+    Normalizes the given path, using the characteristics
+    of the current environment.
+
+    In windows this function adds support for long path names
+    as defined in windows specification.
+
+    @type path: String
+    @param path: The path (to file) value that is going to
+    be returned as normalized.
+    @rtype: String
+    @return: The normalized path, resulting from a series of
+    normalization processes applied to the "original" path.-
+    """
+
+    # retrieves the current os name, as it's going to be used
+    # to determine if windows normalization should be applied
+    os_name = os.name
+
+    # in case the current operative system is windows based and
+    # the normalized path does start with the long path prefix it
+    # must be removed to allow a "normal" path normalization
+    if os_name in WINDOWS_PLATFORMS and path.startswith(LONG_PATH_PREFIX):
+        # removes the long path prefix from the path
+        path = path[4:]
+
+    # checks if the path is absolute
+    is_absolute_path = os.path.isabs(path)
+
+    # in case the path is not absolute (creates problem in windows
+    # long path support)
+    if os_name in WINDOWS_PLATFORMS and not is_absolute_path:
+        # converts the path to absolute
+        path = os.path.abspath(path)
+
+    # normalizes the path, using the underlying python function
+    # that provided simple normalization process
+    normalized_path = os.path.normpath(path)
+
+    # in case the current operative system is windows based and
+    # the normalized path does not start with the long path prefix
+    if os_name in WINDOWS_PLATFORMS and not normalized_path.startswith(LONG_PATH_PREFIX):
+        # creates the path in the windows mode, adds
+        # the support for long path names with the prefix token
+        normalized_path = LONG_PATH_PREFIX + normalized_path
+
+    # returns the "final" normalized path value resultin from
+    # the various normalization processes applied to original path
+    return normalized_path
+
 def configuration(file_path = None, **kwargs):
     """
     Retrieves the configuration map(s) for the given arguments,
