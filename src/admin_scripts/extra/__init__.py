@@ -36,6 +36,8 @@ __license__ = "GNU General Public License (GPL), Version 3"
 
 from . import css
 from . import js
+from . import lib
 
 from .css import css_slimmer
 from .js import javascript_minify
+from .lib import configuration
