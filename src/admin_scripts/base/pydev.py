@@ -51,6 +51,13 @@ USAGE_MESSAGE="pydev [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_f
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
 
+VALID_PROPERTIES = (
+    "org.python.pydev.PYTHON_PROJECT_VERSION",
+    "org.python.pydev.PYTHON_PROJECT_INTERPRETER"
+)
+""" The sequence that defines the complete set of properties that
+are considered valid under the current pydev specification """
+
 def pydev_file(file_path):
     """
     Runs the pydev configuration file normalization that consists
@@ -64,8 +71,69 @@ def pydev_file(file_path):
     pydev configuration specification in xml.
     """
 
+    paths = []
+    properties = dict()
+    buffer = []
+
     xmldoc = xml.dom.minidom.parse(file_path)
-    xmldoc.getElementsByTagName("item")
+    nodes = xmldoc.getElementsByTagName("pydev_property")
+
+    for node in nodes:
+        value = text_value(node)
+        name = node.attributes["name"].value
+        properties[name] = value
+
+    nodes = xmldoc.getElementsByTagName("pydev_pathproperty")
+    nodes = nodes[0].childNodes if nodes else []
+
+    for node in nodes:
+        value = text_value(node)
+        if not value: continue
+        paths.append(value)
+
+    for key in legacy.keys(properties):
+        if key in VALID_PROPERTIES: continue
+        raise RuntimeError("Invalid property '%s'" % key)
+
+    property_keys = legacy.keys(properties)
+    property_keys.sort()
+
+    buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n")
+    buffer.append("<?eclipse-pydev version=\"1.0\"?><pydev_project>\n")
+    buffer.append("<pydev_pathproperty name=\"org.python.pydev.PROJECT_SOURCE_PATH\">\n")
+    for path in paths:
+        buffer.append("<path>%s</path>\n" % path)
+    buffer.append("</pydev_pathproperty>\n")
+    for key in property_keys:
+        value = properties[key]
+        buffer.append("<pydev_property name=\"%s\">%s</pydev_property>\n" % (key, value))
+    buffer.append("</pydev_project>\n")
+
+    result = "".join(buffer)
+    print(result)
+
+def text_value(node):
+    """
+    Retrieves the text/xml string value for the provided
+    node, this is a recursive approach and the child nodes
+    are used as the entry point.
+
+    @type node: Element
+    @param node: The base element node from which the values
+    are going to be retrieved.
+    @rtype: String
+    @return: The string/textual part of the xml element node
+    provided.
+    """
+
+    nodes = node.childNodes
+
+    data = []
+    for node in nodes:
+        if not node.nodeType == node.TEXT_NODE: continue
+        data.append(node.data)
+
+    return "".join(data)
 
 def pydev_walker(arguments, directory_name, names):
     """
@@ -96,7 +164,7 @@ def pydev_walker(arguments, directory_name, names):
     # filters the names with non valid file extensions so that only the
     # ones that conform with the pydev project ones are selected
     valid_complete_names = [os.path.normpath(name) for name in valid_complete_names
-        if name == ".pydevproject"]
+        if name.endswith(".pydevproject")]
 
     # iterates over all the valid complete names with valid structure
     # as defined by the pydev project specification
