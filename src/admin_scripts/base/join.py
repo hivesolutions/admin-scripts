@@ -56,65 +56,6 @@ for the compression of gzip based files """
 USAGE_MESSAGE="join [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
-LONG_PATH_PREFIX = legacy.UNICODE("\\\\?\\")
-""" The windows long path prefix """
-
-NT_PLATFORM_VALUE = "nt"
-""" The nt platform value """
-
-DOS_PLATFORM_VALUE = "dos"
-""" The dos platform value """
-
-WINDOWS_PLATFORMS_VALUE = (
-    NT_PLATFORM_VALUE,
-    DOS_PLATFORM_VALUE
-)
-""" The windows platform value """
-
-def normalize_path(path):
-    """
-    Normalizes the given path, using the characteristics
-    of the current environment.
-    In windows this function adds support for long path names.
-
-    @type path: String
-    @param path: The path to be normalized.
-    @rtype: String
-    @return: The normalized path.
-    """
-
-    # retrieves the current os name
-    os_name = os.name
-
-    # in case the current operative system is windows based and
-    # the normalized path does start with the long path prefix it
-    # must be removed to allow a "normal" path normalization
-    if os_name in WINDOWS_PLATFORMS_VALUE and path.startswith(LONG_PATH_PREFIX):
-        # removes the long path prefix from the path
-        path = path[4:]
-
-    # checks if the path is absolute
-    is_absolute_path = os.path.isabs(path)
-
-    # in case the path is not absolute (creates problem in windows
-    # long path support)
-    if os_name in WINDOWS_PLATFORMS_VALUE and not is_absolute_path:
-        # converts the path to absolute
-        path = os.path.abspath(path)
-
-    # normalizes the path
-    normalized_path = os.path.normpath(path)
-
-    # in case the current operative system is windows based and
-    # the normalized path does not start with the long path prefix
-    if os_name in WINDOWS_PLATFORMS_VALUE and not normalized_path.startswith(LONG_PATH_PREFIX):
-        # creates the path in the windows mode, adds
-        # the support for long path names with the prefix token
-        normalized_path = LONG_PATH_PREFIX + normalized_path
-
-    # returns the normalized path
-    return normalized_path
-
 def join_files(file_path):
     """
     Runs the joining operation according to the specification
@@ -130,7 +71,7 @@ def join_files(file_path):
 
     # normalizes the file path value so that it
     # represents a correct file path
-    file_path_normalized = normalize_path(file_path)
+    file_path_normalized = extra.normalize_path(file_path)
 
     # opens the file for reading and then reads the
     # complete set of data contained in it
@@ -429,6 +370,7 @@ def main():
             configuration_file_path = value
 
     # retrieves the configurations from the command line arguments
+    # either from the command line or configuration file
     configurations = extra.configuration(
         file_path = configuration_file_path,
         recursive = recursive,

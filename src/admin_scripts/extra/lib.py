@@ -85,7 +85,8 @@ def normalize_path(path):
         # removes the long path prefix from the path
         path = path[4:]
 
-    # checks if the path is absolute
+    # checks if the path is absolute, as it will be used to determine
+    # if the path should be normalized as absolute or not
     is_absolute_path = os.path.isabs(path)
 
     # in case the path is not absolute (creates problem in windows

@@ -50,21 +50,6 @@ import admin_scripts.extra as extra
 USAGE_MESSAGE="cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
-LONG_PATH_PREFIX = legacy.UNICODE("\\\\?\\")
-""" The windows long path prefix """
-
-NT_PLATFORM_VALUE = "nt"
-""" The nt platform value """
-
-DOS_PLATFORM_VALUE = "dos"
-""" The dos platform value """
-
-WINDOWS_PLATFORMS_VALUE = (
-    NT_PLATFORM_VALUE,
-    DOS_PLATFORM_VALUE
-)
-""" The windows platform value """
-
 COLOR_REGEX_VALUE = r"(.*:)(.*#)([0-9a-fA-F]+)(.*)"
 """ The color regex value """
 
@@ -154,50 +139,6 @@ def get_property_index(property_line, property_order, line_number):
 
     # returns the property index
     return property_index
-
-def normalize_path(path):
-    """
-    Normalizes the given path, using the characteristics
-    of the current environment.
-    In windows this function adds support for long path names.
-
-    @type path: String
-    @param path: The path to be normalized.
-    @rtype: String
-    @return: The normalized path.
-    """
-
-    # retrieves the current os name
-    os_name = os.name
-
-    # in case the current operative system is windows based and
-    # the normalized path does start with the long path prefix it
-    # must be removed to allow a "normal" path normalization
-    if os_name in WINDOWS_PLATFORMS_VALUE and path.startswith(LONG_PATH_PREFIX):
-        # removes the long path prefix from the path
-        path = path[4:]
-
-    # checks if the path is absolute
-    is_absolute_path = os.path.isabs(path)
-
-    # in case the path is not absolute (creates problem in windows
-    # long path support)
-    if os_name in WINDOWS_PLATFORMS_VALUE and not is_absolute_path:
-        # converts the path to absolute
-        path = os.path.abspath(path)
-
-    # normalizes the path
-    normalized_path = os.path.normpath(path)
-
-    # in case the current operative system is windows based and
-    # the normalized path does not start with the long path prefix
-    if os_name in WINDOWS_PLATFORMS_VALUE and not normalized_path.startswith(LONG_PATH_PREFIX):
-        # creates the path in the windows mode, adds
-        # the support for long path names with the prefix token
-        normalized_path = LONG_PATH_PREFIX + normalized_path
-
-    # returns the normalized path
-    return normalized_path
 
 def write_lines(output_buffer, lines, windows_newline):
     """
