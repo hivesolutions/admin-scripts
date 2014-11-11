@@ -119,14 +119,14 @@ def pydev_file(file_path, fix = True):
 
     buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n")
     buffer.append("<?eclipse-pydev version=\"1.0\"?><pydev_project>\n")
-    buffer.append("<pydev_pathproperty name=\"org.python.pydev.PROJECT_SOURCE_PATH\">\n")
+    if paths: buffer.append("<pydev_pathproperty name=\"org.python.pydev.PROJECT_SOURCE_PATH\">\n")
     for path in paths:
         buffer.append("<path>%s</path>\n" % path)
-    if property_keys: buffer.append("</pydev_pathproperty>\n")
+    if paths: buffer.append("</pydev_pathproperty>\n")
     for key in property_keys:
         value = properties[key]
         buffer.append("<pydev_property name=\"%s\">%s</pydev_property>\n" % (key, value))
-    if property_keys: buffer.append("</pydev_project>\n")
+    buffer.append("</pydev_project>\n")
 
     result = "".join(buffer)
     result = result.encode("utf-8")
@@ -158,6 +158,7 @@ def fix_values(paths, properties):
     _paths = []
 
     for path in paths:
+        if not path: continue
         if not "/" in path: _paths.append(path)
         elif path.startswith("/${PROJECT_DIR_NAME}"): _paths.append(path)
         else: _paths.append(PREFIX_REGEX.sub("/${PROJECT_DIR_NAME}", path, 1))
