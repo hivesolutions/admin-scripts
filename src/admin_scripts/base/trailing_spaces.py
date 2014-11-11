@@ -228,7 +228,7 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
     # iterates over all the valid complete names with extension filter
     for valid_complete_name in valid_complete_names:
         # print a message
-        print("Removing trail in file: %s" % valid_complete_name)
+        extra.echo("Removing trail in file: %s" % valid_complete_name)
 
         # removes the trailing spaces for the (path) name
         remove_trailing_spaces(valid_complete_name, tab_to_spaces, windows_newline)
@@ -236,7 +236,7 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
         # in case the trailing newlines flag is active
         if trailing_newlines:
             # prints a message
-            print("Removing trail newlines in file: %s" % (valid_complete_name,))
+            extra.echo("Removing trail newlines in file: %s" % (valid_complete_name,))
 
             # removes the trailing newlines for the(path) name
             remove_trailing_newlines(valid_complete_name, windows_newline)
@@ -290,13 +290,11 @@ def main():
     # in case the number of arguments
     # is not sufficient
     if len(sys.argv) < 2:
-        # prints a message
-        print("Invalid number of arguments")
-
-        # prints the usage message
-        print("Usage: " + USAGE_MESSAGE)
-
-        # exits the system in error
+        # prints a series of message about the error
+        # that has just occurred and then exits with
+        # an error code to the calling process
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
         sys.exit(2)
 
     # sets the default values for the parameters
@@ -312,13 +310,11 @@ def main():
     try:
         options, _arguments = getopt.getopt(sys.argv[2:], "rtnue:c:", [])
     except getopt.GetoptError:
-        # prints a message
-        print("Invalid number of arguments")
-
-        # prints the usage message
-        print("Usage: " + USAGE_MESSAGE)
-
-        # exits the system in error
+        # prints a series of message about the error
+        # that has just occurred and then exits with
+        # an error code to the calling process
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
         sys.exit(2)
 
     # iterates over all the options, retrieving the option

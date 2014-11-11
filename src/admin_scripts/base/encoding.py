@@ -195,7 +195,7 @@ def convert_encoding_walker(arguments, directory_name, names):
     for valid_complete_name in valid_complete_names:
         # prints a message about the file that is not going to be converted
         # into the proper target encoding as defined in the specification
-        print(
+        extra.echo(
             "Convert encoding in file: %s (%s to %s)" %\
             (
                  valid_complete_name,
@@ -216,7 +216,7 @@ def convert_encoding_walker(arguments, directory_name, names):
                 replacements_list
             )
         except:
-            sys.stderr.write(
+            extra.warn(
                 "WARNING: failed converting encoding in file: %s (%s to %s)" %\
                 (
                      valid_complete_name,
@@ -276,13 +276,10 @@ def main():
     # in case the number of arguments
     # is not sufficient
     if len(sys.argv) < 2:
-        # prints a message
-        print("Invalid number of arguments")
-
-        # prints the usage message
-        print("Usage: " + USAGE_MESSAGE)
-
-        # exits the system in error
+        # prints a series of messages about the command line
+        # error that occurred and then exits with an error
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
         sys.exit(2)
 
     # sets the default values for the parameters
@@ -299,13 +296,10 @@ def main():
     try:
         options, _arguments = getopt.getopt(sys.argv[2:], "rs:t:x:e:c:", [])
     except getopt.GetoptError:
-        # prints a message
-        print("Invalid number of arguments")
-
-        # prints the usage message
-        print("Usage: " + USAGE_MESSAGE)
-
-        # exits the system in error
+        # prints a series of messages about the command line
+        # error that occurred and then exits with an error
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
         sys.exit(2)
 
     # iterates over all the options, retrieving the option

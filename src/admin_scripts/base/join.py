@@ -311,7 +311,7 @@ def join_files_walker(arguments, directory_name, names):
         # print a message a message about the joining
         # operation that is going to be performed and
         # then runs the operation with the correct path
-        print("Joining files defined in file: %s" % valid_complete_name)
+        extra.echo("Joining files defined in file: %s" % valid_complete_name)
         join_files(valid_complete_name)
 
 def join_files_recursive(directory_path, file_exclusion):
@@ -339,8 +339,8 @@ def main():
         # prints a series of message related with he
         # correct usage of the command line and then
         # exits the process with error indication
-        print("Invalid number of arguments")
-        print("Usage: " + USAGE_MESSAGE)
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
         sys.exit(2)
 
     # sets the default values for the parameters
@@ -355,8 +355,8 @@ def main():
         # prints a series of messages about the
         # correct usage of the command line and
         # exits the current process with an error
-        print("Invalid number of arguments")
-        print("Usage: " + USAGE_MESSAGE)
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
         sys.exit(2)
 
     # iterates over all the options, retrieving the option

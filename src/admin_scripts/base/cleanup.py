@@ -41,6 +41,8 @@ import os
 import sys
 import subprocess
 
+import admin_scripts.extra as extra
+
 USAGE_MESSAGE = "cleanup path [extra_argument_1, extra_argument_2, ...]"
 """ The usage message to be printed when an error occurs or
 when help is requested by the end user """
@@ -90,8 +92,8 @@ def run():
     if len(sys.argv) < 2:
         # prints a series of message about the correct usage
         # of the command line for this command
-        print("Invalid number of arguments")
-        print("Usage: " + USAGE_MESSAGE)
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
 
         # exits the system in error
         sys.exit(2)
@@ -136,9 +138,9 @@ def run():
         arguments.extend(extra_arguments)
 
         # prints a message and flushes the standard output
-        print("------------------------------------------------------------------------")
-        print("Executing script file: %s" % script)
-        print("------------------------------------------------------------------------")
+        extra.echo("------------------------------------------------------------------------")
+        extra.echo("Executing script file: %s" % script)
+        extra.echo("------------------------------------------------------------------------")
         sys.stdout.flush()
 
         # opens a sub-process for script execution (and waits for the end of it)
@@ -153,9 +155,9 @@ def run():
         sys.stdout.flush()
 
         # print a message and flushes the standard output
-        print("------------------------------------------------------------------------")
-        print("Finished executing script file: %s" % script)
-        print("------------------------------------------------------------------------")
+        extra.echo("------------------------------------------------------------------------")
+        extra.echo("Finished executing script file: %s" % script)
+        extra.echo("------------------------------------------------------------------------")
         sys.stdout.flush()
 
 if __name__ == "__main__":
