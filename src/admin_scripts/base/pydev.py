@@ -95,6 +95,10 @@ def pydev_file(file_path):
         if key in VALID_PROPERTIES: continue
         raise RuntimeError("Invalid property '%s'" % key)
 
+    python_version = properties.get("org.python.pydev.PYTHON_PROJECT_VERSION", None)
+    if not python_version: extra.warn("No python version defined")
+    elif not python_version == "python 2.6": extra.warn("Python version not 2.6")
+
     property_keys = legacy.keys(properties)
     property_keys.sort()
 
@@ -110,7 +114,7 @@ def pydev_file(file_path):
     buffer.append("</pydev_project>\n")
 
     result = "".join(buffer)
-    print(result)
+    extra.echo(result)
 
 def text_value(node):
     """
@@ -172,7 +176,7 @@ def pydev_walker(arguments, directory_name, names):
         # print a message a message about the pydev
         # operation that is going to be performed and
         # then runs the operation with the correct path
-        print("Normalizing pydev configuration file: %s" % valid_complete_name)
+        extra.echo("Normalizing pydev configuration file: %s" % valid_complete_name)
         pydev_file(valid_complete_name)
 
 def pydev_recursive(directory_path, file_exclusion):
@@ -200,8 +204,8 @@ def main():
         # prints a series of message related with he
         # correct usage of the command line and then
         # exits the process with error indication
-        print("Invalid number of arguments")
-        print("Usage: " + USAGE_MESSAGE)
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
         sys.exit(2)
 
     # sets the default values for the parameters
@@ -218,8 +222,8 @@ def main():
         # prints a series of messages about the
         # correct usage of the command line and
         # exits the current process with an error
-        print("Invalid number of arguments")
-        print("Usage: " + USAGE_MESSAGE)
+        extra.echo("Invalid number of arguments")
+        extra.echo("Usage: " + USAGE_MESSAGE)
         sys.exit(2)
 
     # iterates over all the options, retrieving the option
