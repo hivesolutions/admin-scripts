@@ -38,6 +38,7 @@ __license__ = "GNU General Public License (GPL), Version 3"
 """ The license for the module """
 
 import os
+import re
 import sys
 import getopt
 
@@ -50,6 +51,10 @@ import admin_scripts.extra as extra
 USAGE_MESSAGE="pydev [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
+
+PREFIX_REGEX = re.compile("/[^/]+")
+""" The prefix regular expression used to match the initial
+part of the source directory file path """
 
 VALID_PROPERTIES = (
     "org.python.pydev.PYTHON_PROJECT_VERSION",
@@ -155,7 +160,7 @@ def fix_values(paths, properties):
     for path in paths:
         if not "/" in path: _paths.append(path)
         elif path.startswith("/${PROJECT_DIR_NAME}"): _paths.append(path)
-        else: path.replace()
+        else: _paths.append(PREFIX_REGEX.sub("/${PROJECT_DIR_NAME}", path, 1))
 
     return paths, properties
 
