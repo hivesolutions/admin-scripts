@@ -111,11 +111,11 @@ def pydev_file(file_path):
     buffer.append("<pydev_pathproperty name=\"org.python.pydev.PROJECT_SOURCE_PATH\">\n")
     for path in paths:
         buffer.append("<path>%s</path>\n" % path)
-    buffer.append("</pydev_pathproperty>\n")
+    if property_keys: buffer.append("</pydev_pathproperty>\n")
     for key in property_keys:
         value = properties[key]
         buffer.append("<pydev_property name=\"%s\">%s</pydev_property>\n" % (key, value))
-    buffer.append("</pydev_project>\n")
+    if property_keys: buffer.append("</pydev_project>\n")
 
     result = "".join(buffer)
     result = result.encode("utf-8")
