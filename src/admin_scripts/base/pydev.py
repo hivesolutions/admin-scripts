@@ -101,7 +101,7 @@ def pydev_file(file_path):
 
     for path in paths:
         if path.startswith("/${PROJECT_DIR_NAME}"): continue
-        extra.warn("Path not normalized '%s'" % path)
+        extra.warn("Project directory path not normalized '%s'" % path)
 
     property_keys = legacy.keys(properties)
     property_keys.sort()
