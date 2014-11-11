@@ -58,7 +58,7 @@ VALID_PROPERTIES = (
 """ The sequence that defines the complete set of properties that
 are considered valid under the current pydev specification """
 
-def pydev_file(file_path):
+def pydev_file(file_path, fix = True):
     """
     Runs the pydev configuration file normalization that consists
     in the definition in order of each of the xml lines.
@@ -69,6 +69,10 @@ def pydev_file(file_path):
     @type file_path: String
     @param file_path: The path to the file that contains the
     pydev configuration specification in xml.
+    @type fix: bool
+    @param fix: If any "fixable" error in the pydev project
+    file should be automatically fixes using the known heuristics,
+    this is a dangerous option as errors may be created.
     """
 
     paths = []
@@ -94,6 +98,8 @@ def pydev_file(file_path):
     for key in legacy.keys(properties):
         if key in VALID_PROPERTIES: continue
         raise RuntimeError("Invalid property '%s'" % key)
+
+    if fix: paths, properties = fix_values(paths, properties)
 
     python_version = properties.get("org.python.pydev.PYTHON_PROJECT_VERSION", None)
     if not python_version: extra.warn("No python version defined")
@@ -123,6 +129,35 @@ def pydev_file(file_path):
     file = open(file_path, "wb")
     try: file.write(result)
     finally: file.close()
+
+def fix_values(paths, properties):
+    """
+    Runs the fixer of the various loaded values from the pydev
+    configuration file.
+
+    These set of operations should be able to fix most of the
+    known errors in the pydev configuration, this is a dangerous
+    operation as it may cause problems in data structure.
+
+    @type paths: List
+    @param paths: The sequences of paths that should represent
+    the main entry points for the python source code in project.
+    @type properties: Dictionary
+    @param properties: The map containing the option name to value
+    associations that were loaded from the source pydev file.
+    @rtype: Tuple
+    @return: The resulting values from the provided configurations
+    these values should have been fixed.
+    """
+
+    _paths = []
+
+    for path in paths:
+        if not "/" in path: _paths.append(path)
+        elif path.startswith("/${PROJECT_DIR_NAME}"): _paths.append(path)
+        else: path.replace()
+
+    return paths, properties
 
 def text_value(node):
     """
