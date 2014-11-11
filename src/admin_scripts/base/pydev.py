@@ -99,6 +99,10 @@ def pydev_file(file_path):
     if not python_version: extra.warn("No python version defined")
     elif not python_version == "python 2.6": extra.warn("Python version not 2.6")
 
+    for path in paths:
+        if path.startswith("/${PROJECT_DIR_NAME}"): continue
+        extra.warn("Path not normalized '%s'" % path)
+
     property_keys = legacy.keys(properties)
     property_keys.sort()
 
@@ -114,7 +118,11 @@ def pydev_file(file_path):
     buffer.append("</pydev_project>\n")
 
     result = "".join(buffer)
-    extra.echo(result)
+    result = result.encode("utf-8")
+
+    file = open(file_path, "wb")
+    try: file.write(result)
+    finally: file.close()
 
 def text_value(node):
     """
