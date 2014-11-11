@@ -162,7 +162,7 @@ def fix_values(paths, properties):
         elif path.startswith("/${PROJECT_DIR_NAME}"): _paths.append(path)
         else: _paths.append(PREFIX_REGEX.sub("/${PROJECT_DIR_NAME}", path, 1))
 
-    return paths, properties
+    return _paths, properties
 
 def text_value(node):
     """
