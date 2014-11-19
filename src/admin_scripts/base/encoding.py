@@ -174,7 +174,7 @@ def convert_encoding_walker(arguments, directory_name, names):
 
     # unpacks the arguments tuple
     source_encoding, target_encoding, windows_newline,\
-    replacements_list, file_extensions, file_exclusion = arguments
+        replacements_list, file_extensions, file_exclusion = arguments
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
@@ -183,11 +183,11 @@ def convert_encoding_walker(arguments, directory_name, names):
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name
+    valid_complete_names = [directory_name + "/" + name\
         for name in names if not os.path.isdir(directory_name + "/" + name)]
 
     # filters the names with non valid file extensions
-    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names
+    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
         if file_extensions == None or name.split(".")[-1] in file_extensions]
 
     # iterates over all the valid complete names with extension filter
@@ -196,7 +196,7 @@ def convert_encoding_walker(arguments, directory_name, names):
         # prints a message about the file that is not going to be converted
         # into the proper target encoding as defined in the specification
         extra.echo(
-            "Convert encoding in file: %s (%s to %s)" %
+            "Convert encoding in file: %s (%s to %s)" %\
             (
                  valid_complete_name,
                  source_encoding,
@@ -217,7 +217,7 @@ def convert_encoding_walker(arguments, directory_name, names):
             )
         except:
             extra.warn(
-                "WARNING: failed converting encoding in file: %s (%s to %s)" %
+                "WARNING: failed converting encoding in file: %s (%s to %s)" %\
                 (
                      valid_complete_name,
                      source_encoding,
