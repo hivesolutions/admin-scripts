@@ -579,7 +579,7 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
 
     # unpacks the arguments tuple
     windows_newline, fix_extra_newlines, property_order,\
-        rules_skip, file_extensions, file_exclusion = arguments
+    rules_skip, file_extensions, file_exclusion = arguments
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)

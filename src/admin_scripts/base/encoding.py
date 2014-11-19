@@ -174,7 +174,7 @@ def convert_encoding_walker(arguments, directory_name, names):
 
     # unpacks the arguments tuple
     source_encoding, target_encoding, windows_newline,\
-        replacements_list, file_extensions, file_exclusion = arguments
+    replacements_list, file_extensions, file_exclusion = arguments
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
