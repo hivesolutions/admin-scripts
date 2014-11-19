@@ -53,7 +53,7 @@ DEFAULT_COMPRESSION_LEVEL = 9
 """ The default compression level, to be used
 for the compression of gzip based files """
 
-USAGE_MESSAGE="join [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = "join [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
 def join_files(file_path):
