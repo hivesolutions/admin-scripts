@@ -48,7 +48,7 @@ import legacy
 
 import admin_scripts.extra as extra
 
-USAGE_MESSAGE="pydev [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = "pydev [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
 
@@ -211,12 +211,12 @@ def pydev_walker(arguments, directory_name, names):
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names
+    valid_complete_names = [directory_name + "/" + name for name in names\
         if not os.path.isdir(directory_name + "/" + name)]
 
     # filters the names with non valid file extensions so that only the
     # ones that conform with the pydev project ones are selected
-    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names
+    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
         if name.endswith(".pydevproject")]
 
     # iterates over all the valid complete names with valid structure
