@@ -191,7 +191,7 @@ def convert_encoding_walker(arguments, directory_name, names):
         if file_extensions == None or name.split(".")[-1] in file_extensions]
 
     # iterates over all the valid complete names with extension filter
-    # ot convert the respective file into the target encoding
+    # to convert the respective file into the target encoding
     for valid_complete_name in valid_complete_names:
         # prints a message about the file that is not going to be converted
         # into the proper target encoding as defined in the specification
