@@ -127,7 +127,7 @@ def get_property_index(property_line, property_order, line_number):
     if not property_name in property_order:
         # warns about the missing property name
         extra.echo(
-            "WARNING: order for property %s not defined at line %d" %\
+            "WARNING: order for property %s not defined at line %d" %
             (property_name, line_number)
         )
 

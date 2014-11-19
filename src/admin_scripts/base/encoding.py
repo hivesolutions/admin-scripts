@@ -196,7 +196,7 @@ def convert_encoding_walker(arguments, directory_name, names):
         # prints a message about the file that is not going to be converted
         # into the proper target encoding as defined in the specification
         extra.echo(
-            "Convert encoding in file: %s (%s to %s)" %\
+            "Convert encoding in file: %s (%s to %s)" %
             (
                  valid_complete_name,
                  source_encoding,
@@ -217,7 +217,7 @@ def convert_encoding_walker(arguments, directory_name, names):
             )
         except:
             extra.warn(
-                "WARNING: failed converting encoding in file: %s (%s to %s)" %\
+                "WARNING: failed converting encoding in file: %s (%s to %s)" %
                 (
                      valid_complete_name,
                      source_encoding,
