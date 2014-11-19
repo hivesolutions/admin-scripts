@@ -205,7 +205,7 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
 
     # unpacks the arguments tuple
     tab_to_spaces, trailing_newlines, windows_newline,\
-    file_extensions, file_exclusion = arguments
+        file_extensions, file_exclusion = arguments
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
