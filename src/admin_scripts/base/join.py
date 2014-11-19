@@ -297,13 +297,13 @@ def join_files_walker(arguments, directory_name, names):
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names
+    valid_complete_names = [directory_name + "/" + name for name in names\
         if not os.path.isdir(directory_name + "/" + name)]
 
     # filters the names with non valid file extensions so that only the
     # ones that contain the join extension are used
-    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names
-        if len(name.split(".")) > 1 and name.split(".")[-2] == "join"
+    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
+        if len(name.split(".")) > 1 and name.split(".")[-2] == "join"\
         and name.split(".")[-1] == "json"]
 
     # iterates over all the valid complete names with extension filter
