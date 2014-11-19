@@ -47,7 +47,7 @@ import legacy
 
 import admin_scripts.extra as extra
 
-USAGE_MESSAGE="cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = "cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
 COLOR_REGEX_VALUE = r"(.*:)(.*#)([0-9a-fA-F]+)(.*)"
@@ -127,7 +127,7 @@ def get_property_index(property_line, property_order, line_number):
     if not property_name in property_order:
         # warns about the missing property name
         extra.echo(
-            "WARNING: order for property %s not defined at line %d" %
+            "WARNING: order for property %s not defined at line %d" %\
             (property_name, line_number)
         )
 
@@ -340,7 +340,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
 
     # creates a string buffer that will hold the output of the
     # cleanup operation over the current stylesheet file
-    output_buffer = legacy.StringIO();
+    output_buffer = legacy.StringIO()
 
     # initializes a series of state variables that will control
     # the way the parser/generator will work through the file
@@ -579,7 +579,7 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
 
     # unpacks the arguments tuple
     windows_newline, fix_extra_newlines, property_order,\
-    rules_skip, file_extensions, file_exclusion = arguments
+        rules_skip, file_extensions, file_exclusion = arguments
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
