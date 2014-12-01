@@ -84,7 +84,8 @@ configurations = (
             "conf",
             "rst",
             "liquid",
-            "go"
+            "go",
+            "md"
         ),
         "file_exclusion" : ("android-sdk",)
     },

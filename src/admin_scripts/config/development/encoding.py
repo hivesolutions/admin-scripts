@@ -79,7 +79,8 @@ configurations = (
             "strings",
             "conf",
             "luquid",
-            "go"
+            "go",
+            "md"
         ),
         "file_exclusion" : ("android-sdk",)
     },
