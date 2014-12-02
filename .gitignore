@@ -1,5 +1,5 @@
 *.pyc
 
-/dist/
-/build/
-/src/admin_scripts.egg-info/
+/dist
+/build
+/src/admin_scripts.egg-info
