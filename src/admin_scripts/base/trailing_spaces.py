@@ -308,7 +308,7 @@ def main():
     configuration_file_path = None
 
     try:
-        options, _arguments = getopt.getopt(sys.argv[2:], "rtnue:c:", [])
+        options, _arguments = getopt.getopt(sys.argv[2:], "rtnue:w:c:", [])
     except getopt.GetoptError:
         # prints a series of message about the error
         # that has just occurred and then exits with

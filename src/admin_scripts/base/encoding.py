@@ -294,7 +294,7 @@ def main():
     configuration_file_path = None
 
     try:
-        options, _arguments = getopt.getopt(sys.argv[2:], "rs:t:x:e:c:", [])
+        options, _arguments = getopt.getopt(sys.argv[2:], "rs:t:x:e:w:c:", [])
     except getopt.GetoptError:
         # prints a series of messages about the command line
         # error that occurred and then exits with an error

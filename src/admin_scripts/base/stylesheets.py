@@ -683,7 +683,7 @@ def main():
     configuration_file_path = None
 
     try:
-        options, _arguments = getopt.getopt(sys.argv[2:], "rp:e:c:", [])
+        options, _arguments = getopt.getopt(sys.argv[2:], "rp:e:w:c:", [])
     except getopt.GetoptError:
         # prints a series of message about the correct
         # usage of the command line and the exits the

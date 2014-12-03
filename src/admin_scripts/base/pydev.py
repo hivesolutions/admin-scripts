@@ -266,7 +266,7 @@ def main():
     configuration_file_path = None
 
     try:
-        options, _arguments = getopt.getopt(sys.argv[2:], "rc:", [])
+        options, _arguments = getopt.getopt(sys.argv[2:], "rw:c:", [])
     except getopt.GetoptError:
         # prints a series of messages about the
         # correct usage of the command line and
