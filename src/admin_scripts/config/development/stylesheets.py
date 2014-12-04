@@ -43,6 +43,10 @@ configurations = (
         "windows_newline" : True,
         "fix_extra_newlines" : False,
         "property_order" : (
+            "animation-duration",
+            "-o-animation-duration",
+            "-moz-animation-duration",
+            "-khtml-animation-duration",
             "-webkit-animation-duration",
             "-webkit-animation-name",
             "appearance",
