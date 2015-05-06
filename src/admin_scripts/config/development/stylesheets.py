@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Hive Administration Scripts. If not, see <http://www.gnu.org/licenses/>.
 
-__author__ = "Luís Martinho <lmartinho@hive.pt>"
+__author__ = "João Magalhães <joamag@hive.pt> & Luís Martinho <lmartinho@hive.pt>"
 """ The author(s) of the module """
 
 __version__ = "1.0.0"
@@ -227,6 +227,11 @@ configurations = (
             "-o-tab-size",
             "-moz-tab-size",
             "table-layout",
+            "tap-highlight-color",
+            "-o-tap-highlight-color",
+            "-ms-tap-highlight-color",
+            "-moz-tap-highlight-color",
+            "-webkit-tap-highlight-color",
             "text-align",
             "text-decoration",
             "text-fill-color",
@@ -235,6 +240,11 @@ configurations = (
             "text-shadow",
             "text-transform",
             "top",
+            "touch-callout",
+            "-o-touch-callout",
+            "-ms-touch-callout",
+            "-moz-touch-callout",
+            "-webkit-touch-callout",
             "transform",
             "-o-transform",
             "-ms-transform",

@@ -41,7 +41,7 @@ import re
 
 import legacy
 
-CSS_COMMENTS = re.compile(r"/\*.*?\*/", re.MULTILINE|re.DOTALL)
+CSS_COMMENTS = re.compile(r"/\*.*?\*/", re.MULTILINE | re.DOTALL)
 HEX_COLOR = re.compile(r"#\w{2}\w{2}\w{2}")
 
 def uniqify(all):
@@ -52,7 +52,7 @@ def uniqify(all):
     # REMEMBER! This will shuffle the order of the list
     u = {}
     for each in all:
-        u[each]=1
+        u[each] = 1
     return u.keys()
 
 def simplify_hex_colors(text):
@@ -66,7 +66,7 @@ def simplify_hex_colors(text):
     all_hex_encodings = HEX_COLOR.findall(text)
 
     for e in uniqify(all_hex_encodings):
-        if e[1]==e[2] and e[3]==e[4] and e[5] == e[6]:
+        if e[1] == e[2] and e[3] == e[4] and e[5] == e[6]:
             colour_replacements[e] = "#" + e[1] + e[3] + e[5]
 
     for k, v in colour_replacements.items():
@@ -88,8 +88,8 @@ def css_slimmer(css):
 
     remove_next_comment = 1
     for css_comment in CSS_COMMENTS.findall(css):
-        if css_comment[-3:]=="\*/":
-            remove_next_comment=0
+        if css_comment[-3:] == "\*/":
+            remove_next_comment = 0
             continue
         if remove_next_comment:
             css = css.replace(css_comment, "")
@@ -100,8 +100,8 @@ def css_slimmer(css):
     css = re.sub(r"\s+\n", "", css)
 
     for char in ("{", "}", ":", ";", ","):
-        css = re.sub(char+r"\s", char, css)
-        css = re.sub(r"\s"+char, char, css)
+        css = re.sub(char + r"\s", char, css)
+        css = re.sub(r"\s" + char, char, css)
     css = re.sub(r"\s+</",r"</", css)
     css = re.sub(r"}\s(#|\w)", r"}\1", css)
     css = re.sub(r";}", r"}", css)

@@ -213,12 +213,12 @@ class JavascriptMinify:
 
                 self.theB = self._next()
 
-
     def _jsmin(self):
-        """Copy the input to the output, deleting the characters which are
-           insignificant to JavaScript. Comments will be removed. Tabs will be
-           replaced with spaces. Carriage returns will be replaced with linefeeds.
-           Most spaces and linefeeds will be removed.
+        """
+        Copy the input to the output, deleting the characters which are
+        insignificant to JavaScript. Comments will be removed. Tabs will be
+        replaced with spaces. Carriage returns will be replaced with linefeeds.
+        Most spaces and linefeeds will be removed.
         """
         self.theA = "\n"
         self._action(3)
