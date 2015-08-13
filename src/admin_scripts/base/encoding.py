@@ -66,13 +66,12 @@ def has_encoding(string_buffer, encoding):
 
     try:
         # tries to decode the provided buffer, using the specified encoding
+        # setting the has encoding flag to valid in case nothing fails
         string_buffer.decode(encoding)
-
-        # in case the decode was success sets the has encoding flag
         has_encoding = True
-    # in case a problem occurred decoding
     except:
-        # sets the has encoding flag as false
+        # sets the has encoding flag as false as there was an error while
+        # trying to decode the buffer with the requested encoding
         has_encoding = False
 
     # returns the has encoding flag
