@@ -55,8 +55,10 @@ setuptools.setup(
         "admin_scripts.base",
         "admin_scripts.config",
         "admin_scripts.config.development",
-        "admin_scripts.extra"
+        "admin_scripts.extra",
+        "admin_scripts.test"
     ],
+    test_suite = "admin_scripts.test",
     package_dir = {
         "" : os.path.normpath("src")
     },
