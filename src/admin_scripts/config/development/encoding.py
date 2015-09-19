@@ -80,7 +80,8 @@ configurations = (
             "conf",
             "luquid",
             "go",
-            "md"
+            "md",
+            "swift"
         ),
         "file_exclusion" : ("android-sdk",)
     },
