@@ -85,7 +85,8 @@ configurations = (
             "rst",
             "liquid",
             "go",
-            "gitignore"
+            "gitignore",
+            "swift"
         ),
         "file_exclusion" : ("android-sdk",)
     },
