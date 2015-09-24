@@ -110,7 +110,7 @@ def get_property_index(property_line, property_order, line_number):
     if len(property_line_splitted) > 2:
         # warns about the extra values in the line and then returns
         # with the length of the property order
-        extra.warn("extra values found at line %d" % line_number)
+        extra.warn("Extra values found at line %d" % line_number)
 
     # runs a second split operation that limits the number of splits
     # in the line to two so that no extra problems are raised and then
@@ -127,7 +127,7 @@ def get_property_index(property_line, property_order, line_number):
     if not property_name in property_order:
         # warns about the missing property name
         extra.warn(
-            "order for property %s not defined at line %d" %\
+            "Order for property %s not defined at line %d" %\
             (property_name, line_number)
         )
 
@@ -206,7 +206,7 @@ def process_property_line(property_line, line_number):
     # is considered to be empty (warning required) logs the message
     # and then returns the line itself (no processing)
     if not property_line.strip():
-        extra.warn("empty stylesheet property at line %s" % line_number)
+        extra.warn("Empty stylesheet property at line %s" % line_number)
         return property_line
 
     # strips the line to the right so that no newline characters
@@ -274,8 +274,8 @@ def fix_color(color):
     color = color.lower()
 
     # in case the color length is not in the valid range
+    # raises an exception indicatin the problem
     if not color_length in VALID_COLOR_LENGTHS:
-        # raises an exception
         raise Exception("invalid color length")
 
     # in case the color is compacted
@@ -369,7 +369,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         elif "/*" in line:
             # in case the comment mode is already on
             if comments_started: extra.warn(
-                "found opening comment inside open comment at line %d" % line_number
+                "Found opening comment inside open comment at line %d" % line_number
             )
 
             # increments the comments started counter
@@ -377,7 +377,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         # in case the line contains the end of multiline comment
         elif "*/" in line:
             if not comments_started: extra.error(
-                "found closing comment without corresponding opening at line %d" % line_number
+                "Found closing comment without corresponding opening at line %d" % line_number
             )
 
             # decrements the comments started counter
@@ -419,7 +419,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # in case the rule set does not contain any property
                 # must log an information message about the empty rule
                 if rule_started and not rule_lines:
-                    extra.warn("empty stylesheet rule at line %d" % line_number)
+                    extra.warn("Empty stylesheet rule at line %d" % line_number)
 
                 # updates the flag to signal the rule has ended
                 rule_started = False
@@ -475,13 +475,13 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # otherwise in case this is an extra newline
             elif not needs_newline and newlines > 1:
                 # logs a warning about this extra newline
-                extra.warn("found extra newline at line %d" % line_number)
+                extra.warn("Found extra newline at line %d" % line_number)
 
             # disables the needs newline flag
             needs_newline = False
         else:
             # warns about the statement outside a valid rule
-            extra.warn("found statement outside rule at line %d" % line_number)
+            extra.warn("Found statement outside rule at line %d" % line_number)
 
         # writes the line to the output buffer taking into
         # account the windows newline control flag
