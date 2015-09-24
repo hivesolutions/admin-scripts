@@ -53,7 +53,8 @@ USAGE_MESSAGE = "cleanup-stylesheets-python path [-r] [-u] [-n]\
 [-e file_extension_1, file_extension_2, ...]\
 [-w exclusion_1, exclusion_2, ...]\
 [-c configuration_file]"
-""" The usage message """
+""" The usage message, that is going to be displayed
+once it's requested or an error occurs """
 
 COLOR_REGEX_VALUE = r"(.*:)(.*#)([0-9a-fA-F]+)(.*)"
 """ The color regex value """
@@ -90,10 +91,17 @@ PROPERTY_LINE_REGEX = re.compile(PROPERTY_LINE_REGEX_VALUE)
 PROPERTY_LINE_REPLACEMENT_VALUE = "    \g<1>: \g<2>"
 """ The property line replacement value """
 
+RULES_MAP = dict(
+    margin = ("zero_to_multiple",),
+    border = ("zero_to_none",)
+)
+""" The map that associates various property names
+with the various rules that should be applied to them """
+
 def get_property_index(property_line, property_order, line_number):
     """
     Retrieves the index for the property specified in the provided property
-    line.
+    line, this index may be used to correctly position the property.
 
     @type property_line: String
     @param property_line: The property line containing the property.
@@ -220,6 +228,10 @@ def process_property_line(property_line, line_number):
     # exist (much simpler to manage lines without newlines)
     property_line = property_line.rstrip()
 
+    # runs the initial process of simplifying the property by running
+    # the various rules for the current property name
+    property_line = process_rules(property_line, line_number)
+
     # ensures the property line is correctly indented and
     # the property name and value are correctly separated
     property_line = PROPERTY_LINE_REGEX.sub(PROPERTY_LINE_REPLACEMENT_VALUE, property_line)
@@ -239,6 +251,37 @@ def process_property_line(property_line, line_number):
     property_line = process_color_definition(property_line, line_number)
 
     # returns the processed property line
+    return property_line
+
+def rule_zero_to_multiple(name, value):
+    if not value in ("0", "0px"): return
+    return "%s: 0px 0px 0px 0px;" % name
+
+def rule_zero_to_none(name, value):
+    if not value in ("0", "0px"): return
+    return "%s: none;" % name
+
+def process_rules(property_line, line_number):
+    # unpacks the property line into name and value so that proper
+    # per name rule application is possible for the line
+    property_name, property_value = property_line.split(":", 1)
+    property_name = property_name.strip()
+    property_value = property_value.strip(" ;")
+
+    # tries to retrieve the set of rules (as strings) that are
+    # going to be applied to the current property and then runs
+    # the iteration cycle to apply each of them on the line
+    rules = RULES_MAP.get(property_name, [])
+    for rule in rules:
+        method_name = "rule_" + rule
+        method = globals().get(method_name, None)
+        if not method: continue
+        result = method(property_name, property_value)
+        if not result: continue
+        property_line = result
+
+    # returns the "final" processed line according to the defined
+    # set of rules for the property (name)
     return property_line
 
 def process_color_definition(property_line, line_number):
