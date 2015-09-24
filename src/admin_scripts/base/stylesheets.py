@@ -56,8 +56,10 @@ COLOR_REGEX_VALUE = r"(.*:)(.*#)([0-9a-fA-F]+)(.*)"
 COLOR_REGEX = re.compile(COLOR_REGEX_VALUE)
 """ The color regex """
 
-VALID_COLOR_LENGTHS = [3, 6]
-""" The list of valid color declaration lengths """
+VALID_COLOR_LENGTHS = (3, 6)
+""" The list of valid color declaration lengths
+meaning that only colors of these size are allowed
+by the stylesheet analyser """
 
 AT_RULES_REGEX_VALUE = r"\@charset|\@import|\@media|\@page .*;"
 """ The at rules regex value """
@@ -267,20 +269,19 @@ def process_color_definition(property_line, line_number):
     return property_line
 
 def fix_color(color):
-    # computes the color length
+    # computes the color length and the runs the lowercase
+    # operation in (as it's expected)
     color_length = len(color)
-
-    # lower cases the color
     color = color.lower()
 
     # in case the color length is not in the valid range
-    # raises an exception indicatin the problem
+    # raises an exception indicating the problem
     if not color_length in VALID_COLOR_LENGTHS:
         raise Exception("invalid color length")
 
-    # in case the color is compacted
+    # in case the color is compacted must expand the
+    # string value to double the size (as expected)
     if color_length == 3:
-        # expands the color
         color_list = [value * 2 for value in color]
         color = "".join(color_list)
 
@@ -312,7 +313,9 @@ def skip_rule(start_line, rules_skip):
 
 def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, property_order, rules_skip):
     """
-    Cleans up the property lines. Sorts the css properties in the file, by the specified property order.
+    Cleans up the property lines. Sorts the css properties in the file,
+    by the specified property order.
+
     Ensures that all property lines are correctly terminated with semicolon.
 
     @type input_buffer: StringBuffer
@@ -503,7 +506,13 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
 
     return output_buffer
 
-def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newlines, property_order, rules_skip):
+def cleanup_stylesheets(
+    file_path_normalized,
+    windows_newline,
+    fix_extra_newlines,
+    property_order,
+    rules_skip
+):
     """
     Cleans up stylesheets. Sorts the css properties in the file, by the specified property order.
     Ensures that all property lines are correctly terminated with semicolon.
