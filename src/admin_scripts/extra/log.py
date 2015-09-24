@@ -43,4 +43,7 @@ def echo(message):
     sys.stdout.write(message + "\n")
 
 def warn(message):
-    sys.stderr.write(message + "\n")
+    sys.stderr.write("WARNING: " + message + "\n")
+
+def error(message):
+    sys.stderr.write("ERROR: " + message + "\n")

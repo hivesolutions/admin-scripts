@@ -42,4 +42,4 @@ from . import log
 from .css import uniqify, simplify_hex_colors, css_slimmer
 from .js import javascript_minify
 from .lib import normalize_path, configuration
-from .log import echo, warn
+from .log import echo, warn, error

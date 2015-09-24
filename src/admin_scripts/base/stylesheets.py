@@ -110,7 +110,7 @@ def get_property_index(property_line, property_order, line_number):
     if len(property_line_splitted) > 2:
         # warns about the extra values in the line and then returns
         # with the length of the property order
-        extra.echo("WARNING: extra values found at line %d" % line_number)
+        extra.warn("extra values found at line %d" % line_number)
 
     # runs a second split operation that limits the number of splits
     # in the line to two so that no extra problems are raised and then
@@ -126,8 +126,8 @@ def get_property_index(property_line, property_order, line_number):
     # in case the property is not in the order
     if not property_name in property_order:
         # warns about the missing property name
-        extra.echo(
-            "WARNING: order for property %s not defined at line %d" %\
+        extra.warn(
+            "order for property %s not defined at line %d" %\
             (property_name, line_number)
         )
 
@@ -206,7 +206,7 @@ def process_property_line(property_line, line_number):
     # is considered to be empty (warning required) logs the message
     # and then returns the line itself (no processing)
     if not property_line.strip():
-        extra.echo("WARNING: empty stylesheet property at line %s" % line_number)
+        extra.warn("empty stylesheet property at line %s" % line_number)
         return property_line
 
     # strips the line to the right so that no newline characters
@@ -258,11 +258,10 @@ def process_color_definition(property_line, line_number):
         # assembles the line with the fixed color
         property_line = "".join(line_groups)
     except Exception as exception:
-        # converts the exception to string
+        # converts the exception to string and then
+        # prints a warning to the proper output
         exception_string = legacy.UNICODE(exception)
-
-        # prints a warning
-        extra.echo("WARNING: %s near line %d" % (exception_string, line_number))
+        extra.warn("%s near line %d" % (exception_string, line_number))
 
     # returns the property line
     return property_line
@@ -369,17 +368,17 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
         # in case the line contains a the start of multiline comment
         elif "/*" in line:
             # in case the comment mode is already on
-            if comments_started:
-                # prints a warning
-                extra.echo("WARNING: found opening comment inside open comment at line %d" % line_number)
+            if comments_started: extra.warn(
+                "found opening comment inside open comment at line %d" % line_number
+            )
 
             # increments the comments started counter
             comments_started += 1
         # in case the line contains the end of multiline comment
         elif "*/" in line:
-            if not comments_started:
-                # raises an error
-                extra.echo("ERROR: found closing comment without corresponding opening at line %d" % line_number)
+            if not comments_started: extra.error(
+                "found closing comment without corresponding opening at line %d" % line_number
+            )
 
             # decrements the comments started counter
             comments_started -= 1
@@ -420,7 +419,7 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # in case the rule set does not contain any property
                 # must log an information message about the empty rule
                 if rule_started and not rule_lines:
-                    extra.echo("WARNING: empty stylesheet rule at line %d" % line_number)
+                    extra.warn("empty stylesheet rule at line %d" % line_number)
 
                 # updates the flag to signal the rule has ended
                 rule_started = False
@@ -476,13 +475,13 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # otherwise in case this is an extra newline
             elif not needs_newline and newlines > 1:
                 # logs a warning about this extra newline
-                extra.echo("WARNING: found extra newline at line %d" % line_number)
+                extra.warn("found extra newline at line %d" % line_number)
 
             # disables the needs newline flag
             needs_newline = False
         else:
             # warns about the statement outside a valid rule
-            extra.echo("WARNING: found statement outside rule at line %d" % line_number)
+            extra.warn("found statement outside rule at line %d" % line_number)
 
         # writes the line to the output buffer taking into
         # account the windows newline control flag
@@ -546,7 +545,7 @@ def cleanup_stylesheets(file_path_normalized, windows_newline, fix_extra_newline
         # message to be printed to the standard output, then logs
         # the complete traceback messages to the same output
         exception_string = legacy.UNICODE(exception)
-        extra.echo("ERROR: %s. Skipping file %s" % (exception_string, file_path_normalized))
+        extra.error("%s. Skipping file %s" % (exception_string, file_path_normalized))
         traceback.print_exc(file = sys.stdout)
 
         # skips writing to the file
