@@ -19,6 +19,9 @@
 # You should have received a copy of the Apache License along with
 # Hive Administration Scripts. If not, see <http://www.apache.org/licenses/>.
 
+__author__ = "João Magalhães <joamag@hive.pt>"
+""" The author(s) of the module """
+
 __version__ = "1.0.0"
 """ The version of the module """
 
@@ -34,12 +37,18 @@ __copyright__ = "Copyright (c) 2008-2015 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-from . import css
-from . import js
-from . import lib
-from . import log
+import unittest
 
-from .css import uniqify, simplify_hex_colors, css_slimmer
-from .js import javascript_minify
-from .lib import normalize_path, configuration
-from .log import echo, warn
+import admin_scripts
+
+class ModelTest(unittest.TestCase):
+
+    def test_simplify_hex_colors(self):
+        result = admin_scripts.simplify_hex_colors("#aabbcc")
+        self.assertEqual(result, "#abc")
+
+        result = admin_scripts.simplify_hex_colors("#AABBCC")
+        self.assertEqual(result, "#ABC")
+
+        result = admin_scripts.simplify_hex_colors("#AaBbCc")
+        self.assertEqual(result, "#AaBbCc")

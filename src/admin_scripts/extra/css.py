@@ -45,21 +45,21 @@ CSS_COMMENTS = re.compile(r"/\*.*?\*/", re.MULTILINE | re.DOTALL)
 HEX_COLOR = re.compile(r"#\w{2}\w{2}\w{2}")
 
 def uniqify(all):
-    """
-    borrowed from Tim Peters" algorithm on ASPN Cookbook
-    """
-
-    # REMEMBER! This will shuffle the order of the list
-    u = {}
-    for each in all:
-        u[each] = 1
-    return u.keys()
+    unique = dict()
+    for each in all: unique[each] = 1
+    return unique.keys()
 
 def simplify_hex_colors(text):
     """
     Replace all color declarations where pairs repeat.
-    I.e. #FFFFFF => #FFF; #CCEEFF => #CEF
-    and #EFEFEF, #EFCDI9 avoided.
+    (eg: #aabbcc becomes #abc).
+
+    @type text: String
+    @param text: The payload text value that is going to
+    be simplified.
+    @rtype: String
+    @return: The simplified value according to the defined
+    set of rules.
     """
 
     colour_replacements = {}
@@ -69,15 +69,22 @@ def simplify_hex_colors(text):
         if e[1] == e[2] and e[3] == e[4] and e[5] == e[6]:
             colour_replacements[e] = "#" + e[1] + e[3] + e[5]
 
-    for k, v in colour_replacements.items():
-        text = text.replace(k, v)
+    for key, value in colour_replacements.items():
+        text = text.replace(key, value)
 
     return text
 
 def css_slimmer(css):
     """
-    Remove repeating whitespace characters like tab, newline
+    Removes repeating whitespace characters like tab, newline
     or any other characters.
+
+    @type css: String
+    @param css: The string that contains the complete set of
+    css code that is going to the "slimmed".
+    @rtype: String
+    @return: The final simplified/reduced set of css code that
+    should represent the same original logic.
     """
 
     # verifies the data type of the provided string
