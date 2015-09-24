@@ -237,17 +237,15 @@ def process_property_line(property_line, line_number):
     return property_line
 
 def process_color_definition(property_line, line_number):
-    # tries to match the color regex
+    # tries to match the color regex and retrieves the resulting
+    # set of groups from the match, in case there's no matching
+    # the control flow is returned immediately to the caller
     line_match = COLOR_REGEX.match(property_line)
-
-    # tries to retrieve the line match group
-    line_groups = line_match and line_match.groups() or None
-
-    # in case no line groups are defined, returns
-    # the current property line immediately
+    line_groups = line_match.groups() if line_match else None
     if not line_groups: return property_line
 
-    # unpacks the line groups
+    # unpacks the various line groups into the appropriate
+    # variables to be used in the processing of the color
     property_name, pre_color, color, post_color = line_groups
 
     try:
