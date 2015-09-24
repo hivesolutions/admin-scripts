@@ -141,10 +141,9 @@ def get_property_index(property_line, property_order, line_number):
         # uses the greatest index
         return len(property_order)
 
-    # determines the index for the property name
+    # determines the index for the property name and returns
+    # the value to the caller method
     property_index = property_order.index(property_name)
-
-    # returns the property index
     return property_index
 
 def write_lines(output_buffer, lines, windows_newline):
