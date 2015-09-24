@@ -227,6 +227,7 @@ def process_property_line(property_line, line_number):
     # strips the line to the right so that no newline characters
     # exist (much simpler to manage lines without newlines)
     property_line = property_line.rstrip()
+    property_line = property_line.rstrip(";")
 
     # runs the initial process of simplifying the property by running
     # the various rules for the current property name
@@ -266,7 +267,8 @@ def process_rules(property_line, line_number):
     # per name rule application is possible for the line
     property_name, property_value = property_line.split(":", 1)
     property_name = property_name.strip()
-    property_value = property_value.strip(" ;")
+    property_value = property_value.strip()
+    property_value = property_value.rstrip(";")
 
     # tries to retrieve the set of rules (as strings) that are
     # going to be applied to the current property and then runs
