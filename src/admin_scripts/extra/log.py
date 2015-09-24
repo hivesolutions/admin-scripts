@@ -39,16 +39,19 @@ __license__ = "Apache License, Version 2.0"
 
 import sys
 
-USE_STDERR = False
-
+USE_STDERR = True
+FLUSH_STREAM = True
 STDOUT = sys.stdout
 STDERR = sys.stderr if USE_STDERR else STDOUT
 
 def echo(message):
     STDOUT.write(message + "\n")
+    STDOUT.flush()
 
 def warn(message):
     STDERR.write("WARNING: " + message + "\n")
+    STDERR.flush()
 
 def error(message):
     STDERR.write("ERROR: " + message + "\n")
+    STDERR.flush()
