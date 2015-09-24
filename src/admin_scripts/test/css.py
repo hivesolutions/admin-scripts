@@ -41,7 +41,7 @@ import unittest
 
 import admin_scripts
 
-class ModelTest(unittest.TestCase):
+class CssTest(unittest.TestCase):
 
     def test_simplify_hex_colors(self):
         result = admin_scripts.simplify_hex_colors("#aabbcc")
