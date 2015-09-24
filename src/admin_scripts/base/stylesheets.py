@@ -47,7 +47,12 @@ import legacy
 
 import admin_scripts.extra as extra
 
-USAGE_MESSAGE = "cleanup-stylesheets-python path [-r] [-u] [-n] [-p property_name_1, property_name_2, ...] [-s rule_skip_1, rule_skip_2, ...] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = "cleanup-stylesheets-python path [-r] [-u] [-n]\
+[-p property_name_1, property_name_2, ...]\
+[-s rule_skip_1, rule_skip_2, ...]\
+[-e file_extension_1, file_extension_2, ...]\
+[-w exclusion_1, exclusion_2, ...]\
+[-c configuration_file]"
 """ The usage message """
 
 COLOR_REGEX_VALUE = r"(.*:)(.*#)([0-9a-fA-F]+)(.*)"
@@ -198,7 +203,8 @@ def process_property_lines(property_lines, line_number):
     """
 
     # processes the property lines
-    processed_property_lines = [process_property_line(property_line, line_number) for property_line in property_lines]
+    processed_property_lines = [process_property_line(property_line, line_number)\
+        for property_line in property_lines]
 
     # returns the processed property lines
     return processed_property_lines
@@ -249,13 +255,10 @@ def process_color_definition(property_line, line_number):
     property_name, pre_color, color, post_color = line_groups
 
     try:
-        # fixes the color
+        # runs the fixing color operation and then, re-joins the
+        # various groups again into a single string (from list)
         color = fix_color(color)
-
-        # packs the line groups
         line_groups = [property_name, pre_color, color, post_color]
-
-        # assembles the line with the fixed color
         property_line = "".join(line_groups)
     except Exception as exception:
         # converts the exception to string and then
@@ -425,16 +428,13 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 # updates the flag to signal the rule has ended
                 rule_started = False
 
-                # property lines
+                # sorts the various property lines and the processes them
                 property_lines = sorted(rule_lines, key = get_comparison_key)
-
-                # processes the property lines
                 property_lines = process_property_lines(property_lines, line_number)
 
                 # writes the lines to the buffer, considering the windows newline
+                # and then writes the line
                 write_lines(output_buffer, property_lines, windows_newline)
-
-                # writes the line
                 write_line(output_buffer, line, windows_newline)
 
                 # writes the final newline

@@ -45,7 +45,10 @@ import legacy
 
 import admin_scripts.extra as extra
 
-USAGE_MESSAGE = "remove-trailing-spaces-python path [-r] [-t] [-n] [-u] [-e file_extension_1, file_extension_2, ...] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = "remove-trailing-spaces-python path [-r] [-t] [-n] [-u]\
+[-e file_extension_1, file_extension_2, ...]\
+[-w exclusion_1, exclusion_2, ...]\
+[-c configuration_file]"
 """ The usage message """
 
 SPACE_TAB = b"    "
