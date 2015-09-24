@@ -56,7 +56,7 @@ def simplify_hex_colors(text):
 
     @type text: String
     @param text: The payload text value that is going to
-    be simplified.
+    have the color values simplified.
     @rtype: String
     @return: The simplified value according to the defined
     set of rules.

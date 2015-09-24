@@ -106,7 +106,7 @@ def normalize_path(path):
         # the support for long path names with the prefix token
         normalized_path = LONG_PATH_PREFIX + normalized_path
 
-    # returns the "final" normalized path value resultin from
+    # returns the "final" normalized path value resulting from
     # the various normalization processes applied to original path
     return normalized_path
 

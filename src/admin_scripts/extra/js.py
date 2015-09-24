@@ -39,7 +39,7 @@ __license__ = "Apache License, Version 2.0"
 
 import legacy
 
-class JavascriptMinify:
+class JavascriptMinify(object):
     """
     Class used to minify javascript code.
     The minification is done using a classic

@@ -304,12 +304,9 @@ def skip_rule(start_line, rules_skip):
     # for each of the rules to skip
     for rule_skip in rules_skip:
         # checks if the rule is to be skipped
+        # and if that's the case breaks the loop
         skip_rule = rule_skip in start_line
-
-        # in case the rule is to be skipped
-        if skip_rule:
-            # stops checking
-            break
+        if skip_rule: break
 
     # returns the skip rule value
     return skip_rule
