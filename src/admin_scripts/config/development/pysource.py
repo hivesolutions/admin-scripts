@@ -19,6 +19,9 @@
 # You should have received a copy of the Apache License along with
 # Hive Administration Scripts. If not, see <http://www.apache.org/licenses/>.
 
+__author__ = "João Magalhães <joamag@hive.pt>"
+""" The author(s) of the module """
+
 __version__ = "1.0.0"
 """ The version of the module """
 
@@ -34,9 +37,9 @@ __copyright__ = "Copyright (c) 2008-2015 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-from . import encoding
-from . import join
-from . import pydev
-from . import pysource
-from . import stylesheets
-from . import trailing_spaces
+configurations = (
+    {
+        "recursive" : True,
+        "file_exclusion" : ("android-sdk",)
+    },
+)

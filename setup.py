@@ -68,7 +68,8 @@ setuptools.setup(
         ]
     },
     install_requires = [
-        "legacy"
+        "legacy",
+        "pep8"
     ],
     classifiers = [
         "Development Status :: 5 - Production/Stable",

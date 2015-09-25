@@ -37,5 +37,7 @@ __license__ = "Apache License, Version 2.0"
 from . import cleanup
 from . import encoding
 from . import join
+from . import pydev
+from . import pysource
 from . import stylesheets
 from . import trailing_spaces
