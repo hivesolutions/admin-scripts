@@ -73,7 +73,7 @@ def pysource_file(file_path, run_pep8 = True, ignores = ()):
             def get_file_results(self):
                 self._deferred_print.sort()
                 for line_number, offset, code, text, doc in self._deferred_print:
-                    STDERR.write(self._fmt % dict(
+                    extra.STDERR.write(self._fmt % dict(
                         path = self.filename,
                         row = self.line_offset + line_number,
                         col = offset + 1,
