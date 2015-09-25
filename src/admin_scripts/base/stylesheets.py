@@ -92,7 +92,7 @@ PROPERTY_LINE_REPLACEMENT_VALUE = "    \g<1>: \g<2>"
 """ The property line replacement value """
 
 RULES_MAP = dict(
-    margin = ("zero_to_multiple",),
+    margin = ("zero_to_multiple", "two_to_multiple"),
     border = ("zero_to_none",)
 )
 """ The map that associates various property names
@@ -278,22 +278,41 @@ def rule_zero_to_none(name, value):
     if not value in ("0", "0px"): return
     return "%s: none;" % name
 
+def rule_two_to_multiple(name, value):
+    parts = value.split()
+    if not len(parts) == 2: return
+    return "%s: %s;" % (name, value * 2)
+
 def process_rules(property_line, line_number):
-    # unpacks the property line into name and value so that proper
-    # per name rule application is possible for the line
-    property_name, property_value = property_line.split(":", 1)
+    # retrieves the initial value for the property name
+    # by splitting the line value, this value is going to
+    # be used for the resolution of the final rules (set)
+    property_name, _property_value = property_line.split(":", 1)
     property_name = property_name.strip()
-    property_value = property_value.strip()
-    property_value = property_value.rstrip(";")
 
     # tries to retrieve the set of rules (as strings) that are
     # going to be applied to the current property and then runs
     # the iteration cycle to apply each of them on the line
     rules = RULES_MAP.get(property_name, [])
     for rule in rules:
+        # creates the (rule) method name by appending the name of
+        # the current rule to the prefix and tries to retrieve a
+        # global function with such name in case it does not exists
+        # continues the current loop (nothing to be done)
         method_name = "rule_" + rule
         method = globals().get(method_name, None)
         if not method: continue
+
+        # unpacks the property line into name and value so that proper
+        # per name rule application is possible for the line
+        property_name, property_value = property_line.split(":", 1)
+        property_name = property_name.strip()
+        property_value = property_value.strip()
+        property_value = property_value.rstrip(";")
+
+        # calls the proper rule method with the (current) property name
+        # and value and verifies if a valid result is returned in case
+        # it does replaces the property line value with the new value
         result = method(property_name, property_value)
         if not result: continue
         property_line = result
