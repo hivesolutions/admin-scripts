@@ -502,9 +502,6 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 )
                 write_line(output_buffer, line, windows_newline = windows_newline)
 
-                # writes the final newline
-                fix_extra_newlines and write_line(output_buffer, "\n", windows_newline)
-
                 # resets the newlines counter and then
                 # enables the needs newline flag
                 newlines = 0
@@ -514,16 +511,9 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
                 continue
         # in case this line is part of a valid rule set
         elif rule_started:
-            if fix_extra_newlines:
-                # strips the line and then appends the line
-                # to the rule set in case it's not a newline
-                line_stripped = line.strip()
-                line_stripped and rule_lines.append(line)
-            else:
-                # appends the line to the rule set
-                rule_lines.append(line)
-
+            # appends the line to the rule set, and then
             # skips outputting the line to the buffer
+            rule_lines.append(line)
             continue
         # in case this is part of rule selector declaration
         elif "," in line:
@@ -534,14 +524,10 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # increments the newlines count
             newlines += 1
 
-            # in case the fix extra newlines flag is active
-            if fix_extra_newlines:
-                # skip processing
-                continue
             # otherwise in case this is an extra newline
-            elif not needs_newline and newlines > 1:
-                # logs a warning about this extra newline
-                extra.warn("Found extra newline at line %d" % line_number)
+            if not needs_newline and newlines > 1:
+                if fix_extra_newlines: continue
+                else: extra.warn("Found extra newline at line %d" % line_number)
 
             # disables the needs newline flag
             needs_newline = False
