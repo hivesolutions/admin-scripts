@@ -202,7 +202,7 @@ def pydev_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    file_exclusion, = arguments
+    file_exclusion, fix = arguments
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
@@ -226,9 +226,9 @@ def pydev_walker(arguments, directory_name, names):
         # operation that is going to be performed and
         # then runs the operation with the correct path
         extra.echo("Normalizing pydev configuration file: %s" % valid_complete_name)
-        pydev_file(valid_complete_name)
+        pydev_file(valid_complete_name, fix = fix)
 
-def pydev_recursive(directory_path, file_exclusion):
+def pydev_recursive(directory_path, file_exclusion, fix = True):
     """
     Normalizes pydev in recursive mode.
     All the options are arguments to be passed to the
@@ -238,9 +238,13 @@ def pydev_recursive(directory_path, file_exclusion):
     @param directory_path: The path to the (entry point) directory.
     @type file_exclusion: List
     @param file_exclusion: The list of file exclusion to be used.
+    @type fix: bool
+    @param fix: If any "fixable" error in the pydev project
+    file should be automatically fixes using the known heuristics,
+    this is a dangerous option as errors may be created.
     """
 
-    legacy.walk(directory_path, pydev_walker, (file_exclusion,))
+    legacy.walk(directory_path, pydev_walker, (file_exclusion, fix))
 
 def main():
     """
@@ -298,13 +302,14 @@ def main():
         # retrieves the configuration values
         recursive = configuration["recursive"]
         file_exclusion = configuration["file_exclusion"]
+        fix = configuration.get("fix", True)
 
         # in case the recursive flag is set, normalizes the multiple
         # found pydev configuration file
-        if recursive: pydev_recursive(path, file_exclusion)
+        if recursive: pydev_recursive(path, file_exclusion, fix = fix)
         # otherwise it's a "normal" iteration and runs the
         # pydev normalization process in it
-        else: pydev_file(path)
+        else: pydev_file(path, fix = fix)
 
 if __name__ == "__main__":
     main()

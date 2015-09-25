@@ -39,6 +39,7 @@ __license__ = "Apache License, Version 2.0"
 
 configurations = (
     {
+        "fix" : True,
         "recursive" : True,
         "file_exclusion" : ("android-sdk",)
     },
