@@ -55,3 +55,15 @@ def warn(message):
 def error(message):
     STDERR.write("ERROR: " + message + "\n")
     STDERR.flush()
+
+def patch(stream):
+    def writer(*args, **kwargs):
+        stream._counter += 1
+        stream._write(*args, **kwargs)
+
+    stream._counter = 0
+    stream._write = stream.write
+    stream.write = writer
+
+patch(STDOUT)
+patch(STDERR)
