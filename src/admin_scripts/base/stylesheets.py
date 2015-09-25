@@ -391,7 +391,13 @@ def skip_rule(start_line, rules_skip):
     # returns the skip rule value
     return skip_rule
 
-def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, property_order, rules_skip):
+def cleanup_properties(
+    input_buffer,
+    windows_newline = True,
+    fix_extra_newlines = True,
+    property_order = (),
+    rules_skip = ()
+):
     """
     Cleans up the property lines. Sorts the css properties in the file,
     by the specified property order.
@@ -543,7 +549,8 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
             # increments the newlines count
             newlines += 1
 
-            # otherwise in case this is an extra newline
+            # otherwise in case this is an extra newline, must either
+            # remove it or print a warning message depending on mode
             if not needs_newline and newlines > 1:
                 if fix_extra_newlines: continue
                 else: extra.warn("Found extra newline at line %d" % line_number)
@@ -570,7 +577,10 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
     number_lines = output_buffer_value.count("\n")
 
     if not number_lines == number_original_lines and not fix_extra_newlines:
-        raise Exception("number of lines in processed file (%d) is different from original file (%d)" % (number_lines, number_original_lines))
+        raise Exception(
+            "number of lines in processed file (%d) is different from original file (%d)" %\
+            (number_lines, number_original_lines)
+        )
 
     return output_buffer
 
@@ -606,10 +616,10 @@ def cleanup_stylesheets(
         # complete set of rules and clean the file
         string_buffer = cleanup_properties(
             file,
-            windows_newline,
-            fix_extra_newlines,
-            property_order,
-            rules_skip
+            windows_newline = windows_newline,
+            fix_extra_newlines = fix_extra_newlines,
+            property_order = property_order,
+            rules_skip = rules_skip
         )
 
         # retrieves the string value from the output
