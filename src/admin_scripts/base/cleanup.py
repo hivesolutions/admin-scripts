@@ -164,10 +164,13 @@ def run():
         # the final exit code to be returned by the process is changed to error
         if not process.returncode == 0: exit_code = 1
 
+        # creates the proper prefix message using the return code from the process
+        # note that the failed prefix is set for unwanted error codes
+        prefix = "Finished" if process.returncode == 0 else "Finished (with errors)"
+
         # print a message and flushes the standard output
         extra.echo("------------------------------------------------------------------------")
-        extra.echo("Finished executing script file: %s" % script)
-        extra.echo("Execution finished with error [%d]" % process.returncode)
+        extra.echo("%s executing script file: %s" % (prefix, script))
         extra.echo("------------------------------------------------------------------------")
         sys.stdout.flush()
 
