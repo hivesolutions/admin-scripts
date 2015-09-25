@@ -109,6 +109,10 @@ def run():
     # sets the shell value to be used in the process
     shell_value = os.name in WINDOWS_PLATFORMS and True or False
 
+    # sets the initial value for the exit code that is
+    # going to be used at the end of the cleanup operation
+    exit_code = 0
+
     # iterates over all the scripts for execution, passing
     # the proper script values into each script for execution
     for script in SCRIPTS_LIST:
@@ -156,11 +160,20 @@ def run():
         process.wait()
         sys.stdout.flush()
 
+        # in case the return code of the process is not the expected one (zero)
+        # the final exit code to be returned by the process is changed to error
+        if not process.returncode == 0: exit_code = 1
+
         # print a message and flushes the standard output
         extra.echo("------------------------------------------------------------------------")
         extra.echo("Finished executing script file: %s" % script)
+        extra.echo("Execution finished with error [%d]" % process.returncode)
         extra.echo("------------------------------------------------------------------------")
         sys.stdout.flush()
+
+    # exits the current process with the code that has been calculated
+    # from the execution of the various sub-scripts
+    sys.exit(exit_code)
 
 if __name__ == "__main__":
     run()
