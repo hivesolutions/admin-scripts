@@ -68,8 +68,24 @@ def pysource_file(file_path, run_pep8 = True, ignores = ()):
     try: import pep8
     except: pep8 = None
 
+    if pep8:
+        class ErrorReport(pep8.StandardReport):
+            def get_file_results(self):
+                self._deferred_print.sort()
+                for line_number, offset, code, text, doc in self._deferred_print:
+                    STDERR.write(self._fmt % dict(
+                        path = self.filename,
+                        row = self.line_offset + line_number,
+                        col = offset + 1,
+                        code = code,
+                        text = text,
+                    ) + "\n")
+                    if self._show_pep8 and doc: extra.STDERR.write("    " + doc.strip() + "\n")
+                    extra.STDERR.flush()
+                return self.file_errors
+
     if pep8 and run_pep8:
-        checker = pep8.Checker(file_path)
+        checker = pep8.Checker(file_path, reporter = ErrorReport)
         checker.check_all(expected = ignores)
 
 def pysource_walker(arguments, directory_name, names):
