@@ -41,7 +41,7 @@ configurations = (
     {
         "recursive" : True,
         "windows_newline" : True,
-        "fix_extra_newlines" : False,
+        "fix_extra_newlines" : True,
         "property_order" : (
             "animation",
             "-o-animation",

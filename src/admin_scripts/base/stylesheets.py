@@ -154,7 +154,7 @@ def get_property_index(property_line, property_order, line_number):
     property_index = property_order.index(property_name)
     return property_index
 
-def write_lines(output_buffer, lines, windows_newline):
+def write_lines(output_buffer, lines, windows_newline = True, avoid_empty = False):
     """
     Writes the provided lines to the output buffer, considering the windows
     newline option.
@@ -165,14 +165,21 @@ def write_lines(output_buffer, lines, windows_newline):
     @param lines: The list of lines to output.
     @type windows_newline: bool
     @param windows_newline: If the windows newline should be used.
+    @type avoid_empty: bool
+    @param avoid_empty: If the empty lines (after strip operation)
+    should be considered invalid and not written to buffer.
     """
 
-    # for each line
-    for line in lines:
-        # writes the line, considering the windows newline
-        write_line(output_buffer, line, windows_newline)
+    # iterates over the complete set of lines that are going
+    # to be written to the buffer and writes their value
+    for line in lines: write_line(
+        output_buffer,
+        line,
+        windows_newline = windows_newline,
+        avoid_empty = avoid_empty
+    )
 
-def write_line(output_buffer, line, windows_newline):
+def write_line(output_buffer, line, windows_newline = True, avoid_empty = False):
     """
     Writes the provided line to the output buffer, considering the windows
     newline option. This is considered a normalization operation.
@@ -183,6 +190,9 @@ def write_line(output_buffer, line, windows_newline):
     @param lines: The list of lines to output.
     @type windows_newline: bool
     @param windows_newline: If the windows newline should be used.
+    @type avoid_empty: bool
+    @param avoid_empty: If the empty lines (after strip operation)
+    should be considered invalid and not written to buffer.
     """
 
     # right strips the line so that no extra space characters
@@ -190,6 +200,10 @@ def write_line(output_buffer, line, windows_newline):
     # string buffer (flush operation)
     line = line.rstrip()
     output_buffer.write(line)
+
+    # in case the avoid empty flag is set and the line value
+    # is considered invalid/empty, it's ignored
+    if avoid_empty and not line: return
 
     # in case the newline mode is of type windows writes the
     # typical carriage return new line values otherwise writes
@@ -209,7 +223,9 @@ def process_property_lines(property_lines, line_number):
     @return: The processed property lines.
     """
 
-    # processes the property lines
+    # processes the property lines one by one so that the
+    # properly represent the same semantic value but with
+    # a better/standard representation of the value
     processed_property_lines = [process_property_line(property_line, line_number)\
         for property_line in property_lines]
 
@@ -478,8 +494,13 @@ def cleanup_properties(input_buffer, windows_newline, fix_extra_newlines, proper
 
                 # writes the lines to the buffer, considering the windows newline
                 # and then writes the line
-                write_lines(output_buffer, property_lines, windows_newline)
-                write_line(output_buffer, line, windows_newline)
+                write_lines(
+                    output_buffer,
+                    property_lines,
+                    windows_newline = windows_newline,
+                    avoid_empty = True
+                )
+                write_line(output_buffer, line, windows_newline = windows_newline)
 
                 # writes the final newline
                 fix_extra_newlines and write_line(output_buffer, "\n", windows_newline)
