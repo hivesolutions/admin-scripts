@@ -86,7 +86,7 @@ def pysource_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    file_exclusion, = arguments
+    file_exclusion, ignores = arguments
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
@@ -110,9 +110,9 @@ def pysource_walker(arguments, directory_name, names):
         # operation that is going to be performed and
         # then runs the operation with the correct path
         extra.echo("Validation python source file: %s" % valid_complete_name)
-        pysource_file(valid_complete_name)
+        pysource_file(valid_complete_name, ignores = ignores)
 
-def pysource_recursive(directory_path, file_exclusion):
+def pysource_recursive(directory_path, file_exclusion, ignores = ()):
     """
     Normalizes pysource in recursive mode.
     All the options are arguments to be passed to the
@@ -122,9 +122,12 @@ def pysource_recursive(directory_path, file_exclusion):
     @param directory_path: The path to the (entry point) directory.
     @type file_exclusion: List
     @param file_exclusion: The list of file exclusion to be used.
+    @type ignores: Tuple
+    @param ignores: A sequence of string values that define the
+    various tests (in pep8) that are going to be ignored.
     """
 
-    legacy.walk(directory_path, pysource_walker, (file_exclusion,))
+    legacy.walk(directory_path, pysource_walker, (file_exclusion, ignores))
 
 def main():
     """
@@ -182,13 +185,14 @@ def main():
         # retrieves the configuration values
         recursive = configuration["recursive"]
         file_exclusion = configuration["file_exclusion"]
+        ignores = configuration.get("ignores", ())
 
         # in case the recursive flag is set, normalizes the multiple
         # found pysource configuration file
-        if recursive: pysource_recursive(path, file_exclusion)
+        if recursive: pysource_recursive(path, file_exclusion, ignores = ignores)
         # otherwise it's a "normal" iteration and runs the
         # pysource normalization process in it
-        else: pysource_file(path)
+        else: pysource_file(path, ignores = ignores)
 
 if __name__ == "__main__":
     main()

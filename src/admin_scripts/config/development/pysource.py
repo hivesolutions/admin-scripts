@@ -39,6 +39,37 @@ __license__ = "Apache License, Version 2.0"
 
 configurations = (
     {
+        "ignores" : (
+            "E501",
+            "E203",
+            "W293",
+            "E701",
+            "W291",
+            "E231",
+            "E251",
+            "E302",
+            "E121",
+            "E261",
+            "E713",
+            "E502",
+            "E711",
+            "E128",
+            "E126",
+            "E702",
+            "E122",
+            "E129",
+            "E721",
+            "E262",
+            "E712",
+            "E124",
+            "E127",
+            "E125",
+            "E131",
+            "E123",
+            "E402",
+            "E731",
+            "E704"
+        ),
         "recursive" : True,
         "file_exclusion" : ("android-sdk",)
     },
