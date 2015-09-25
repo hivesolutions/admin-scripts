@@ -92,8 +92,9 @@ PROPERTY_LINE_REPLACEMENT_VALUE = "    \g<1>: \g<2>"
 """ The property line replacement value """
 
 RULES_MAP = dict(
+    border = ("zero_to_none",),
     margin = ("zero_to_multiple", "two_to_multiple"),
-    border = ("zero_to_none",)
+    padding = ("zero_to_multiple", "two_to_multiple")
 )
 """ The map that associates various property names
 with the various rules that should be applied to them """
@@ -211,14 +212,18 @@ def write_line(output_buffer, line, windows_newline = True, avoid_empty = False)
     if windows_newline: output_buffer.write("\r\n")
     else: output_buffer.write("\n")
 
-def process_property_lines(property_lines, line_number):
+def process_property_lines(property_lines, line_number, avoid_empty = False):
     """
-    Processes the property lines.
+    Processes the property lines, this process should be
+    iterative for each of the lines passed in the list.
 
     @type property_lines: List
     @param property_lines: The property lines to process.
     @type line_number: int
     @param line_number: The approximate line number for this processing.
+    @type avoid_empty: bool
+    @param avoid_empty: If the empty lines should avoid any
+    kind of processing (extra errors may occur).
     @rtype: List
     @return: The processed property lines.
     """
@@ -227,7 +232,7 @@ def process_property_lines(property_lines, line_number):
     # properly represent the same semantic value but with
     # a better/standard representation of the value
     processed_property_lines = [process_property_line(property_line, line_number)\
-        for property_line in property_lines]
+        for property_line in property_lines if not avoid_empty or property_line.strip()]
 
     # returns the processed property lines
     return processed_property_lines
@@ -281,7 +286,7 @@ def rule_zero_to_none(name, value):
 def rule_two_to_multiple(name, value):
     parts = value.split()
     if not len(parts) == 2: return
-    return "%s: %s;" % (name, value * 2)
+    return "%s: %s %s;" % (name, value, value)
 
 def process_rules(property_line, line_number):
     # retrieves the initial value for the property name
@@ -515,7 +520,11 @@ def cleanup_properties(
 
                 # sorts the various property lines and the processes them
                 property_lines = sorted(rule_lines, key = get_comparison_key)
-                property_lines = process_property_lines(property_lines, line_number)
+                property_lines = process_property_lines(
+                    property_lines,
+                    line_number,
+                    avoid_empty = fix_extra_newlines
+                )
 
                 # writes the lines to the buffer, considering the windows newline
                 # and then writes the line
@@ -523,7 +532,7 @@ def cleanup_properties(
                     output_buffer,
                     property_lines,
                     windows_newline = windows_newline,
-                    avoid_empty = True
+                    avoid_empty = fix_extra_newlines
                 )
                 write_line(output_buffer, line, windows_newline = windows_newline)
 
