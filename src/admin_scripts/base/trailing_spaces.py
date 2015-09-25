@@ -380,5 +380,9 @@ def main():
                 # removes the trailing newlines (for one file)
                 remove_trailing_newlines(path, windows_newline)
 
+    # verifies if there were messages printed to the standard
+    # error output and if that's the case exits in error
+    exit(1 if extra.has_errors() else 0)
+
 if __name__ == "__main__":
     main()

@@ -56,6 +56,10 @@ def error(message):
     STDERR.write("ERROR: " + message + "\n")
     STDERR.flush()
 
+def has_errors():
+    if not hasattr(STDERR, "_counter"): return False
+    return STDERR._counter > 0
+
 def patch(stream):
     if hasattr(stream, "_patched"): return
 
@@ -71,3 +75,5 @@ def patch(stream):
 def patch_all():
     patch(STDOUT)
     patch(STDERR)
+
+patch_all()

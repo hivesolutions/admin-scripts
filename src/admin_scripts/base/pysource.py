@@ -210,5 +210,9 @@ def main():
         # pysource normalization process in it
         else: pysource_file(path, ignores = ignores)
 
+    # verifies if there were messages printed to the standard
+    # error output and if that's the case exits in error
+    exit(1 if extra.has_errors() else 0)
+
 if __name__ == "__main__":
     main()
