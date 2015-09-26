@@ -44,6 +44,29 @@ FLUSH_STREAM = True
 STDOUT = sys.stdout
 STDERR = sys.stderr if USE_STDERR else STDOUT
 
+class StreamWrapper(object):
+
+    def __init__(self, stream):
+        self.stream = stream
+        self.counter = 0
+
+    def __getattr__(self, name):
+        if hasattr(self.stream, name):
+            return getattr(self.stream, name)
+        raise AttributeError("'%s' not found" % name)
+
+    @classmethod
+    def wrap(cls, stream):
+        if hasattr(stream, "counter"): return stream
+        return cls(stream)
+
+    def write(self, *args, **kwargs):
+        self.counter += 1
+        self.stream.write(*args, **kwargs)
+
+    def written(self):
+        return self.counter > 0
+
 def echo(message):
     STDOUT.write(message + "\n")
     STDOUT.flush()
@@ -57,23 +80,12 @@ def error(message):
     STDERR.flush()
 
 def has_errors():
-    if not hasattr(STDERR, "_counter"): return False
-    return STDERR._counter > 0
+    return STDERR.written()
 
-def patch(stream):
-    if hasattr(stream, "_patched"): return
+def wrap_all():
+    global STDOUT
+    global STDERR
+    STDOUT = StreamWrapper.wrap(STDOUT)
+    STDERR = StreamWrapper.wrap(STDERR)
 
-    def writer(*args, **kwargs):
-        stream._counter += 1
-        stream._write(*args, **kwargs)
-
-    stream._patched = True
-    stream._counter = 0
-    stream._write = stream.write
-    stream.write = writer
-
-def patch_all():
-    patch(STDOUT)
-    patch(STDERR)
-
-patch_all()
+wrap_all()
