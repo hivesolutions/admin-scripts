@@ -77,8 +77,6 @@ def remove_trailing_newlines(file_path, windows_newline = True):
         # creates a string buffer for buffering
         string_buffer = legacy.BytesIO()
 
-
-
         # reads the complete set of file lines and then
         # reverses their order to detect the end of file
         file_lines = file.readlines()
