@@ -68,20 +68,20 @@ def remove_trailing_newlines(file_path, windows_newline = True):
     @param windows_newline: If the windows newline should be used.
     """
 
-    # normalizes the file path
+    # normalizes the file path and uses the resulting
+    # file path as the basis for the opening of the file
     file_path_normalized = extra.normalize_path(file_path)
-
-    # opens the file for reading
     file = open(file_path_normalized, "rb")
 
     try:
         # creates a string buffer for buffering
         string_buffer = legacy.BytesIO()
 
-        # reads the file lines
-        file_lines = file.readlines()
 
-        # reverses the file lines
+
+        # reads the complete set of file lines and then
+        # reverses their order to detect the end of file
+        file_lines = file.readlines()
         file_lines.reverse()
 
         # start the index
