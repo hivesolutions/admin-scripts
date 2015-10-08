@@ -92,6 +92,10 @@ PROPERTY_LINE_REPLACEMENT_VALUE = "    \g<1>: \g<2>"
 """ The property line replacement value """
 
 RULES_MAP = dict(
+    left = ("zero_to_zero_px",),
+    top = ("zero_to_zero_px",),
+    right = ("zero_to_zero_px",),
+    bottom = ("zero_to_zero_px",),
     border = ("zero_to_none",),
     margin = ("zero_to_multiple", "two_to_multiple"),
     padding = ("zero_to_multiple", "two_to_multiple")
@@ -274,6 +278,10 @@ def process_property_line(property_line, line_number):
 
     # returns the processed property line
     return property_line
+
+def rule_zero_to_zero_px(name, value):
+    if not value in ("0",): return
+    return "%s: 0px;" % name
 
 def rule_zero_to_multiple(name, value):
     if not value in ("0", "0px"): return
