@@ -100,7 +100,8 @@ configurations = (
             "drg",
             "am",
             "m4",
-            "md"
+            "md",
+            "csv"
         ),
         "file_exclusion" : ("android-sdk",)
     }
