@@ -89,8 +89,8 @@ def run():
     # retrieves the path to the "current" directory
     directory_path = os.path.dirname(__file__)
 
-    # in case the number of arguments
-    # is not sufficient
+    # in case the number of arguments is not sufficient
+    # must print an error message about the issue
     if len(sys.argv) < 2:
         # prints a series of message about the correct usage
         # of the command line for this command
