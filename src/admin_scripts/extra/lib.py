@@ -58,6 +58,29 @@ LONG_PATH_PREFIX = legacy.UNICODE("\\\\?\\")
 """ The windows long path prefix, used for special
 construction of path values in windows """
 
+IGNORE_FILE = ".cignore"
+""" The name of the file that is going to be used to determine
+if a path tree should be ignored and no operation should be
+performed for any of its children """
+
+def handle_ignore(names):
+    """
+    Tries to handle the ignore operation for the provided
+    set of names, this should include the changing of the
+    names list in case its required.
+    
+    @type names: List
+    @param names: The list of directory names that are meant
+    to be verified/handled for the ignore file.
+    @rtype: bool
+    @return: If the ignore operation has been processed for
+    the current list of names. 
+    """
+    
+    if not IGNORE_FILE in names: return False
+    del names[:]
+    return True
+
 def normalize_path(path):
     """
     Normalizes the given path, using the characteristics
