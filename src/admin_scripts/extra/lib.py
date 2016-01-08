@@ -68,15 +68,15 @@ def handle_ignore(names):
     Tries to handle the ignore operation for the provided
     set of names, this should include the changing of the
     names list in case its required.
-    
+
     @type names: List
     @param names: The list of directory names that are meant
     to be verified/handled for the ignore file.
     @rtype: bool
     @return: If the ignore operation has been processed for
-    the current list of names. 
+    the current list of names.
     """
-    
+
     if not IGNORE_FILE in names: return False
     del names[:]
     return True

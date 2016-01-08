@@ -289,7 +289,7 @@ def join_files_walker(arguments, directory_name, names):
 
     # unpacks the arguments tuple
     file_exclusion, = arguments
-    
+
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
