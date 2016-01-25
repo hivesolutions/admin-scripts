@@ -139,7 +139,7 @@ def jssource_walker(arguments, directory_name, names):
         # print a message a message about the jssource
         # operation that is going to be performed and
         # then runs the operation with the correct path
-        extra.echo("Transformation javascript source file: %s" % valid_complete_name)
+        extra.echo("Transforming javascript source file: %s" % valid_complete_name)
         jssource_file(valid_complete_name)
 
 def jssource_recursive(directory_path, file_exclusion):
