@@ -51,10 +51,10 @@ SCRIPTS_LIST = [
     "stylesheets.py",
     "encoding.py",
     "join.py",
-    "trailing_spaces.py",
     "pydev.py",
     "pysource.py",
-    "jssource.py"
+    "jssource.py",
+    "trailing_spaces.py"
 ]
 """ The list of scripts to be executed by the complete
 cleanup operation, each of the scripts will be executed
