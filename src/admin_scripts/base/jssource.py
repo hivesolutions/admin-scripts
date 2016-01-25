@@ -49,7 +49,7 @@ USAGE_MESSAGE = "jssource [-r] [-w exclusion_1, exclusion_2, ...] [-c configurat
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
 
-def jssource_file(file_path, beautifty = True, encoding = "utf-8", ignores = ()):
+def jssource_file(file_path, beautifty = True, encoding = "utf-8"):
     """
     Runs the javascript source file verification/validation process
     as defined by a series of specifications.
@@ -63,9 +63,6 @@ def jssource_file(file_path, beautifty = True, encoding = "utf-8", ignores = ())
     @type encoding: String
     @param encoding: The encoding that is going to be used as the
     default one for the decoding operation in the source file.
-    @type ignores: Tuple
-    @param ignores: A sequence of string values that define the
-    various tests (in pep8) that are going to be ignored.
     """
 
     try: import jsbeautifier
@@ -85,10 +82,10 @@ def jssource_file(file_path, beautifty = True, encoding = "utf-8", ignores = ())
         # creates the dictionary that will contain the complete
         # set of options to be applied in the beautify operation
         # and then uses such values to run the beautification process
-        opts = dict(
-            break_chained_methods = True,
-            end_with_newline = True
-        )
+        opts = jsbeautifier.default_options()
+        opts.wrap_line_length = 120
+        opts.end_with_newline = True
+        opts.eol = "\r\n"
         result = jsbeautifier.beautify(contents, opts = opts)
 
         # determines if the result from the beautification process
@@ -114,7 +111,7 @@ def jssource_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    file_exclusion, ignores = arguments
+    file_exclusion, = arguments
 
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
@@ -143,9 +140,9 @@ def jssource_walker(arguments, directory_name, names):
         # operation that is going to be performed and
         # then runs the operation with the correct path
         extra.echo("Transformation javascript source file: %s" % valid_complete_name)
-        jssource_file(valid_complete_name, ignores = ignores)
+        jssource_file(valid_complete_name)
 
-def jssource_recursive(directory_path, file_exclusion, ignores = ()):
+def jssource_recursive(directory_path, file_exclusion):
     """
     Normalizes jssource in recursive mode.
     All the options are arguments to be passed to the
@@ -155,12 +152,9 @@ def jssource_recursive(directory_path, file_exclusion, ignores = ()):
     @param directory_path: The path to the (entry point) directory.
     @type file_exclusion: List
     @param file_exclusion: The list of file exclusion to be used.
-    @type ignores: Tuple
-    @param ignores: A sequence of string values that define the
-    various tests (in pep8) that are going to be ignored.
     """
 
-    legacy.walk(directory_path, jssource_walker, (file_exclusion, ignores))
+    legacy.walk(directory_path, jssource_walker, (file_exclusion,))
 
 def main():
     """
@@ -218,14 +212,13 @@ def main():
         # retrieves the configuration values
         recursive = configuration["recursive"]
         file_exclusion = configuration["file_exclusion"]
-        ignores = configuration.get("ignores", ())
 
         # in case the recursive flag is set, normalizes the multiple
         # found jssource configuration file
-        if recursive: jssource_recursive(path, file_exclusion, ignores = ignores)
+        if recursive: jssource_recursive(path, file_exclusion)
         # otherwise it's a "normal" iteration and runs the
         # jssource normalization process in it
-        else: jssource_file(path, ignores = ignores)
+        else: jssource_file(path)
 
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
