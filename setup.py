@@ -69,7 +69,8 @@ setuptools.setup(
     },
     install_requires = [
         "legacy",
-        "pep8"
+        "pep8",
+        "jsbeautifier"
     ],
     classifiers = [
         "Development Status :: 5 - Production/Stable",
