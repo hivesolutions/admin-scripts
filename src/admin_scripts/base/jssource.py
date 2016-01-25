@@ -131,7 +131,7 @@ def jssource_walker(arguments, directory_name, names):
     # filters the names with non valid file extensions so that only the
     # ones that conform with the javascript source ones are selected
     valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if name.endswith(".js")]
+        if name.endswith((".js", ".json"))]
 
     # iterates over all the valid complete names with valid structure
     # as defined by the javascript file structure definition
