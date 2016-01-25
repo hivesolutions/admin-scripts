@@ -64,10 +64,10 @@ SCRIPTS_CONFIGURATION_MAP = {
     "stylesheets.py" : "development/stylesheets.py",
     "encoding.py" : "development/encoding.py",
     "join.py" : "development/join.py",
-    "trailing_spaces.py" : "development/trailing_spaces.py",
     "pydev.py" : "development/pydev.py",
     "pysource.py" : "development/pysource.py",
-    "jssource.py" : "development/jssource.py"
+    "jssource.py" : "development/jssource.py",
+    "trailing_spaces.py" : "development/trailing_spaces.py"
 }
 """ The map associating the script name with the name
 of the configuration file, so that during execution
