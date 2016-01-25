@@ -36,6 +36,7 @@ __license__ = "Apache License, Version 2.0"
 
 from . import encoding
 from . import join
+from . import jssource
 from . import pydev
 from . import pysource
 from . import stylesheets

@@ -53,7 +53,8 @@ SCRIPTS_LIST = [
     "join.py",
     "trailing_spaces.py",
     "pydev.py",
-    "pysource.py"
+    "pysource.py",
+    "jssource.py"
 ]
 """ The list of scripts to be executed by the complete
 cleanup operation, each of the scripts will be executed
@@ -65,7 +66,8 @@ SCRIPTS_CONFIGURATION_MAP = {
     "join.py" : "development/join.py",
     "trailing_spaces.py" : "development/trailing_spaces.py",
     "pydev.py" : "development/pydev.py",
-    "pysource.py" : "development/pysource.py"
+    "pysource.py" : "development/pysource.py",
+    "jssource.py" : "development/jssource.py"
 }
 """ The map associating the script name with the name
 of the configuration file, so that during execution
