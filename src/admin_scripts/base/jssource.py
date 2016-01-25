@@ -49,7 +49,7 @@ USAGE_MESSAGE = "jssource [-r] [-w exclusion_1, exclusion_2, ...] [-c configurat
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
 
-def jssource_file(file_path, beautifty = True, ignores = ()):
+def jssource_file(file_path, beautifty = True, encoding = "utf-8", ignores = ()):
     """
     Runs the javascript source file verification/validation process
     as defined by a series of specifications.
@@ -60,6 +60,9 @@ def jssource_file(file_path, beautifty = True, ignores = ()):
     @type beautifier: bool
     @param beautifier: If the beautification process should be
     run for the provided file for verification.
+    @type encoding: String
+    @param encoding: The encoding that is going to be used as the
+    default one for the decoding operation in the source file.
     @type ignores: Tuple
     @param ignores: A sequence of string values that define the
     various tests (in pep8) that are going to be ignored.
@@ -68,8 +71,34 @@ def jssource_file(file_path, beautifty = True, ignores = ()):
     try: import jsbeautifier
     except: jsbeautifier = None
 
-    if jsbeautifier and beautifty:
-        result = jsbeautifier.beautify_file(file_path)
+    is_min = file_path.endswith("min.js")
+
+    if jsbeautifier and beautifty and not is_min:
+        # reads the complete set of contents from the original
+        # file and then tries to decode such contents using the
+        # default encoding (as expected by the processor)
+        file = open(file_path, "rb")
+        try: contents = file.read()
+        finally: file.close()
+        contents = contents.decode(encoding)
+
+        # creates the dictionary that will contain the complete
+        # set of options to be applied in the beautify operation
+        # and then uses such values to run the beautification process
+        opts = dict(
+            break_chained_methods = True,
+            end_with_newline = True
+        )
+        result = jsbeautifier.beautify(contents, opts = opts)
+
+        # determines if the result from the beautification process
+        # is a bytes or unicode value and if it's not runs the encoding
+        # and the re-writes the file with the new contents
+        is_unicode = legacy.is_unicode(result)
+        if is_unicode: result = result.encode(encoding)
+        file = open(file_path, "wb")
+        try: file.write(result)
+        finally: file.close()
 
 def jssource_walker(arguments, directory_name, names):
     """
@@ -105,7 +134,7 @@ def jssource_walker(arguments, directory_name, names):
     # filters the names with non valid file extensions so that only the
     # ones that conform with the javascript source ones are selected
     valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if name.endswith(".py")]
+        if name.endswith(".js")]
 
     # iterates over all the valid complete names with valid structure
     # as defined by the javascript file structure definition
