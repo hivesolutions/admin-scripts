@@ -182,6 +182,7 @@ configurations = (
             "font-family",
             "font-size",
             "font-size-adjust",
+            "font-smooth",
             "font-smoothing",
             "-o-font-smoothing",
             "-moz-font-smoothing",
