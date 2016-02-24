@@ -88,7 +88,7 @@ PROPERTY_LINE_REGEX_VALUE = r"^[ ]*([\w\-]*)[ ]*:[ ]*(\S*)"
 PROPERTY_LINE_REGEX = re.compile(PROPERTY_LINE_REGEX_VALUE)
 """ The property line regex """
 
-PROPERTY_LINE_REPLACEMENT_VALUE = "    \g<1>: \g<2>"
+PROPERTY_LINE_REPLACEMENT_VALUE = "\g<1>: \g<2>"
 """ The property line replacement value """
 
 TOKEN_REGEX_VALUE = r"\s*([>\+\s])\s*"
@@ -265,7 +265,12 @@ def write_line(output_buffer, line, windows_newline = True, avoid_empty = False)
     if windows_newline: output_buffer.write("\r\n")
     else: output_buffer.write("\n")
 
-def process_property_lines(property_lines, line_number, avoid_empty = False):
+def process_property_lines(
+    property_lines,
+    line_number,
+    indentation = 0,
+    avoid_empty = False
+):
     """
     Processes the property lines, this process should be
     iterative for each of the lines passed in the list.
@@ -277,6 +282,10 @@ def process_property_lines(property_lines, line_number, avoid_empty = False):
     @type avoid_empty: bool
     @param avoid_empty: If the empty lines should avoid any
     kind of processing (extra errors may occur).
+    @type indentation: int
+    @param identation: The level of indentation to be used for the processing
+    of the various property lines, this value is going to be used in the
+    operation of pre-pending spaced to the property rules.
     @rtype: List
     @return: The processed property lines.
     """
@@ -284,13 +293,13 @@ def process_property_lines(property_lines, line_number, avoid_empty = False):
     # processes the property lines one by one so that the
     # properly represent the same semantic value but with
     # a better/standard representation of the value
-    processed_property_lines = [process_property_line(property_line, line_number)\
+    processed_property_lines = [process_property_line(property_line, line_number, indentation)\
         for property_line in property_lines if not avoid_empty or property_line.strip()]
 
     # returns the processed property lines
     return processed_property_lines
 
-def process_property_line(property_line, line_number):
+def process_property_line(property_line, line_number, indentation):
     # in case the property line is empty, when stripped the property
     # is considered to be empty (warning required) logs the message
     # and then returns the line itself (no processing)
@@ -309,7 +318,11 @@ def process_property_line(property_line, line_number):
 
     # ensures the property line is correctly indented and
     # the property name and value are correctly separated
-    property_line = PROPERTY_LINE_REGEX.sub(PROPERTY_LINE_REPLACEMENT_VALUE, property_line)
+    padding = indentation * " " * 4
+    property_line = PROPERTY_LINE_REGEX.sub(
+        padding + PROPERTY_LINE_REPLACEMENT_VALUE,
+        property_line
+    )
 
     # ensures the property line and an ending semicolon
     # adding it to the property line in case it does not
@@ -605,45 +618,51 @@ def cleanup_properties(
             # decrements the open rule count
             open_rule_count -= 1
 
+            # in case there is a mismatch in open and closed rules
+            # must raise an exception indicating the problem
+            if open_rule_count < 0: raise Exception("mismatched rules found")
+
             # strips the current line removing any extra (not expected)
             # values and simplifying the current line value
+            padding = open_rule_count * 4 * " "
             line = line.strip()
+            line = padding + line
 
-            # in case this is an actual rule
-            if open_rule_count == 0:
-                # in case the rule set does not contain any property
-                # must log an information message about the empty rule
-                if rule_started and not rule_lines:
-                    extra.warn("Empty stylesheet rule at line %d" % line_number)
+            # in case the rule set does not contain any property
+            # must log an information message about the empty rule
+            if rule_started and not rule_lines:
+                extra.warn("Empty stylesheet rule at line %d" % line_number)
 
-                # updates the flag to signal the rule has ended
-                rule_started = False
+            # updates the flag to signal the rule has ended
+            rule_started = False
 
-                # sorts the various property lines and the processes them
-                property_lines = sorted(rule_lines, key = get_comparison_key)
-                property_lines = process_property_lines(
-                    property_lines,
-                    line_number,
-                    avoid_empty = fix_extra_newlines
-                )
+            # sorts the various property lines and the processes them
+            property_lines = sorted(rule_lines, key = get_comparison_key)
+            property_lines = process_property_lines(
+                property_lines,
+                line_number,
+                indentation = open_rule_count + 1,
+                avoid_empty = fix_extra_newlines
+            )
 
-                # writes the lines to the buffer, considering the windows newline
-                # and then writes the line
-                write_lines(
-                    output_buffer,
-                    property_lines,
-                    windows_newline = windows_newline,
-                    avoid_empty = fix_extra_newlines
-                )
-                write_line(output_buffer, line, windows_newline = windows_newline)
+            # writes the lines to the buffer, considering the windows newline
+            # and then writes the line
+            write_lines(
+                output_buffer,
+                property_lines,
+                windows_newline = windows_newline,
+                avoid_empty = fix_extra_newlines
+            )
+            write_line(output_buffer, line, windows_newline = windows_newline)
 
-                # resets the newlines counter and then
-                # enables the needs newline flag
-                newlines = 0
-                needs_newline = True
+            # resets the newlines counter and then
+            # enables the needs newline flag
+            newlines = 0
+            needs_newline = True
+            rule_lines = []
 
-                # skips further processing
-                continue
+            # skips further processing
+            continue
 
         # in case this line is part of a valid rule set
         elif rule_started:

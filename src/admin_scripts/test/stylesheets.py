@@ -47,7 +47,7 @@ class StylesheetsTest(unittest.TestCase):
     def test_rules(self):
         input = b""".property>.sub  >   .sub-sub  ,
         .property2    >.sub  >   .sub-sub  {
-    margin: 80px auto;
+    margin   : 80px auto;
      border: 0;
 
 
@@ -78,6 +78,34 @@ class StylesheetsTest(unittest.TestCase):
                 "margin",
                 "max-width",
                 "padding"
+            )
+        )
+        result.seek(0)
+        result = result.read()
+        self.assertEqual(result, expected)
+
+    def test_sub_rules(self):
+        input = b"""@master   {
+        slave {
+border   : 0;
+  max-width: 1170px;;;
+        }
+}
+"""
+        expected = """@master {
+    slave {
+        border: none;
+        max-width: 1170px;
+    }
+}
+"""
+        buffer = legacy.BytesIO(input)
+        result = stylesheets.cleanup_properties(
+            buffer,
+            windows_newline = False,
+            property_order = (
+                "border",
+                "max-width"
             )
         )
         result.seek(0)
