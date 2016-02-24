@@ -137,6 +137,9 @@ def get_property_index(property_line, property_order, line_number):
     @param property_order: The list of property names in order.
     @type line_number: int
     @param line_number: The approximate line number for this processing.
+    @rtype: int
+    @return: The index of the property line, note that in case an index
+    value is not found for the rule a large index is returned instead.
     """
 
     # splits the property name, to retrieve the property value
@@ -168,13 +171,12 @@ def get_property_index(property_line, property_order, line_number):
 
     # in case the property is not in the order
     if not property_name in property_order:
-        # warns about the missing property name
+        # warns about the missing property name and returns the
+        # largest possible index value for any property name
         extra.warn(
             "Order for property %s not defined at line %d" %\
             (property_name, line_number)
         )
-
-        # uses the greatest index
         return len(property_order)
 
     # determines the index for the property name and returns
@@ -497,7 +499,11 @@ def cleanup_properties(
         line_number += 1
 
         # updates the comparison key function
-        get_comparison_key = lambda property_line: get_property_index(property_line, property_order, line_number)
+        get_comparison_key = lambda property_line: get_property_index(
+            property_line,
+            property_order,
+            line_number
+        )
 
         # in case the line contains a single line comment
         if "/*" in line and "*/" in line:
@@ -518,10 +524,9 @@ def cleanup_properties(
                 "Found closing comment without corresponding opening at line %d" % line_number
             )
 
-            # decrements the comments started counter
-            comments_started -= 1
-
+            # decrements the comments started counter and then
             # enables the needs newline flag
+            comments_started -= 1
             needs_newline = True
         # in case this is a comment line
         elif comments_started:
