@@ -237,6 +237,11 @@ configurations = (
             "min-height",
             "min-width",
             "opacity",
+            "-o-opacity",
+            "-ms-opacity",
+            "-moz-opacity",
+            "-khtml-opacity",
+            "-webkit-opacity",
             "orphans",
             "osx-font-smoothing",
             "-o-osx-font-smoothing",
@@ -385,7 +390,13 @@ configurations = (
             "word-break",
             "word-spacing",
             "word-wrap",
-            "z-index"
+            "z-index",
+            "zoom",
+            "-o-zoom",
+            "-ms-zoom",
+            "-moz-zoom",
+            "-khtml-zoom",
+            "-webkit-zoom"
         ),
         "rules_skip" : (
             "@-",
