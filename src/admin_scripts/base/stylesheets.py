@@ -91,6 +91,30 @@ PROPERTY_LINE_REGEX = re.compile(PROPERTY_LINE_REGEX_VALUE)
 PROPERTY_LINE_REPLACEMENT_VALUE = "    \g<1>: \g<2>"
 """ The property line replacement value """
 
+TOKEN_REGEX_VALUE = r"\s*([>\+\s])\s*"
+""" The regex value meant to catch the various css related
+tokens that are separated with a space compatible character """
+
+TOKEN_REGEX = re.compile(TOKEN_REGEX_VALUE)
+""" The regex meant to catch the various css related
+tokens that are separated with a space compatible character """
+
+COMMA_REGEX_VALUE = r"\s*(,)\s*"
+""" The regex value that defines a valid comma under css,
+note that multiple characters before and after are allowed """
+
+COMMA_REGEX = re.compile(COMMA_REGEX_VALUE)
+""" The regex that defines a valid comma under css,
+note that multiple characters before and after are allowed """
+
+SPACE_REGEX_VALUE = r"\s+"
+""" The regex value that defines a valid space under css,
+note that multiple characters are allowed """
+
+SPACE_REGEX = re.compile(SPACE_REGEX_VALUE)
+""" The regex that defines a valid space under css,
+note that multiple characters are allowed """
+
 RULES_MAP = {
     "left" : ("zero_to_zero_px",),
     "top" : ("zero_to_zero_px",),
@@ -216,8 +240,8 @@ def write_line(output_buffer, line, windows_newline = True, avoid_empty = False)
 
     @type output_buffer: StringBuffer
     @param output_buffer: The output buffer.
-    @type lines: List
-    @param lines: The list of lines to output.
+    @type line: List
+    @param line: The line that is going to be written to output buffer.
     @type windows_newline: bool
     @param windows_newline: If the windows newline should be used.
     @type avoid_empty: bool
@@ -537,8 +561,10 @@ def cleanup_properties(
             # after an at rule, a newline must follow
             needs_newline = True
         # in case the line contains a full rule specification
+        # does nothing, will just write line as is as there's
+        # very few thing possible to optimise under this situation
         elif "{" in line and "}" in line:
-            # does nothing, will just write line as is
+            line = line.strip()
             needs_newline = True
         # in case this is a rule start line
         elif "{" in line:
@@ -553,9 +579,24 @@ def cleanup_properties(
                 # signals the rule started flag,
                 # in case the rule is no to be skipped
                 rule_started = not skip_rule(line, rules_skip)
+
+            # replaces the various css tokens with proper separators
+            # meaning that no extra spaces between them are allowed
+            line = TOKEN_REGEX.sub(r" \1 ", line)
+
+            # runs the space replacement operation so that the
+            # extra spaces in the line (not required) are removed
+            # and the line is simplified
+            line = SPACE_REGEX.sub(" ", line)
+            line = line.strip()
+
         elif "}" in line:
             # decrements the open rule count
             open_rule_count -= 1
+
+            # strips the current line removing any extra (not expected)
+            # values and simplifying the current line value
+            line = line.strip()
 
             # in case this is an actual rule
             if open_rule_count == 0:
@@ -592,6 +633,7 @@ def cleanup_properties(
 
                 # skips further processing
                 continue
+
         # in case this line is part of a valid rule set
         elif rule_started:
             # appends the line to the rule set, and then
@@ -599,9 +641,12 @@ def cleanup_properties(
             rule_lines.append(line)
             continue
         # in case this is part of rule selector declaration
+        # the typical rule replacement operations are applied
         elif "," in line:
-            # does nothing, will just write line as is
-            pass
+            line = TOKEN_REGEX.sub(r" \1 ", line)
+            line = SPACE_REGEX.sub(" ", line)
+            line = COMMA_REGEX.sub(r"\1", line)
+            line = line.strip()
         # in case the between rules mode is active
         elif not rule_started and not line.strip():
             # increments the newlines count
@@ -625,13 +670,11 @@ def cleanup_properties(
 
     # in case there is a mismatch in open and closed rules
     # must raise an exception indicating the problem
-    if not open_rule_count == 0:
-        raise Exception("mismatched rules found")
+    if not open_rule_count == 0: raise Exception("mismatched rules found")
 
-    # retrieves the output buffer value
+    # retrieves the output buffer value and then counts the
+    # number of lines contained in it (assertion validation)
     output_buffer_value = output_buffer.getvalue()
-
-    # counts the lines in the output buffer
     number_lines = output_buffer_value.count("\n")
 
     if not number_lines == number_original_lines and not fix_extra_newlines:

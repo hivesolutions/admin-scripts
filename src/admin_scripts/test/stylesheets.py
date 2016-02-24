@@ -45,7 +45,8 @@ import admin_scripts.base.stylesheets as stylesheets
 class StylesheetsTest(unittest.TestCase):
 
     def test_rules(self):
-        input = b""".property {
+        input = b""".property>.sub  >   .sub-sub  ,
+        .property2    >.sub  >   .sub-sub  {
     margin: 80px auto;
      border: 0;
 
@@ -54,9 +55,10 @@ class StylesheetsTest(unittest.TestCase):
   padding: 0px 0px 32px 0px
   border-radius: 2px;
   -webkit-border-radius: 2px;;
-}
+   }
 """
-        expected = """.property {
+        expected = """.property > .sub > .sub-sub,
+.property2 > .sub > .sub-sub {
     border: none;
     border-radius: 2px 2px 2px 2px;
     -webkit-border-radius: 2px 2px 2px 2px;
