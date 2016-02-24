@@ -52,10 +52,14 @@ class StylesheetsTest(unittest.TestCase):
 
       max-width: 1170px;;;
   padding: 0px 0px 32px 0px
+  border-radius: 2px;
+  -webkit-border-radius: 2px;;
 }
 """
         expected = """.property {
     border: none;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px 2px 2px 2px;
     margin: 80px auto 80px auto;
     max-width: 1170px;
     padding: 0px 0px 32px 0px;
@@ -67,6 +71,8 @@ class StylesheetsTest(unittest.TestCase):
             windows_newline = False,
             property_order = (
                 "border",
+                "border-radius",
+                "-webkit-border-radius",
                 "margin",
                 "max-width",
                 "padding"

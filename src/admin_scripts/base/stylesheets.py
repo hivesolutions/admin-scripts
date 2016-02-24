@@ -91,17 +91,40 @@ PROPERTY_LINE_REGEX = re.compile(PROPERTY_LINE_REGEX_VALUE)
 PROPERTY_LINE_REPLACEMENT_VALUE = "    \g<1>: \g<2>"
 """ The property line replacement value """
 
-RULES_MAP = dict(
-    left = ("zero_to_zero_px",),
-    top = ("zero_to_zero_px",),
-    right = ("zero_to_zero_px",),
-    bottom = ("zero_to_zero_px",),
-    border = ("zero_to_none",),
-    margin = ("zero_to_multiple", "two_to_multiple"),
-    padding = ("zero_to_multiple", "two_to_multiple")
-)
+RULES_MAP = {
+    "left" : ("zero_to_zero_px",),
+    "top" : ("zero_to_zero_px",),
+    "right" : ("zero_to_zero_px",),
+    "bottom" : ("zero_to_zero_px",),
+    "border" : ("zero_to_none",),
+    "margin" : (
+        "zero_to_multiple",
+        "one_to_multiple",
+        "two_to_multiple"
+    ),
+    "padding" : (
+        "zero_to_multiple",
+        "one_to_multiple",
+        "two_to_multiple"
+    ),
+    "border-radius" : (
+        "zero_to_multiple",
+        "one_to_multiple",
+        "two_to_multiple"
+    )
+}
 """ The map that associates various property names
 with the various rules that should be applied to them """
+
+BROWSER_PREFIXES = (
+    "-o",
+    "-ms",
+    "-moz",
+    "-khtml",
+    "-webkit"
+)
+""" The sequence that defines the complete set of accepted
+browser prefixes for the stylesheet usage """
 
 def get_property_index(property_line, property_order, line_number):
     """
@@ -291,6 +314,11 @@ def rule_zero_to_none(name, value):
     if not value in ("0", "0px"): return
     return "%s: none;" % name
 
+def rule_one_to_multiple(name, value):
+    parts = value.split()
+    if not len(parts) == 1: return
+    return "%s: %s %s %s %s;" % (name, value, value, value, value)
+
 def rule_two_to_multiple(name, value):
     parts = value.split()
     if not len(parts) == 2: return
@@ -303,10 +331,18 @@ def process_rules(property_line, line_number):
     property_name, _property_value = property_line.split(":", 1)
     property_name = property_name.strip()
 
+    # constructs the base name, by removing the complete set
+    # of browser prefixes, this value is going to be used as
+    # the basis for the retrieval of rules (wildcard retrieval)
+    base_name = property_name
+    for prefix in BROWSER_PREFIXES:
+        if not base_name.startswith(prefix): continue
+        base_name = base_name[len(prefix) + 1:]
+
     # tries to retrieve the set of rules (as strings) that are
     # going to be applied to the current property and then runs
     # the iteration cycle to apply each of them on the line
-    rules = RULES_MAP.get(property_name, [])
+    rules = RULES_MAP.get(base_name, [])
     for rule in rules:
         # creates the (rule) method name by appending the name of
         # the current rule to the prefix and tries to retrieve a
