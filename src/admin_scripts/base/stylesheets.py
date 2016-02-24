@@ -545,28 +545,43 @@ def cleanup_properties(
         )
 
         # in case the line contains a single line comment
-        if "/*" in line and "*/" in line:
+        if "/*" in line and "*/" in line and not "*/*/" in line:
             # does nothing, will write the line as is
             pass
-        # in case the line contains a the start of multiline comment
-        elif "/*" in line:
-            # in case the comment mode is already on
-            if comments_started: extra.warn(
-                "Found opening comment inside open comment at line %d" % line_number
-            )
-
-            # increments the comments started counter
-            comments_started += 1
         # in case the line contains the end of multiline comment
         elif "*/" in line:
+            # in case the comment mode is currently not enabled prints
+            # a warning as we're trying to close a comment without opening
             if not comments_started: extra.error(
                 "Found closing comment without corresponding opening at line %d" % line_number
             )
 
+            # in case there's more that one closing comment defined under
+            # the same line prints an error as this is not allowed
+            if line.count("*/") > 1: extra.error(
+                "More that one closing comment at line %d" % line_number
+            )
+
             # decrements the comments started counter and then
             # enables the needs newline flag
-            comments_started -= 1
+            comments_started = 0
             needs_newline = True
+        # in case the line contains a the start of multiline comment
+        elif "/*" in line:
+            # in case the comment mode is already enabled (at least one)
+            # prints a waning about the double opening
+            if comments_started: extra.warn(
+                "Found opening comment inside open comment at line %d" % line_number
+            )
+
+            # in case there's more that one opening comment defined under
+            # the same line prints an error as this is not allowed
+            if line.count("/*") > 1: extra.error(
+                "More that one opening comment at line %d" % line_number
+            )
+
+            # increments the comments started counter
+            comments_started += 1
         # in case this is a comment line
         elif comments_started:
             # does nothing, will just write the line as is
@@ -577,7 +592,7 @@ def cleanup_properties(
             needs_newline = True
         # in case the line contains a full rule specification
         # does nothing, will just write line as is as there's
-        # very few thing possible to optimise under this situation
+        # very few thing possible to optimize under this situation
         elif "{" in line and "}" in line:
             line = line.strip()
             needs_newline = True
