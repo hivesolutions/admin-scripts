@@ -105,7 +105,13 @@ def apply_replacements_list(string_buffer, replacements_list):
     # returns the replaced string buffer
     return string_buffer
 
-def convert_encoding(file_path, source_encoding, target_encoding, windows_newline = True, replacements_list = None):
+def convert_encoding(
+    file_path,
+    source_encoding,
+    target_encoding,
+    windows_newline = True,
+    replacements_list = None
+):
     """
     Converts the encoding of the specified file.
 
