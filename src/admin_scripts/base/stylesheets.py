@@ -309,6 +309,13 @@ def process_property_line(property_line, line_number, indentation):
         extra.warn("Empty stylesheet property at line %s" % line_number)
         return property_line
 
+    # in case no separator is present between the name of the property
+    # the value of it a warning is raised and the value returned immediately
+    # to avoid further (unavoidable) errors
+    if not ":" in property_line:
+        extra.warn("No value set for property at line %s" % line_number)
+        return property_line
+
     # strips the line to the right so that no newline characters
     # exist (much simpler to manage lines without newlines)
     property_line = property_line.rstrip()
