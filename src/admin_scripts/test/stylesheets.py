@@ -90,12 +90,22 @@ class StylesheetsTest(unittest.TestCase):
 max-width: 1170px;;;
   border   : 0;
         }
+
+            master {
+  padding   : 0;
+   -webkit-border-radius: 3px;;;
+        }
 }
 """
         expected = """@media (max-width: 539px) and (min-width: 375px) {
     slave {
         border: none;
         max-width: 1170px;
+    }
+
+    master {
+        -webkit-border-radius: 3px 3px 3px 3px;
+        padding: 0px 0px 0px 0px;
     }
 }
 """
@@ -105,7 +115,9 @@ max-width: 1170px;;;
             windows_newline = False,
             property_order = (
                 "border",
-                "max-width"
+                "-webkit-border-radius",
+                "max-width",
+                "padding"
             )
         )
         result.seek(0)
