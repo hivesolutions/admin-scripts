@@ -175,23 +175,18 @@ def get_property_index(property_line, property_order, line_number):
     # returns immediately with the provided property order
     if len(property_line_splitted) < 2: return len(property_order)
 
-    # in case the length of the splitted line is greater than
-    # expected print a warning message indicating the problem
-    if len(property_line_splitted) > 2:
-        # warns about the extra values in the line and then returns
-        # with the length of the property order
-        extra.warn("Extra values found at line %d" % line_number)
-
     # runs a second split operation that limits the number of splits
     # in the line to two so that no extra problems are raised and then
     # retrieves the name of the current property
     property_line_splitted = property_line.split(":", 1)
-    property_name, _property_value = property_line_splitted
+    property_name, property_value = property_line_splitted
     property_name = property_name.strip()
+    property_value = property_value.strip()
 
-    # in case the property name is empty, raises an exception indicating
+    # in case the property name or value are empty, raises an exception indicating
     # the problem to be handled at the top layers
     if not property_name: raise Exception("property name is empty")
+    if not property_value: raise Exception("property value is empty")
 
     # in case the property is not in the order
     if not property_name in property_order:
@@ -202,6 +197,13 @@ def get_property_index(property_line, property_order, line_number):
             (property_name, line_number)
         )
         return len(property_order)
+
+    # in case the property value starts with a separator it's considered
+    # that the value is a extra/duplicated separator
+    if property_value[0] == ":":
+        # warns about the extra values in the line, so that the duplicated
+        # information may be properly removed and considered
+        extra.warn("Extra values found at line %d" % line_number)
 
     # determines the index for the property name and returns
     # the value to the caller method
