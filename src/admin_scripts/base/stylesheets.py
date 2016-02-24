@@ -67,12 +67,6 @@ VALID_COLOR_LENGTHS = (3, 6)
 meaning that only colors of these size are allowed
 by the stylesheet analyser """
 
-AT_RULES_REGEX_VALUE = r"\@charset|\@import|\@media|\@page .*;"
-""" The at rules regex value """
-
-AT_RULES_REGEX = re.compile(AT_RULES_REGEX_VALUE)
-""" The at rules regex """
-
 URL_REGEX_VALUE = r"url\([\"'](.*)[\"']\)"
 """ The url regex value """
 
@@ -586,10 +580,6 @@ def cleanup_properties(
         elif comments_started:
             # does nothing, will just write the line as is
             pass
-        # in case the line contains an at rule specification
-        elif AT_RULES_REGEX.match(line):
-            # after an at rule, a newline must follow
-            needs_newline = True
         # in case the line contains a full rule specification
         # does nothing, will just write line as is as there's
         # very few thing possible to optimize under this situation

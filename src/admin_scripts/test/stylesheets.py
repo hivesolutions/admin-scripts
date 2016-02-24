@@ -85,14 +85,14 @@ class StylesheetsTest(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_sub_rules(self):
-        input = b"""@master   {
+        input = b"""@media     (max-width: 539px)    and     (min-width:   375px)   {
         slave {
-border   : 0;
-  max-width: 1170px;;;
+max-width: 1170px;;;
+  border   : 0;
         }
 }
 """
-        expected = """@master {
+        expected = """@media (max-width: 539px) and (min-width: 375px) {
     slave {
         border: none;
         max-width: 1170px;
