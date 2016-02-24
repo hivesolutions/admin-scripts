@@ -590,6 +590,17 @@ def cleanup_properties(
             line = SPACE_REGEX.sub(" ", line)
             line = line.strip()
 
+            # calculates the space padding that is going to be pre-pended
+            # to the line and then adds it to the line note that the open
+            # rule count is decremented by one (opened on this line)
+            padding = (open_rule_count - 1) * 4 * " "
+            line = padding + line
+
+            # flushes the current line value to the output buffer and then
+            # continues the current loop (avoids general operations)
+            write_line(output_buffer, line, windows_newline)
+            continue
+
         elif "}" in line:
             # decrements the open rule count
             open_rule_count -= 1
@@ -663,6 +674,13 @@ def cleanup_properties(
         else:
             # warns about the statement outside a valid rule
             extra.warn("Found statement outside rule at line %d" % line_number)
+
+        # "calculates" the padding string value taking into account the
+        # current open rule count value and then removes any left space
+        # compatible values and replaces them with proper indentation
+        padding = open_rule_count * 4 * " "
+        line = line.lstrip()
+        line = padding + line
 
         # writes the line to the output buffer taking into
         # account the windows newline control flag
