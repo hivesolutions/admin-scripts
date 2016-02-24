@@ -584,8 +584,9 @@ def cleanup_properties(
             # increments the open rule count
             open_rule_count += 1
 
-            # in case this is an actual rule
-            if open_rule_count == 1:
+            # in case this is an actual rule, meaning that the open rule
+            # count value is positive (assertion valid)
+            if open_rule_count > 0:
                 # resets the rule lines
                 rule_lines = []
 
