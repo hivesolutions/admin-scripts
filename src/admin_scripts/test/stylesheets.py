@@ -123,3 +123,16 @@ max-width: 1170px;;;
         result.seek(0)
         result = result.read()
         self.assertEqual(result, expected)
+
+    def test_at_rules(self):
+        input = b"""@charset "utf-8";"""
+        expected = """@charset "utf-8";
+"""
+        buffer = legacy.BytesIO(input)
+        result = stylesheets.cleanup_properties(
+            buffer,
+            windows_newline = False
+        )
+        result.seek(0)
+        result = result.read()
+        self.assertEqual(result, expected)
