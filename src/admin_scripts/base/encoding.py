@@ -56,6 +56,10 @@ USAGE_MESSAGE = "encoding path [-r]\
 """ The usage message, to be printed when help is required
 or when a command line error exists """
 
+BOM_SEQUENCE = b"\xef\xbb\xbf"
+""" The byte based sequence that defines the start of
+an utf-8 bom encoded text file """
+
 def has_encoding(string_buffer, encoding):
     """
     Determines if the provided buffer is encoded in the provided encoding.
@@ -139,6 +143,12 @@ def convert_encoding(
         string_value = string_value.replace(b"\r\n", b"\n")
         has_target_encoding = has_encoding(string_value, target_encoding)
 
+        # in case the retrieved string value starts with the bom
+        # (byte order mark) sequence it's removed as it's considered
+        # deprecated as a method of detecting utf encoding
+        if string_value.startswith(BOM_SEQUENCE):
+            string_value = string_value[len(BOM_SEQUENCE):]
+
         # decodes the string value from the specified source encoding, this
         # operation may fail as the source encoding may only be a guess on
         # the true encoding of the file, the encodes the string value again
@@ -213,9 +223,9 @@ def convert_encoding_walker(arguments, directory_name, names):
         extra.echo(
             "Convert encoding in file: %s (%s to %s)" %\
             (
-                 valid_complete_name,
-                 source_encoding,
-                 target_encoding
+                valid_complete_name,
+                source_encoding,
+                target_encoding
             )
         )
 
@@ -234,9 +244,9 @@ def convert_encoding_walker(arguments, directory_name, names):
             extra.warn(
                 "Failed converting encoding in file: %s (%s to %s)" %\
                 (
-                     valid_complete_name,
-                     source_encoding,
-                     target_encoding
+                    valid_complete_name,
+                    source_encoding,
+                    target_encoding
                 )
             )
 
