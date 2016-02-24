@@ -579,6 +579,7 @@ def cleanup_properties(
         elif "{" in line and "}" in line:
             line = line.strip()
             needs_newline = True
+            rule_started = False
         # in case this is a rule start line
         elif "{" in line:
             # increments the open rule count
