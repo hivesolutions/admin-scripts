@@ -91,6 +91,7 @@ max-width: 1170px;;;
   border   : 0;
         }
 
+main,
             master {
   padding   : 0;
    -webkit-border-radius: 3px;;;
@@ -103,6 +104,7 @@ max-width: 1170px;;;
         max-width: 1170px;
     }
 
+    main,
     master {
         -webkit-border-radius: 3px 3px 3px 3px;
         padding: 0px 0px 0px 0px;
@@ -118,6 +120,41 @@ max-width: 1170px;;;
                 "-webkit-border-radius",
                 "max-width",
                 "padding"
+            )
+        )
+        result.seek(0)
+        result = result.read()
+        self.assertEqual(result, expected)
+
+    def test_keyframes_rules(self):
+        input = b"""@keyframes line-scale {
+    0%,
+    40%,
+    100% {
+        transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1);
+    }
+}
+"""
+        expected = """@keyframes line-scale {
+    0%,
+    40%,
+    100% {
+        transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1);
+    }
+}
+"""
+        buffer = legacy.BytesIO(input)
+        result = stylesheets.cleanup_properties(
+            buffer,
+            windows_newline = False,
+            property_order = (
+                "transform"
             )
         )
         result.seek(0)

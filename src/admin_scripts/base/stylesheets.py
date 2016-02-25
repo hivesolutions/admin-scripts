@@ -551,10 +551,11 @@ def cleanup_properties(
             line_number
         )
 
-        # in case the line contains a single line comment
+        # in case the line contains a single line comment,
+        # does nothing, will write the line as is
         if "/*" in line and "*/" in line and not "*/*/" in line:
-            # does nothing, will write the line as is
             pass
+
         # in case the line contains the end of multiline comment
         elif "*/" in line:
             # in case the comment mode is currently not enabled prints
@@ -573,6 +574,7 @@ def cleanup_properties(
             # enables the needs newline flag
             comments_started = 0
             needs_newline = True
+
         # in case the line contains a the start of multiline comment
         elif "/*" in line:
             # in case the comment mode is already enabled (at least one)
@@ -589,14 +591,17 @@ def cleanup_properties(
 
             # increments the comments started counter
             comments_started += 1
-        # in case this is a comment line
+
+        # in case this is a comment line (comment started)
+        # does nothing, will just write the line as is
         elif comments_started:
-            # does nothing, will just write the line as is
             pass
+
         # in case the line contains an at rule specification
         elif AT_RULES_REGEX.match(line):
             # after an at rule, a newline must follow
             needs_newline = True
+
         # in case the line contains a full rule specification
         # does nothing, will just write line as is as there's
         # very few thing possible to optimize under this situation
@@ -604,6 +609,7 @@ def cleanup_properties(
             line = line.strip()
             needs_newline = True
             rule_started = False
+
         # in case this is a rule start line
         elif "{" in line:
             # increments the open rule count
@@ -690,19 +696,21 @@ def cleanup_properties(
             # skips further processing
             continue
 
+        # in case this is part of rule selector declaration
+        # the typical rule replacement operations are applied
+        elif line.rstrip().endswith(","):
+            line = TOKEN_REGEX.sub(r" \1 ", line)
+            line = SPACE_REGEX.sub(" ", line)
+            line = COMMA_REGEX.sub(r"\1", line)
+            line = line.strip()
+
         # in case this line is part of a valid rule set
         elif rule_started:
             # appends the line to the rule set, and then
             # skips outputting the line to the buffer
             rule_lines.append(line)
             continue
-        # in case this is part of rule selector declaration
-        # the typical rule replacement operations are applied
-        elif "," in line:
-            line = TOKEN_REGEX.sub(r" \1 ", line)
-            line = SPACE_REGEX.sub(" ", line)
-            line = COMMA_REGEX.sub(r"\1", line)
-            line = line.strip()
+
         # in case the between rules mode is active
         elif not rule_started and not line.strip():
             # increments the newlines count
@@ -716,6 +724,7 @@ def cleanup_properties(
 
             # disables the needs newline flag
             needs_newline = False
+
         else:
             # warns about the statement outside a valid rule
             extra.warn("Found statement outside rule at line %d" % line_number)
