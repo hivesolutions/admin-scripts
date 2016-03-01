@@ -298,8 +298,30 @@ def process_property_lines(
     processed_property_lines = [process_property_line(property_line, line_number, indentation)\
         for property_line in property_lines if not avoid_empty or property_line.strip()]
 
+    # runs an extra step to check for any duplicated line
+    # in the set of processed property lines
+    check_duplicates(processed_property_lines, line_number)
+
     # returns the processed property lines
     return processed_property_lines
+
+def check_duplicates(property_lines, line_number):
+    # retrieves the complete set of names for the rules, this is
+    # going to be used as the base unit for duplicate checking
+    names = [line.strip().split(":", 1)[0] for line in property_lines]
+
+    # starts the sequence/list that is going to store the already
+    # visited sequence of names (for duplicate detection)
+    visited = []
+
+    # iterates over the complete set of names to detect any duplicated
+    # value printing a warning message for such situation
+    for name in names:
+        if name in visited: extra.warn(
+            "Duplicated property line '%s' at line %s" %\
+            (name, line_number)
+        )
+        visited.append(name)
 
 def process_property_line(property_line, line_number, indentation):
     # in case the property line is empty, when stripped the property
