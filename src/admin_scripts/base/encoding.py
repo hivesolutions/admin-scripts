@@ -141,6 +141,7 @@ def convert_encoding(
         # checks if the file already has the target encoding
         string_value = file.read()
         string_value = string_value.replace(b"\r\n", b"\n")
+        string_value = string_value.replace(b"\r", b"\n")
         has_target_encoding = has_encoding(string_value, target_encoding)
 
         # in case the retrieved string value starts with the bom
