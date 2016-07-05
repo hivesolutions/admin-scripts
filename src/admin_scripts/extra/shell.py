@@ -37,7 +37,13 @@ __copyright__ = "Copyright (c) 2008-2016 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
+import os
 import subprocess
 
-def shell_exec(command, args, shell = True):
+def shell_exec(command, args, tester = None, shell = True):
+    if tester:
+        null = open(os.devnull, "wb")
+        try: result = subprocess.call(tester, stdout = null, stderr = null, shell = shell)
+        except: return
+        if result: return
     subprocess.call([command] + args, shell = shell)

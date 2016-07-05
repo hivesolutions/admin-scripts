@@ -105,7 +105,11 @@ def jssource_file(file_path, run_jshint = True, beautifty = True, encoding = "ut
     # in case the (run) jshint flag is set an extra jshint execution
     # is performed to be able run a linter on source code
     if run_jshint:
-        extra.shell_exec("jshint", [file_path])
+        extra.shell_exec(
+            "jshint",
+            [file_path],
+            tester = ["jshint", "--version"]
+        )
 
 def jssource_walker(arguments, directory_name, names):
     """
