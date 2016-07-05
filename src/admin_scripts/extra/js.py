@@ -179,7 +179,6 @@ class JavascriptMinify(object):
                     if self.theA == self.theB:
                         break
                     if self.theA <= "\n":
-                        # raises a runtime error
                         raise RuntimeError("unterminated string literal")
                     if self.theA == "\\":
                         self._out_a()
@@ -261,7 +260,7 @@ class JavascriptMinify(object):
         self.input_file = input_file
         self.output_file = output_file
 
-        #
+        # sets some of the minifications variables
         self.theA = "\n"
         self.theB = None
         self.look_ahead = None

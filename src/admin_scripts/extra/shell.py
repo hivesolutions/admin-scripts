@@ -19,6 +19,9 @@
 # You should have received a copy of the Apache License along with
 # Hive Administration Scripts. If not, see <http://www.apache.org/licenses/>.
 
+__author__ = "João Magalhães <joamag@hive.pt>"
+""" The author(s) of the module """
+
 __version__ = "1.0.0"
 """ The version of the module """
 
@@ -34,14 +37,7 @@ __copyright__ = "Copyright (c) 2008-2016 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-from . import css
-from . import js
-from . import lib
-from . import log
-from . import shell
+import subprocess
 
-from .css import uniqify, simplify_hex_colors, css_slimmer
-from .js import javascript_minify
-from .lib import handle_ignore, normalize_path, configuration
-from .log import STDOUT, STDERR, echo, warn, error, has_errors
-from .shell import shell_exec
+def shell_exec(command, args, shell = True):
+    subprocess.call([command] + args, shell = shell)
