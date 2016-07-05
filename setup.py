@@ -62,6 +62,11 @@ setuptools.setup(
     package_dir = {
         "" : os.path.normpath("src")
     },
+    package_data = {
+        "admin_scripts" : [
+            "config/extra/*"
+        ]
+    },
     entry_points = {
         "console_scripts" : [
             "cleanup = admin_scripts.base.cleanup:run"

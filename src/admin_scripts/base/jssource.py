@@ -158,9 +158,18 @@ def jssource_recursive(directory_path, file_exclusion):
     legacy.walk(directory_path, jssource_walker, (file_exclusion,))
     extra.shell_exec(
         "jshint",
-        [directory_path],
+        [directory_path, "--config", _config("jshint.json")],
         tester = ["jshint", "--version"]
     )
+
+def _config(name):
+    base_path = os.path.dirname(__file__)
+    base_path = os.path.abspath(base_path)
+    config_path = os.path.join(base_path, "..", "config")
+    extra_path = os.path.join(config_path, "extra")
+    name_path = os.path.join(extra_path, name)
+    name_path = os.path.normpath(name_path)
+    return name_path
 
 def main():
     """
