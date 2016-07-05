@@ -143,15 +143,6 @@ def jssource_walker(arguments, directory_name, names):
         extra.echo("Transforming javascript source file: %s" % valid_complete_name)
         jssource_file(valid_complete_name)
 
-    # in case there are valid complete names/files run the proper jshint
-    # execution environment to lint all of its files
-    if valid_complete_names:
-        extra.shell_exec(
-            "jshint",
-            valid_complete_names,
-            tester = ["jshint", "--version"]
-        )
-
 def jssource_recursive(directory_path, file_exclusion):
     """
     Normalizes jssource in recursive mode.
@@ -165,6 +156,11 @@ def jssource_recursive(directory_path, file_exclusion):
     """
 
     legacy.walk(directory_path, jssource_walker, (file_exclusion,))
+    extra.shell_exec(
+        "jshint",
+        [directory_path],
+        tester = ["jshint", "--version"]
+    )
 
 def main():
     """
