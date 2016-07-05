@@ -49,7 +49,7 @@ USAGE_MESSAGE = "jssource [-r] [-w exclusion_1, exclusion_2, ...] [-c configurat
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
 
-def jssource_file(file_path, run_jshint = True, beautifty = True, encoding = "utf-8"):
+def jssource_file(file_path, beautifty = True, encoding = "utf-8"):
     """
     Runs the javascript source file verification/validation process
     as defined by a series of specifications.
@@ -57,10 +57,6 @@ def jssource_file(file_path, run_jshint = True, beautifty = True, encoding = "ut
     @type file_path: String
     @param file_path: The path to the file that contains the
     jssource configuration specification in xml.
-    @type run_jshint: bool
-    @param run_jshint: If the js hint tool should be rune for the
-    current execution life cycle, this should display a series of
-    warning around the current file.
     @type beautifier: bool
     @param beautifier: If the beautification process should be
     run for the provided file for verification.
@@ -101,15 +97,6 @@ def jssource_file(file_path, run_jshint = True, beautifty = True, encoding = "ut
         file = open(file_path, "wb")
         try: file.write(result)
         finally: file.close()
-
-    # in case the (run) jshint flag is set an extra jshint execution
-    # is performed to be able run a linter on source code
-    if run_jshint:
-        extra.shell_exec(
-            "jshint",
-            [file_path],
-            tester = ["jshint", "--version"]
-        )
 
 def jssource_walker(arguments, directory_name, names):
     """
@@ -155,6 +142,15 @@ def jssource_walker(arguments, directory_name, names):
         # then runs the operation with the correct path
         extra.echo("Transforming javascript source file: %s" % valid_complete_name)
         jssource_file(valid_complete_name)
+
+    # in case there are valid complete names/files run the proper jshint
+    # execution environment to lint all of its files
+    if valid_complete_names:
+        extra.shell_exec(
+            "jshint",
+            valid_complete_names,
+            tester = ["jshint", "--version"]
+        )
 
 def jssource_recursive(directory_path, file_exclusion):
     """
