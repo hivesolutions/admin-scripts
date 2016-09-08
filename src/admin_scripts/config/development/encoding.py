@@ -83,7 +83,8 @@ configurations = (
             "luquid",
             "go",
             "md",
-            "swift"
+            "swift",
+            "Dockerfile"
         ),
         "file_exclusion" : ("android-sdk",)
     },
