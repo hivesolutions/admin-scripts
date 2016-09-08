@@ -879,7 +879,7 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
     # filters the names with non valid file extensions so that
     valid_complete_names = [
         os.path.normpath(name) for name in valid_complete_names\
-        if file_extensions == None or name.split(".")[-1] in file_extensions
+        if file_extensions == None or os.path.split(name)[-1].split(".")[-1] in file_extensions
     ]
 
     # iterates over all the valid complete names with extension filter

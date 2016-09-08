@@ -88,7 +88,8 @@ configurations = (
             "liquid",
             "go",
             "gitignore",
-            "swift"
+            "swift",
+            "Dockerfile"
         ),
         "file_exclusion" : ("android-sdk",)
     },
