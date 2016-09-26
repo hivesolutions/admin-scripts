@@ -55,6 +55,7 @@ configurations = (
             "mm",
             "hpp",
             "h",
+            "cl",
             "pch",
             "lua",
             "cs",
