@@ -88,9 +88,8 @@ def remove_trailing_newlines(file_path, windows_newline = True):
         # iterates over all the lines in the file
         for line in file_lines:
             # in case the line is not just a newline character
-            if not line == b"\n" and not line == b"\r\n":
-                # breaks the cycle
-                break
+            # breaks the current loop as no extra newlines exist
+            if not line == b"\n" and not line == b"\r\n": break
 
             # decrements the index
             index -= 1
