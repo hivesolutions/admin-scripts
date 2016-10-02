@@ -49,23 +49,19 @@ USAGE_MESSAGE = "misc [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
 
-def misc_file(file_path, beautifty = True, encoding = "utf-8"):
+def chmod_file(file_path, mode):
     """
-    Runs the javascript source file verification/validation process
+    Runs the change permission operation file process
     as defined by a series of specifications.
 
     @type file_path: String
-    @param file_path: The path to the file that contains the
-    jssource configuration specification in xml.
-    @type beautifier: bool
-    @param beautifier: If the beautification process should be
-    run for the provided file for verification.
-    @type encoding: String
-    @param encoding: The encoding that is going to be used as the
-    default one for the decoding operation in the source file.
+    @param file_path: The path to the file that is going
+    to have its permissions changed.
+    @type mode: int
+    @param mode: The target permissions mode for the file.
     """
 
-    os.chmod(file_path, 0o644)
+    os.chmod(file_path, mode)
 
 def misc_walker(arguments, directory_name, names):
     """
@@ -99,18 +95,18 @@ def misc_walker(arguments, directory_name, names):
         if not os.path.isdir(directory_name + "/" + name)]
 
     # filters the names with non valid file extensions so that only the
-    # ones that conform with the javascript source ones are selected
+    # ones that conform with the misc source ones are selected
     valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
         if name.endswith((".png",))]
 
     # iterates over all the valid complete names with valid structure
-    # as defined by the javascript file structure definition
+    # as defined by the misc file structure definition
     for valid_complete_name in valid_complete_names:
         # print a message a message about the misc
         # operation that is going to be performed and
         # then runs the operation with the correct path
         extra.echo("Changing permissions of file: %s" % valid_complete_name)
-        os.chmod(valid_complete_name, 0o644)
+        chmod_file(valid_complete_name, 0o644)
 
 def misc_recursive(directory_path, file_exclusion):
     """
@@ -137,7 +133,7 @@ def _config(name):
 
 def main():
     """
-    Main function used for the jssource file normalization.
+    Main function used for the misc source file normalization.
     """
 
     # in case the number of arguments
@@ -193,7 +189,7 @@ def main():
         file_exclusion = configuration["file_exclusion"]
 
         # in case the recursive flag is set, normalizes the multiple
-        # found jssource configuration file
+        # found misc source configuration file
         if recursive: misc_recursive(path, file_exclusion)
         # otherwise it's a "normal" iteration and runs the
         # misc normalization process in it

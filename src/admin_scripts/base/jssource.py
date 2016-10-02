@@ -55,8 +55,8 @@ def jssource_file(file_path, beautifty = True, encoding = "utf-8"):
     as defined by a series of specifications.
 
     @type file_path: String
-    @param file_path: The path to the file that contains the
-    jssource configuration specification in xml.
+    @param file_path: The path to the file that is going to be
+    changed according to the jssource operation.
     @type beautifier: bool
     @param beautifier: If the beautification process should be
     run for the provided file for verification.
