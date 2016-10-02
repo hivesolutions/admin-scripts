@@ -38,6 +38,7 @@ from . import cleanup
 from . import encoding
 from . import join
 from . import jssource
+from . import misc
 from . import pydev
 from . import pysource
 from . import stylesheets

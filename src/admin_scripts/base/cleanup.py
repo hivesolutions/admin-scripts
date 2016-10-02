@@ -67,7 +67,8 @@ SCRIPTS_CONFIGURATION_MAP = {
     "pydev.py" : "development/pydev.py",
     "pysource.py" : "development/pysource.py",
     "jssource.py" : "development/jssource.py",
-    "trailing_spaces.py" : "development/trailing_spaces.py"
+    "trailing_spaces.py" : "development/trailing_spaces.py",
+    "misc.py" : "development/misc.py"
 }
 """ The map associating the script name with the name
 of the configuration file, so that during execution
