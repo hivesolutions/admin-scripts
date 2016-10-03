@@ -54,14 +54,14 @@ def pysource_file(file_path, run_pep8 = True, ignores = ()):
     Runs the python source file verification/validation process
     as defined by a series of specifications.
 
-    @type file_path: String
-    @param file_path: The path to the file that contains the
+    :type file_path: String
+    :param file_path: The path to the file that contains the
     pysource configuration specification in xml.
-    @type run_pep8: bool
-    @param run_pep8: If the pep8 verification process should be
+    :type run_pep8: bool
+    :param run_pep8: If the pep8 verification process should be
     run for the provided file for verification.
-    @type ignores: Tuple
-    @param ignores: A sequence of string values that define the
+    :type ignores: Tuple
+    :param ignores: A sequence of string values that define the
     various tests (in pep8) that are going to be ignored.
     """
 
@@ -93,12 +93,12 @@ def pysource_walker(arguments, directory_name, names):
     Walker method to be used by the path walker for running the
     normalization pysource process.
 
-    @type arguments: Tuple
-    @param arguments: The arguments tuple sent by the walker method.
-    @type directory_name: String
-    @param directory_name: The name of the current directory in the walk.
-    @type names: List
-    @param names: The list of names in the current directory.
+    :type arguments: Tuple
+    :param arguments: The arguments tuple sent by the walker method.
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
+    :type names: List
+    :param names: The list of names in the current directory.
     """
 
     # unpacks the arguments tuple
@@ -139,12 +139,12 @@ def pysource_recursive(directory_path, file_exclusion, ignores = ()):
     All the options are arguments to be passed to the
     walker function.
 
-    @type directory_path: String
-    @param directory_path: The path to the (entry point) directory.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
-    @type ignores: Tuple
-    @param ignores: A sequence of string values that define the
+    :type directory_path: String
+    :param directory_path: The path to the (entry point) directory.
+    :type file_exclusion: List
+    :param file_exclusion: The list of file exclusion to be used.
+    :type ignores: Tuple
+    :param ignores: A sequence of string values that define the
     various tests (in pep8) that are going to be ignored.
     """
 

@@ -54,11 +54,11 @@ def simplify_hex_colors(text):
     Replace all color declarations where pairs repeat.
     (eg: #aabbcc becomes #abc).
 
-    @type text: String
-    @param text: The payload text value that is going to
+    :type text: String
+    :param text: The payload text value that is going to
     have the color values simplified.
-    @rtype: String
-    @return: The simplified value according to the defined
+    :rtype: String
+    :return: The simplified value according to the defined
     set of rules.
     """
 
@@ -79,11 +79,11 @@ def css_slimmer(css):
     Removes repeating whitespace characters like tab, newline
     or any other characters.
 
-    @type css: String
-    @param css: The string that contains the complete set of
+    :type css: String
+    :param css: The string that contains the complete set of
     css code that is going to the "slimmed".
-    @rtype: String
-    @return: The final simplified/reduced set of css code that
+    :rtype: String
+    :return: The final simplified/reduced set of css code that
     should represent the same original logic.
     """
 

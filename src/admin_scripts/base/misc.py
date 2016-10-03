@@ -96,7 +96,7 @@ def misc_walker(arguments, directory_name, names):
 
     # unpacks the arguments tuple into its values
     file_exclusion, configuration = arguments
-    
+
     chmod = configuration.get("chmod", {})
     extensions = legacy.items(chmod)
 

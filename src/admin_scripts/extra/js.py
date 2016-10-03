@@ -278,11 +278,11 @@ def javascript_minify(string_value):
     The heuristics used in the minification should not
     change the normal behavior of the file.
 
-    @type string_value: String
-    @param string_value: The string containing the value
+    :type string_value: String
+    :param string_value: The string containing the value
     to be minified, may be an normal or byte string.
-    @rtype: String
-    @return: The minified string value.
+    :rtype: String
+    :return: The minified string value.
     """
 
     # verifies the data type of the provided string
@@ -323,8 +323,8 @@ def is_alpha(character):
     letter. This is a complex operation as many comparison
     operations must be performed.
 
-    @rtype: bool
-    @return: If the given character represents an alphabet
+    :rtype: bool
+    :return: If the given character represents an alphabet
     letter.
     """
 

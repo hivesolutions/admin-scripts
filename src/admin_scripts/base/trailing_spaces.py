@@ -61,11 +61,11 @@ def remove_trailing_newlines(file_path, windows_newline = True):
     The extra argument defines if the newline format used
     should be the windows mode (carriage return and newline).
 
-    @type file_path: String
-    @param file_path: The path to the file to have the trailing
+    :type file_path: String
+    :param file_path: The path to the file to have the trailing
     newlines removed.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
     """
 
     # normalizes the file path and uses the resulting
@@ -137,14 +137,14 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
     The extra argument defines if the newline format used
     should be the windows mode (carriage return and newline).
 
-    @type file_path: String
-    @param file_path: The path to the file to have the trailing
+    :type file_path: String
+    :param file_path: The path to the file to have the trailing
     spaces removed.
-    @type tab_to_spaces: bool
-    @param tab_to_spaces: If the tab characters should be converted
+    :type tab_to_spaces: bool
+    :param tab_to_spaces: If the tab characters should be converted
     to spaces.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
     """
 
     # normalizes the file path
@@ -193,12 +193,12 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
     Walker method to be used by the path walker for the removal of trailing
     spaces and newlines.
 
-    @type arguments: Tuple
-    @param arguments: The arguments tuple sent by the walker method.
-    @type directory_name: String
-    @param directory_name: The name of the current directory in the walk.
-    @type names: List
-    @param names: The list of names in the current directory.
+    :type arguments: Tuple
+    :param arguments: The arguments tuple sent by the walker method.
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
+    :type names: List
+    :param names: The list of names in the current directory.
     """
 
     # unpacks the arguments tuple
@@ -257,19 +257,19 @@ def remove_trailing_spaces_recursive(
     All the options are arguments to be passed to the
     walker function.
 
-    @type directory_path: String
-    @param directory_path: The path to the (entry point) directory.
-    @type tab_to_spaces: bool
-    @param tab_to_spaces: If the tab characters should be converted
+    :type directory_path: String
+    :param directory_path: The path to the (entry point) directory.
+    :type tab_to_spaces: bool
+    :param tab_to_spaces: If the tab characters should be converted
     to spaces.
-    @type trailing_newlines: bool
-    @param trailing_newlines: If the trailing newline characters should be removed.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
-    @type file_extensions: List
-    @param file_extensions: The list of file extensions to be used.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
+    :type trailing_newlines: bool
+    :param trailing_newlines: If the trailing newline characters should be removed.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
+    :type file_extensions: List
+    :param file_extensions: The list of file extensions to be used.
+    :type file_exclusion: List
+    :param file_exclusion: The list of file exclusion to be used.
     """
 
     legacy.walk(

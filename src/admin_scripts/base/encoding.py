@@ -64,10 +64,10 @@ def has_encoding(string_buffer, encoding):
     """
     Determines if the provided buffer is encoded in the provided encoding.
 
-    @type string_buffer: String
-    @param string_buffer: The string buffer.
-    @type encoding: String
-    @param encoding: The encoding against which to test the string buffer.
+    :type string_buffer: String
+    :param string_buffer: The string buffer.
+    :type encoding: String
+    :param encoding: The encoding against which to test the string buffer.
     """
 
     # initializes the has encoding flag
@@ -90,10 +90,10 @@ def apply_replacements_list(string_buffer, replacements_list):
     """
     Applies a list of replacements to the provided string buffer.
 
-    @type string_buffer: String
-    @param string_buffer: The string to which the replacements are to be applied to.
-    @type replacements_list: List
-    @param replacements_list: The list of replacements to apply.
+    :type string_buffer: String
+    :param string_buffer: The string to which the replacements are to be applied to.
+    :type replacements_list: List
+    :param replacements_list: The list of replacements to apply.
     """
 
     # iterates over all the replacements to be performed and applies
@@ -119,16 +119,16 @@ def convert_encoding(
     """
     Converts the encoding of the specified file.
 
-    @type file_path: String
-    @param file_path: The path to the file to have its encoding converted.
-    @type source_encoding: String
-    @param source_encoding: The encoding from which the file is to be converted from.
-    @type target_encoding: String
-    @param target_encoding: The encoding to which the file is to be converted.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
-    @type replacements_list: List
-    @param replacements_list: The list of replacements to perform.
+    :type file_path: String
+    :param file_path: The path to the file to have its encoding converted.
+    :type source_encoding: String
+    :param source_encoding: The encoding from which the file is to be converted from.
+    :type target_encoding: String
+    :param target_encoding: The encoding to which the file is to be converted.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
+    :type replacements_list: List
+    :param replacements_list: The list of replacements to perform.
     """
 
     # normalizes the file path and uses it as the path to
@@ -185,12 +185,12 @@ def convert_encoding_walker(arguments, directory_name, names):
     """
     Walker method to be used by the path walker for the encoding conversion.
 
-    @type arguments: Tuple
-    @param arguments: The arguments tuple sent by the walker method.
-    @type directory_name: String
-    @param directory_name: The name of the current directory in the walk.
-    @type names: List
-    @param names: The list of names in the current directory.
+    :type arguments: Tuple
+    :param arguments: The arguments tuple sent by the walker method.
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
+    :type names: List
+    :param names: The list of names in the current directory.
     """
 
     # unpacks the arguments tuple
@@ -265,20 +265,20 @@ def convert_encoding_recursive(
     All the options are arguments to be passed to the
     walker function.
 
-    @type directory_path: String
-    @param directory_path: The path to the (entry point) directory.
-    @type source_encoding: String
-    @param source_encoding: The source encoding from which the file is to be
+    :type directory_path: String
+    :param directory_path: The path to the (entry point) directory.
+    :type source_encoding: String
+    :param source_encoding: The source encoding from which the file is to be
     converted.
-    @type target_encoding: String
-    @param target_encoding: The target encoding to which the file is to be
+    :type target_encoding: String
+    :param target_encoding: The target encoding to which the file is to be
     converted to.
-    @type replacements_list: List
-    @param replacements_list: The list of replacements to perform.
-    @type file_extensions: List
-    @param file_extensions: The list of file extensions to be used.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
+    :type replacements_list: List
+    :param replacements_list: The list of replacements to perform.
+    :type file_extensions: List
+    :param file_extensions: The list of file extensions to be used.
+    :type file_exclusion: List
+    :param file_exclusion: The list of file exclusion to be used.
     """
 
     legacy.walk(

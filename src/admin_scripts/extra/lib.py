@@ -69,11 +69,11 @@ def handle_ignore(names):
     set of names, this should include the changing of the
     names list in case its required.
 
-    @type names: List
-    @param names: The list of directory names that are meant
+    :type names: List
+    :param names: The list of directory names that are meant
     to be verified/handled for the ignore file.
-    @rtype: bool
-    @return: If the ignore operation has been processed for
+    :rtype: bool
+    :return: If the ignore operation has been processed for
     the current list of names.
     """
 
@@ -89,11 +89,11 @@ def normalize_path(path):
     In windows this function adds support for long path names
     as defined in windows specification.
 
-    @type path: String
-    @param path: The path (to file) value that is going to
+    :type path: String
+    :param path: The path (to file) value that is going to
     be returned as normalized.
-    @rtype: String
-    @return: The normalized path, resulting from a series of
+    :rtype: String
+    :return: The normalized path, resulting from a series of
     normalization processes applied to the "original" path.-
     """
 
@@ -139,11 +139,11 @@ def configuration(file_path = None, **kwargs):
     the keyword based arguments are used as the configuration
     in case no valid configuration file exits (fallback).
 
-    @type file_path: String
-    @param file_path: The path to the file that is going to be
+    :type file_path: String
+    :param file_path: The path to the file that is going to be
     processed as the configuration file in context.
-    @rtype: Dictionary
-    @return: The configuration structure/map, taking into account
+    :rtype: Dictionary
+    :return: The configuration structure/map, taking into account
     the current location structure.
     """
 

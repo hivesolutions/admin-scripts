@@ -54,14 +54,14 @@ def jssource_file(file_path, beautifty = True, encoding = "utf-8"):
     Runs the javascript source file verification/validation process
     as defined by a series of specifications.
 
-    @type file_path: String
-    @param file_path: The path to the file that is going to be
+    :type file_path: String
+    :param file_path: The path to the file that is going to be
     changed according to the jssource operation.
-    @type beautifier: bool
-    @param beautifier: If the beautification process should be
+    :type beautifier: bool
+    :param beautifier: If the beautification process should be
     run for the provided file for verification.
-    @type encoding: String
-    @param encoding: The encoding that is going to be used as the
+    :type encoding: String
+    :param encoding: The encoding that is going to be used as the
     default one for the decoding operation in the source file.
     """
 
@@ -103,12 +103,12 @@ def jssource_walker(arguments, directory_name, names):
     Walker method to be used by the path walker for running the
     normalization jssource process.
 
-    @type arguments: Tuple
-    @param arguments: The arguments tuple sent by the walker method.
-    @type directory_name: String
-    @param directory_name: The name of the current directory in the walk.
-    @type names: List
-    @param names: The list of names in the current directory.
+    :type arguments: Tuple
+    :param arguments: The arguments tuple sent by the walker method.
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
+    :type names: List
+    :param names: The list of names in the current directory.
     """
 
     # unpacks the arguments tuple
@@ -149,10 +149,10 @@ def jssource_recursive(directory_path, file_exclusion):
     All the options are arguments to be passed to the
     walker function.
 
-    @type directory_path: String
-    @param directory_path: The path to the (entry point) directory.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
+    :type directory_path: String
+    :param directory_path: The path to the (entry point) directory.
+    :type file_exclusion: List
+    :param file_exclusion: The list of file exclusion to be used.
     """
 
     legacy.walk(directory_path, jssource_walker, (file_exclusion,))

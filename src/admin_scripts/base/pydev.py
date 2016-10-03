@@ -71,11 +71,11 @@ def pydev_file(file_path, fix = True):
     This operation should fail with an exception in case the
     structure of the xml document is not the expected one.
 
-    @type file_path: String
-    @param file_path: The path to the file that contains the
+    :type file_path: String
+    :param file_path: The path to the file that contains the
     pydev configuration specification in xml.
-    @type fix: bool
-    @param fix: If any "fixable" error in the pydev project
+    :type fix: bool
+    :param fix: If any "fixable" error in the pydev project
     file should be automatically fixes using the known heuristics,
     this is a dangerous option as errors may be created.
     """
@@ -144,14 +144,14 @@ def fix_values(paths, properties):
     known errors in the pydev configuration, this is a dangerous
     operation as it may cause problems in data structure.
 
-    @type paths: List
-    @param paths: The sequences of paths that should represent
+    :type paths: List
+    :param paths: The sequences of paths that should represent
     the main entry points for the python source code in project.
-    @type properties: Dictionary
-    @param properties: The map containing the option name to value
+    :type properties: Dictionary
+    :param properties: The map containing the option name to value
     associations that were loaded from the source pydev file.
-    @rtype: Tuple
-    @return: The resulting values from the provided configurations
+    :rtype: Tuple
+    :return: The resulting values from the provided configurations
     these values should have been fixed.
     """
 
@@ -171,11 +171,11 @@ def text_value(node):
     node, this is a recursive approach and the child nodes
     are used as the entry point.
 
-    @type node: Element
-    @param node: The base element node from which the values
+    :type node: Element
+    :param node: The base element node from which the values
     are going to be retrieved.
-    @rtype: String
-    @return: The string/textual part of the xml element node
+    :rtype: String
+    :return: The string/textual part of the xml element node
     provided.
     """
 
@@ -193,12 +193,12 @@ def pydev_walker(arguments, directory_name, names):
     Walker method to be used by the path walker for running the
     normalization pydev process.
 
-    @type arguments: Tuple
-    @param arguments: The arguments tuple sent by the walker method.
-    @type directory_name: String
-    @param directory_name: The name of the current directory in the walk.
-    @type names: List
-    @param names: The list of names in the current directory.
+    :type arguments: Tuple
+    :param arguments: The arguments tuple sent by the walker method.
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
+    :type names: List
+    :param names: The list of names in the current directory.
     """
 
     # unpacks the arguments tuple
@@ -239,12 +239,12 @@ def pydev_recursive(directory_path, file_exclusion, fix = True):
     All the options are arguments to be passed to the
     walker function.
 
-    @type directory_path: String
-    @param directory_path: The path to the (entry point) directory.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
-    @type fix: bool
-    @param fix: If any "fixable" error in the pydev project
+    :type directory_path: String
+    :param directory_path: The path to the (entry point) directory.
+    :type file_exclusion: List
+    :param file_exclusion: The list of file exclusion to be used.
+    :type fix: bool
+    :param fix: If any "fixable" error in the pydev project
     file should be automatically fixes using the known heuristics,
     this is a dangerous option as errors may be created.
     """

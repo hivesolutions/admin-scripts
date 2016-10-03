@@ -155,14 +155,14 @@ def get_property_index(property_line, property_order, line_number):
     Retrieves the index for the property specified in the provided property
     line, this index may be used to correctly position the property.
 
-    @type property_line: String
-    @param property_line: The property line containing the property.
-    @type property_order: List
-    @param property_order: The list of property names in order.
-    @type line_number: int
-    @param line_number: The approximate line number for this processing.
-    @rtype: int
-    @return: The index of the property line, note that in case an index
+    :type property_line: String
+    :param property_line: The property line containing the property.
+    :type property_order: List
+    :param property_order: The list of property names in order.
+    :type line_number: int
+    :param line_number: The approximate line number for this processing.
+    :rtype: int
+    :return: The index of the property line, note that in case an index
     value is not found for the rule a large index is returned instead.
     """
 
@@ -215,14 +215,14 @@ def write_lines(output_buffer, lines, windows_newline = True, avoid_empty = Fals
     Writes the provided lines to the output buffer, considering the windows
     newline option.
 
-    @type output_buffer: StringBuffer
-    @param output_buffer: The output buffer.
-    @type lines: List
-    @param lines: The list of lines to output.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
-    @type avoid_empty: bool
-    @param avoid_empty: If the empty lines (after strip operation)
+    :type output_buffer: StringBuffer
+    :param output_buffer: The output buffer.
+    :type lines: List
+    :param lines: The list of lines to output.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
+    :type avoid_empty: bool
+    :param avoid_empty: If the empty lines (after strip operation)
     should be considered invalid and not written to buffer.
     """
 
@@ -240,14 +240,14 @@ def write_line(output_buffer, line, windows_newline = True, avoid_empty = False)
     Writes the provided line to the output buffer, considering the windows
     newline option. This is considered a normalization operation.
 
-    @type output_buffer: StringBuffer
-    @param output_buffer: The output buffer.
-    @type line: List
-    @param line: The line that is going to be written to output buffer.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
-    @type avoid_empty: bool
-    @param avoid_empty: If the empty lines (after strip operation)
+    :type output_buffer: StringBuffer
+    :param output_buffer: The output buffer.
+    :type line: List
+    :param line: The line that is going to be written to output buffer.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
+    :type avoid_empty: bool
+    :param avoid_empty: If the empty lines (after strip operation)
     should be considered invalid and not written to buffer.
     """
 
@@ -277,19 +277,19 @@ def process_property_lines(
     Processes the property lines, this process should be
     iterative for each of the lines passed in the list.
 
-    @type property_lines: List
-    @param property_lines: The property lines to process.
-    @type line_number: int
-    @param line_number: The approximate line number for this processing.
-    @type avoid_empty: bool
-    @param avoid_empty: If the empty lines should avoid any
+    :type property_lines: List
+    :param property_lines: The property lines to process.
+    :type line_number: int
+    :param line_number: The approximate line number for this processing.
+    :type avoid_empty: bool
+    :param avoid_empty: If the empty lines should avoid any
     kind of processing (extra errors may occur).
-    @type indentation: int
-    @param identation: The level of indentation to be used for the processing
+    :type indentation: int
+    :param identation: The level of indentation to be used for the processing
     of the various property lines, this value is going to be used in the
     operation of pre-pending spaced to the property rules.
-    @rtype: List
-    @return: The processed property lines.
+    :rtype: List
+    :return: The processed property lines.
     """
 
     # processes the property lines one by one so that the
@@ -491,10 +491,10 @@ def skip_rule(start_line, rules_skip):
     """
     Determines if the rule started by the provided line should be skipped.
 
-    @type start_line: String
-    @param start_line: The line which starts the rule.
-    @type rules_skip: List
-    @param rules_skip: The list of rules to skip.
+    :type start_line: String
+    :param start_line: The line which starts the rule.
+    :type rules_skip: List
+    :param rules_skip: The list of rules to skip.
     """
 
     # initializes the skip rule flag
@@ -523,18 +523,18 @@ def cleanup_properties(
 
     Ensures that all property lines are correctly terminated with semicolon.
 
-    @type input_buffer: StringBuffer
-    @param input_buffer: The input buffer.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
-    @type windows_newline: bool
-    @param windows_newline: If the extra newlines should be fixed.
-    @type fix_extra_newlines: bool
-    @param fix_extra_newlines: If the extra newlines should be fixed.
-    @type property_order: List
-    @param property_order: The list with the explicit order of property names.
-    @type rules_skip: List
-    @param rules_skip: The list of specific rules to skip.
+    :type input_buffer: StringBuffer
+    :param input_buffer: The input buffer.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
+    :type windows_newline: bool
+    :param windows_newline: If the extra newlines should be fixed.
+    :type fix_extra_newlines: bool
+    :param fix_extra_newlines: If the extra newlines should be fixed.
+    :type property_order: List
+    :param property_order: The list with the explicit order of property names.
+    :type rules_skip: List
+    :param rules_skip: The list of specific rules to skip.
     """
 
     # reads the input lines and counts the number of lines
@@ -790,16 +790,16 @@ def cleanup_stylesheets(
     Cleans up stylesheets. Sorts the css properties in the file, by the specified property order.
     Ensures that all property lines are correctly terminated with semicolon.
 
-    @type file_path_normalized: String
-    @param file_path_normalized: The file path normalized.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
-    @type fix_extra_newlines: bool
-    @param fix_extra_newlines: If the extra newlines should be fixed.
-    @type property_order: List
-    @param property_order: The list with the explicit order of property names.
-    @type rules_skip: List
-    @param rules_skip: The list of specific rules to skip.
+    :type file_path_normalized: String
+    :param file_path_normalized: The file path normalized.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
+    :type fix_extra_newlines: bool
+    :param fix_extra_newlines: If the extra newlines should be fixed.
+    :type property_order: List
+    :param property_order: The list with the explicit order of property names.
+    :type rules_skip: List
+    :param rules_skip: The list of specific rules to skip.
     """
 
     # opens the file for reading in text mode so that the
@@ -847,12 +847,12 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
     Walker method to be used by the path walker for the cleanup
     of stylesheets.
 
-    @type arguments: Tuple
-    @param arguments: The arguments tuple sent by the walker method.
-    @type directory_name: String
-    @param directory_name: The name of the current directory in the walk.
-    @type names: List
-    @param names: The list of names in the current directory.
+    :type arguments: Tuple
+    :param arguments: The arguments tuple sent by the walker method.
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
+    :type names: List
+    :param names: The list of names in the current directory.
     """
 
     # unpacks the arguments tuple
@@ -909,20 +909,20 @@ def cleanup_stylesheets_recursive(
     All the options are arguments to be passed to the
     walker function.
 
-    @type directory_path: String
-    @param directory_path: The path to the (entry point) directory.
-    @type windows_newline: bool
-    @param windows_newline: If the windows newline should be used.
-    @type fix_extra_newlines: bool
-    @param fix_extra_newlines: If the extra newlines should be fixed.
-    @type property_order: List
-    @param property_order: The list with the explicit order of property names.
-    @type rules_skip: List
-    @param rules_skip: The list of specific rules to skip.
-    @type file_extensions: List
-    @param file_extensions: The list of file extensions to be used.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
+    :type directory_path: String
+    :param directory_path: The path to the (entry point) directory.
+    :type windows_newline: bool
+    :param windows_newline: If the windows newline should be used.
+    :type fix_extra_newlines: bool
+    :param fix_extra_newlines: If the extra newlines should be fixed.
+    :type property_order: List
+    :param property_order: The list with the explicit order of property names.
+    :type rules_skip: List
+    :param rules_skip: The list of specific rules to skip.
+    :type file_extensions: List
+    :param file_extensions: The list of file extensions to be used.
+    :type file_exclusion: List
+    :param file_exclusion: The list of file exclusion to be used.
     """
 
     legacy.walk(

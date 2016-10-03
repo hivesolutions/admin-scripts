@@ -64,8 +64,8 @@ def join_files(file_path):
     The joining operation may be complex and may take some
     time until it's completely finished.
 
-    @type file_path: String
-    @param file_path: The path to the file that contains the
+    :type file_path: String
+    :param file_path: The path to the file that contains the
     json based specification for the joining operation.
     """
 
@@ -195,14 +195,14 @@ def gzip_contents(contents_string, file_name = None):
     Compresses the given contents using the deflate compression
     algorithm and encapsulating it into the gzip file format.
 
-    @type contents_string: String
-    @param contents_string: A string containing the contents
+    :type contents_string: String
+    :param contents_string: A string containing the contents
     to be compressed.
-    @type file_name: String
-    @param file_name: The name to be set to the file in the
+    :type file_name: String
+    :param file_name: The name to be set to the file in the
     generated compressed buffer.
-    @rtype: String
-    @return: The string containing the compressed buffer.
+    :rtype: String
+    :return: The string containing the compressed buffer.
     """
 
     # creates a new string buffer
@@ -258,10 +258,10 @@ def _unsigned(number):
     Converts the given number to unsigned assuming
     a 32 bit value.
 
-    @type number: int
-    @param number: The number to be converted to unsigned.
-    @rtype: int
-    @return: The given number converted to unsigned.
+    :type number: int
+    :param number: The number to be converted to unsigned.
+    :rtype: int
+    :return: The given number converted to unsigned.
     """
 
     # in case the number is positive or zero
@@ -279,12 +279,12 @@ def join_files_walker(arguments, directory_name, names):
     """
     Walker method to be used by the path walker for the joining of the files.
 
-    @type arguments: Tuple
-    @param arguments: The arguments tuple sent by the walker method.
-    @type directory_name: String
-    @param directory_name: The name of the current directory in the walk.
-    @type names: List
-    @param names: The list of names in the current directory.
+    :type arguments: Tuple
+    :param arguments: The arguments tuple sent by the walker method.
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
+    :type names: List
+    :param names: The list of names in the current directory.
     """
 
     # unpacks the arguments tuple
@@ -325,10 +325,10 @@ def join_files_recursive(directory_path, file_exclusion):
     All the options are arguments to be passed to the
     walker function.
 
-    @type directory_path: String
-    @param directory_path: The path to the (entry point) directory.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
+    :type directory_path: String
+    :param directory_path: The path to the (entry point) directory.
+    :type file_exclusion: List
+    :param file_exclusion: The list of file exclusion to be used.
     """
 
     legacy.walk(directory_path, join_files_walker, (file_exclusion,))
