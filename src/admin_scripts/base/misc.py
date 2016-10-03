@@ -54,16 +54,16 @@ def chmod_file(file_path, mode):
     Runs the change permission operation file process
     as defined by a series of specifications.
 
-    @type file_path: String
-    @param file_path: The path to the file that is going
+    :type file_path: String
+    :param file_path: The path to the file that is going
     to have its permissions changed.
-    @type mode: int
-    @param mode: The target permissions mode for the file.
+    :type mode: int
+    :param mode: The target permissions mode for the file.
     """
 
     os.chmod(file_path, mode)
 
-def misc_file(file_path):
+def misc_file(file_path, configuration):
     """
     Runs the misc set of operations on the file associated
     with the provided path.
@@ -71,9 +71,12 @@ def misc_file(file_path):
     This operation should fail with an exception in case the
     structure of the xml document is not the expected one.
 
-    @type file_path: String
-    @param file_path: The path to the file that is going to
+    :type file_path: String
+    :param file_path: The path to the file that is going to
     subject to the misc operations.
+    :type configuration: Dictionary
+    :param configuration: The map of configuration that is
+    going to be used while running the misc operations.
     """
 
     pass
@@ -83,12 +86,12 @@ def misc_walker(arguments, directory_name, names):
     Walker method to be used by the path walker for running the
     normalization misc process.
 
-    @type arguments: Tuple
-    @param arguments: The arguments tuple sent by the walker method.
-    @type directory_name: String
-    @param directory_name: The name of the current directory in the walk.
-    @type names: List
-    @param names: The list of names in the current directory.
+    :type arguments: Tuple
+    :param arguments: The arguments tuple sent by the walker method.
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
+    :type names: List
+    :param names: The list of names in the current directory.
     """
 
     # unpacks the arguments tuple into its values
@@ -124,7 +127,7 @@ def misc_walker(arguments, directory_name, names):
         # operation that is going to be performed and
         # then runs the operation with the correct path
         extra.echo("Running the misc operations on file: %s" % valid_complete_name)
-        misc_file(valid_complete_name, 0o644)
+        misc_file(valid_complete_name, configuration)
 
 def misc_recursive(directory_path, file_exclusion, configuration):
     """
@@ -132,12 +135,12 @@ def misc_recursive(directory_path, file_exclusion, configuration):
     All the options are arguments to be passed to the
     walker function.
 
-    @type directory_path: String
-    @param directory_path: The path to the (entry point) directory.
-    @type file_exclusion: List
-    @param file_exclusion: The list of file exclusion to be used.
-    @type configuration: Dictionary
-    @param configuration: The configuration structure to be used
+    :type directory_path: String
+    :param directory_path: The path to the (entry point) directory.
+    :type file_exclusion: List
+    :param file_exclusion: The list of file exclusion to be used.
+    :type configuration: Dictionary
+    :param configuration: The configuration structure to be used
     for the execution of the misc operations
     """
 
