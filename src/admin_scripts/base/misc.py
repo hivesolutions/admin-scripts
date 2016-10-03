@@ -63,6 +63,21 @@ def chmod_file(file_path, mode):
 
     os.chmod(file_path, mode)
 
+def misc_file(file_path):
+    """
+    Runs the misc set of operations on the file associated
+    with the provided path.
+
+    This operation should fail with an exception in case the
+    structure of the xml document is not the expected one.
+
+    @type file_path: String
+    @param file_path: The path to the file that is going to
+    subject to the misc operations.
+    """
+
+    pass
+
 def misc_walker(arguments, directory_name, names):
     """
     Walker method to be used by the path walker for running the
@@ -76,8 +91,11 @@ def misc_walker(arguments, directory_name, names):
     @param names: The list of names in the current directory.
     """
 
-    # unpacks the arguments tuple
-    file_exclusion, = arguments
+    # unpacks the arguments tuple into its values
+    file_exclusion, configuration = arguments
+    
+    chmod = configuration.get("chmod", {})
+    extensions = legacy.items(chmod)
 
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
@@ -97,7 +115,7 @@ def misc_walker(arguments, directory_name, names):
     # filters the names with non valid file extensions so that only the
     # ones that conform with the misc source ones are selected
     valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if name.endswith((".png",))]
+        if name.endswith(extensions)]
 
     # iterates over all the valid complete names with valid structure
     # as defined by the misc file structure definition
@@ -105,10 +123,10 @@ def misc_walker(arguments, directory_name, names):
         # print a message a message about the misc
         # operation that is going to be performed and
         # then runs the operation with the correct path
-        extra.echo("Changing permissions of file: %s" % valid_complete_name)
-        chmod_file(valid_complete_name, 0o644)
+        extra.echo("Running the misc operations on file: %s" % valid_complete_name)
+        misc_file(valid_complete_name, 0o644)
 
-def misc_recursive(directory_path, file_exclusion):
+def misc_recursive(directory_path, file_exclusion, configuration):
     """
     Runs the misc operations in recursive mode.
     All the options are arguments to be passed to the
@@ -118,9 +136,12 @@ def misc_recursive(directory_path, file_exclusion):
     @param directory_path: The path to the (entry point) directory.
     @type file_exclusion: List
     @param file_exclusion: The list of file exclusion to be used.
+    @type configuration: Dictionary
+    @param configuration: The configuration structure to be used
+    for the execution of the misc operations
     """
 
-    legacy.walk(directory_path, misc_walker, (file_exclusion,))
+    legacy.walk(directory_path, misc_walker, (file_exclusion, configuration))
 
 def _config(name):
     base_path = os.path.dirname(__file__)
@@ -190,10 +211,10 @@ def main():
 
         # in case the recursive flag is set, normalizes the multiple
         # found misc source configuration file
-        if recursive: misc_recursive(path, file_exclusion)
+        if recursive: misc_recursive(path, file_exclusion, configuration)
         # otherwise it's a "normal" iteration and runs the
         # misc normalization process in it
-        else: misc_file(path)
+        else: misc_file(path, configuration)
 
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
