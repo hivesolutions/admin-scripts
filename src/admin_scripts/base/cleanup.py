@@ -54,7 +54,8 @@ SCRIPTS_LIST = [
     "pydev.py",
     "pysource.py",
     "jssource.py",
-    "trailing_spaces.py"
+    "trailing_spaces.py",
+    "misc.py"
 ]
 """ The list of scripts to be executed by the complete
 cleanup operation, each of the scripts will be executed

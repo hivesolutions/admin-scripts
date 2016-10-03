@@ -79,7 +79,10 @@ def misc_file(file_path, configuration):
     going to be used while running the misc operations.
     """
 
-    pass
+    chmod = configuration.get("chmod", {})
+    _base, extension = os.path.splitext(file_path)
+    mode = chmod.get(extension.lstrip("."), None)
+    if not mode == None: chmod_file(file_path, mode)
 
 def misc_walker(arguments, directory_name, names):
     """
@@ -97,8 +100,12 @@ def misc_walker(arguments, directory_name, names):
     # unpacks the arguments tuple into its values
     file_exclusion, configuration = arguments
 
+    # retrieves the complete set of extensions registered for the chmod
+    # operations and then gathers their keys as the basis for the extension
+    # based filtering operations (optimization)
     chmod = configuration.get("chmod", {})
-    extensions = legacy.items(chmod)
+    extensions = legacy.keys(chmod)
+    extensions = tuple(extensions)
 
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
@@ -118,7 +125,7 @@ def misc_walker(arguments, directory_name, names):
     # filters the names with non valid file extensions so that only the
     # ones that conform with the misc source ones are selected
     valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if name.endswith(extensions)]
+        if name.endswith(tuple(extensions))]
 
     # iterates over all the valid complete names with valid structure
     # as defined by the misc file structure definition
