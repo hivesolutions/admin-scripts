@@ -40,7 +40,11 @@ __license__ = "Apache License, Version 2.0"
 configurations = (
     {
         "chmod" : {
-            "png" : 0o644
+            "jpeg" : 0o644,
+            "jpg" : 0o644,
+            "js" : 0o644,
+            "png" : 0o644,
+            "py" : 0o644
         },
         "recursive" : True,
         "file_exclusion" : ("android-sdk",)
