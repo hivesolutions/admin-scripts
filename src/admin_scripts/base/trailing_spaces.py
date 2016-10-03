@@ -112,13 +112,11 @@ def remove_trailing_newlines(file_path, windows_newline = True):
             # writes the valid file line stripped to the string buffer
             string_buffer.write(valid_file_line_stripped)
 
-            # in case the newline mode is of type windows
-            if windows_newline:
-                # writes the carriage return character and the new line character
-                string_buffer.write(b"\r\n")
-            else:
-                # writes the new line character
-                string_buffer.write(b"\n")
+            # in case the newline mode is of type windows, writes the
+            # carriage return character and the new line character,
+            # otherwise, writes only the new line character
+            if windows_newline: string_buffer.write(b"\r\n")
+            else: string_buffer.write(b"\n")
     finally:
         # closes the file for reading
         file.close()
