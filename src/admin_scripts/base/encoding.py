@@ -216,17 +216,22 @@ def convert_encoding_walker(arguments, directory_name, names):
     valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
         if file_extensions == None or os.path.split(name)[-1].split(".")[-1] in file_extensions]
 
+    # creates the string based value of the windows newline taking into
+    # account the boolean value of it
+    windows_newline_s = "windows newline" if windows_newline else "unix newline"
+
     # iterates over all the valid complete names with extension filter
     # to convert the respective file into the target encoding
     for valid_complete_name in valid_complete_names:
         # prints a message about the file that is not going to be converted
         # into the proper target encoding as defined in the specification
         extra.echo(
-            "Convert encoding in file: %s (%s to %s)" %\
+            "Convert encoding in file: %s (%s to %s) (%s)" %\
             (
                 valid_complete_name,
                 source_encoding,
-                target_encoding
+                target_encoding,
+                windows_newline_s
             )
         )
 
@@ -364,9 +369,9 @@ def main():
     for configuration in configurations:
         # retrieves the configuration values
         recursive = configuration["recursive"]
-        source_encoding = configuration["source_encoding"]
-        target_encoding = configuration["target_encoding"]
-        windows_newline = configuration["windows_newline"]
+        source_encoding = configuration["source_encoding"] or "utf-8"
+        target_encoding = configuration["target_encoding"] or "utf-8"
+        windows_newline = configuration["windows_newline"] or True
         replacements_list = configuration["replacements_list"] or ()
         file_extensions = configuration["file_extensions"] or ()
         file_exclusion = configuration["file_exclusion"] or ()
