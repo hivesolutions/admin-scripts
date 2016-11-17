@@ -228,18 +228,22 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
         if file_extensions == None or os.path.split(name)[-1].split(".")[-1] in file_extensions
     ]
 
+    # creates the string based value of the windows newline taking into
+    # account the boolean value of it
+    windows_newline_s = "windows newline" if windows_newline else "unix newline"
+
     # iterates over all the valid complete names with extension filter
     for valid_complete_name in valid_complete_names:
-        # print a message
-        extra.echo("Removing trail in file: %s" % valid_complete_name)
+        # prints a message about the operation to be performed
+        extra.echo("Removing trail in file: %s (%s)" % (valid_complete_name, windows_newline_s))
 
         # removes the trailing spaces for the (path) name
         remove_trailing_spaces(valid_complete_name, tab_to_spaces, windows_newline)
 
         # in case the trailing newlines flag is active
         if trailing_newlines:
-            # prints a message
-            extra.echo("Removing trail newlines in file: %s" % (valid_complete_name,))
+            # prints a message about the operation to be performed
+            extra.echo("Removing trail newlines in file: %s" % valid_complete_name)
 
             # removes the trailing newlines for the(path) name
             remove_trailing_newlines(valid_complete_name, windows_newline)
