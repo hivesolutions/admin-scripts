@@ -97,12 +97,11 @@ def remove_trailing_newlines(file_path, windows_newline = True):
         # reverses the file lines
         file_lines.reverse()
 
-        if index == 0:
-            # retrieves the valid file lines
-            valid_file_lines = file_lines
-        else:
-            # retrieves the valid file lines
-            valid_file_lines = file_lines[:index]
+        # in case the original index is set (no extra new lines found)
+        # all the lines are considered valid, otherwise only the valid
+        # (non extra lines) are used as valid
+        if index == 0: valid_file_lines = file_lines
+        else: valid_file_lines = file_lines[:index]
 
         # iterates over all the file lines
         for valid_file_line in valid_file_lines:
