@@ -44,6 +44,9 @@ configurations = (
             "jpg" : 0o644,
             "js" : 0o644,
             "png" : 0o644,
+            "gif" : 0o644,
+            "tiff" : 0o644,
+            "webp" : 0o644,
             "py" : 0o644
         },
         "recursive" : True,
