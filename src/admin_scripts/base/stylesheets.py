@@ -387,11 +387,13 @@ def rule_zero_to_none(name, value):
 def rule_one_to_multiple(name, value):
     parts = value.split()
     if not len(parts) == 1: return
+    if value in ("initial", "inherit"): return
     return "%s: %s %s %s %s;" % (name, value, value, value, value)
 
 def rule_two_to_multiple(name, value):
     parts = value.split()
     if not len(parts) == 2: return
+    if value in ("initial", "inherit"): return
     return "%s: %s %s;" % (name, value, value)
 
 def process_rules(property_line, line_number):
