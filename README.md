@@ -1,4 +1,4 @@
-# [Admin Scripts](http://admin_scripts.hive.pt)
+# [Admin Scripts](http://admin-scripts.hive.pt)
 
 Set of scripts for general administration tasks.
 
