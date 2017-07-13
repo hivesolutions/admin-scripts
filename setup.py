@@ -48,7 +48,7 @@ setuptools.setup(
     description = "Administration Scripts",
     license = "Apache License, Version 2.0",
     keywords = "scripts admin public",
-    url = "http://admin_scripts.hive.pt",
+    url = "http://admin-scripts.hive.pt",
     zip_safe = False,
     packages = [
         "admin_scripts",
