@@ -410,6 +410,7 @@ configurations = (
             "white-space",
             "widows",
             "width",
+            "will-change",
             "word-break",
             "word-spacing",
             "word-wrap",
