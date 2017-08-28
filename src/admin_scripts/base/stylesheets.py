@@ -150,6 +150,51 @@ BROWSER_PREFIXES = (
 """ The sequence that defines the complete set of accepted
 browser prefixes for the stylesheet usage """
 
+PREFIXED_NAMES = (
+    "animation",
+    "animation-delay",
+    "animation-duration",
+    "animation-name",
+    "appearance",
+    "backface-visibility",
+    "background-clip",
+    "border-bottom-left-radius",
+    "border-bottom-right-radius",
+    "border-radius",
+    "border-top-left-radius",
+    "border-top-right-radius",
+    "box-shadow",
+    "box-sizing",
+    "column-count",
+    "column-gap",
+    "filter",
+    "font-smoothing",
+    "hyphens",
+    "opacity",
+    "osx-font-smoothing",
+    "outline",
+    "overflow-scrolling",
+    "perspective",
+    "print-color-adjust",
+    "tab-size",
+    "highlight-color",
+    "fill-color",
+    "text-shadow",
+    "touch-callout",
+    "transform",
+    "transform-origin",
+    "transform-style",
+    "transition",
+    "transition-delay",
+    "transition-duration",
+    "transition-property",
+    "transition-timing-function",
+    "user-select",
+    "zoom"
+)
+""" The complete set of property names that should be prefixed
+with proper browser prefixes (complex properties) """
+
 def get_property_index(property_line, property_order, line_number):
     """
     Retrieves the index for the property specified in the provided property
@@ -335,53 +380,23 @@ def process_rule_all_g(property_lines_m):
     process_rule_prefixes_g(property_lines_m)
 
 def process_rule_prefixes_g(property_lines_m):
-    for name in (
-        "animation"
-        "animation-delay",
-        "animation-duration",
-        "animation-name",
-        "appearance",
-        "backface-visibility",
-        "background-clip",
-        "border-bottom-left-radius",
-        "border-bottom-right-radius",
-        "border-radius",
-        "border-top-left-radius",
-        "border-top-right-radius",
-        "box-shadow",
-        "box-sizing",
-        "column-count",
-        "column-gap",
-        "filter",
-        "font-smoothing",
-        "hyphens",
-        "opacity",
-        "osx-font-smoothing",
-        "outline",
-        "overflow-scrolling",
-        "perspective",
-        "print-color-adjust",
-        "tab-size",
-        "highlight-color",
-        "fill-color",
-        "text-shadow",
-        "touch-callout",
-        "transform",
-        "transform-origin",
-        "transform-style",
-        "transition",
-        "transition-delay",
-        "transition-duration",
-        "transition-property",
-        "transition-timing-function",
-        "user-select",
-        "zoom"
-    ):
-        if not name in property_lines_m: continue
-        value = property_lines_m[name]
+    prefixes = [""] + list(BROWSER_PREFIXES)
 
-        for prefix in ("-o", "-ms", "-moz", "-khtml", "-webkit"):
-            name_p = prefix + "-" + name
+    for name in PREFIXED_NAMES:
+        exists = False
+
+        for prefix in prefixes:
+            name_p = prefix + "-" + name if prefix else name
+            if not name_p in property_lines_m: continue
+            exists = True
+            break
+
+        if not exists: continue
+
+        value = property_lines_m[name_p]
+
+        for prefix in prefixes:
+            name_p = prefix + "-" + name if prefix else name
             property_lines_m[name_p] = value
 
     return property_lines_m

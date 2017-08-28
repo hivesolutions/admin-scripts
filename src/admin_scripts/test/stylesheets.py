@@ -61,6 +61,10 @@ class StylesheetsTest(unittest.TestCase):
 .property2 > .sub > .sub-sub {
     border: none;
     border-radius: 2px 2px 2px 2px;
+    -o-border-radius: 2px 2px 2px 2px;
+    -ms-border-radius: 2px 2px 2px 2px;
+    -moz-border-radius: 2px 2px 2px 2px;
+    -khtml-border-radius: 2px 2px 2px 2px;
     -webkit-border-radius: 2px 2px 2px 2px;
     margin: 80px auto 80px auto;
     max-width: 1170px;
@@ -74,6 +78,10 @@ class StylesheetsTest(unittest.TestCase):
             property_order = (
                 "border",
                 "border-radius",
+                "-o-border-radius",
+                "-ms-border-radius",
+                "-moz-border-radius",
+                "-khtml-border-radius",
                 "-webkit-border-radius",
                 "margin",
                 "max-width",
@@ -106,6 +114,11 @@ main,
 
     main,
     master {
+        border-radius: 3px 3px 3px 3px;
+        -o-border-radius: 3px 3px 3px 3px;
+        -ms-border-radius: 3px 3px 3px 3px;
+        -moz-border-radius: 3px 3px 3px 3px;
+        -khtml-border-radius: 3px 3px 3px 3px;
         -webkit-border-radius: 3px 3px 3px 3px;
         padding: 0px 0px 0px 0px;
     }
@@ -117,6 +130,11 @@ main,
             windows_newline = False,
             property_order = (
                 "border",
+                "border-radius",
+                "-o-border-radius",
+                "-ms-border-radius",
+                "-moz-border-radius",
+                "-khtml-border-radius",
                 "-webkit-border-radius",
                 "max-width",
                 "padding"
@@ -143,9 +161,19 @@ main,
     40%,
     100% {
         transform: scaleY(0.4);
+        -o-transform: scaleY(0.4);
+        -ms-transform: scaleY(0.4);
+        -moz-transform: scaleY(0.4);
+        -khtml-transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
     }
     20% {
         transform: scaleY(1);
+        -o-transform: scaleY(1);
+        -ms-transform: scaleY(1);
+        -moz-transform: scaleY(1);
+        -khtml-transform: scaleY(1);
+        -webkit-transform: scaleY(1);
     }
 }
 """
@@ -154,7 +182,12 @@ main,
             buffer,
             windows_newline = False,
             property_order = (
-                "transform"
+                "transform",
+                "-o-transform",
+                "-ms-transform",
+                "-moz-transform",
+                "-khtml-transform",
+                "-webkit-transform",
             )
         )
         result.seek(0)
