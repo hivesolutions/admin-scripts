@@ -285,7 +285,7 @@ def process_property_lines(
     :param avoid_empty: If the empty lines should avoid any
     kind of processing (extra errors may occur).
     :type indentation: int
-    :param identation: The level of indentation to be used for the processing
+    :param indentation: The level of indentation to be used for the processing
     of the various property lines, this value is going to be used in the
     operation of pre-pending spaced to the property rules.
     :rtype: List
@@ -298,12 +298,93 @@ def process_property_lines(
     processed_property_lines = [process_property_line(property_line, line_number, indentation)\
         for property_line in property_lines if not avoid_empty or property_line.strip()]
 
+    # runs the initial process of simplifying the property lines
+    # by running the various rules for the current property lines
+    processed_property_lines = process_rules_g(processed_property_lines, line_number, indentation)
+
     # runs an extra step to check for any duplicated line
     # in the set of processed property lines
     check_duplicates(processed_property_lines, line_number)
 
     # returns the processed property lines
     return processed_property_lines
+
+def process_rules_g(property_lines, line_number, indentation):
+    # creates the dictionary that is going to hold the multiple
+    # properly lines indexed by their name
+    property_lines_m = dict()
+
+    # iterates over the complete set of property lines to split
+    # them into name and value and populate the map of properties
+    for property_line in property_lines:
+        parts = property_line.split(":", 1)
+        if len(parts) == 1: parts += [""]
+        name, value = parts
+        name = name.strip()
+        value = value.strip()
+        property_lines_m[name] = value
+
+    # runs the complete set of global rules against the property
+    # lines map so that it gets properly updated, running then the
+    # re-creation of the properly lines list (should re-run ordering)
+    process_rule_all_g(property_lines_m)
+    property_lines = ["%s%s: %s" % (indentation * " " * 4, name, value) for name, value in legacy.items(property_lines_m)]
+    return property_lines
+
+def process_rule_all_g(property_lines_m):
+    process_rule_prefixes_g(property_lines_m)
+
+def process_rule_prefixes_g(property_lines_m):
+    for name in (
+        "animation"
+        "animation-delay",
+        "animation-duration",
+        "animation-name",
+        "appearance",
+        "backface-visibility",
+        "background-clip",
+        "border-bottom-left-radius",
+        "border-bottom-right-radius",
+        "border-radius",
+        "border-top-left-radius",
+        "border-top-right-radius",
+        "box-shadow",
+        "box-sizing",
+        "column-count",
+        "column-gap",
+        "filter",
+        "font-smoothing",
+        "hyphens",
+        "opacity",
+        "osx-font-smoothing",
+        "outline",
+        "overflow-scrolling",
+        "perspective",
+        "print-color-adjust",
+        "tab-size",
+        "highlight-color",
+        "fill-color",
+        "text-shadow",
+        "touch-callout",
+        "transform",
+        "transform-origin",
+        "transform-style",
+        "transition",
+        "transition-delay",
+        "transition-duration",
+        "transition-property",
+        "transition-timing-function",
+        "user-select",
+        "zoom"
+    ):
+        if not name in property_lines_m: continue
+        value = property_lines_m[name]
+
+        for prefix in ("-o", "-ms", "-moz", "-khtml", "-webkit"):
+            name_p = prefix + "-" + name
+            property_lines_m[name_p] = value
+
+    return property_lines_m
 
 def check_duplicates(property_lines, line_number):
     # retrieves the complete set of names for the rules, this is
@@ -700,6 +781,7 @@ def cleanup_properties(
                 indentation = open_rule_count + 1,
                 avoid_empty = fix_extra_newlines
             )
+            property_lines = sorted(property_lines, key = get_comparison_key)
 
             # writes the lines to the buffer, considering the windows newline
             # and then writes the line

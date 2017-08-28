@@ -173,3 +173,34 @@ main,
         result.seek(0)
         result = result.read()
         self.assertEqual(result, expected)
+
+    def test_prefix_rules(self):
+        input = b""".line-scale {
+    animation: fade-in 1s ease-in-out;
+}
+"""
+        expected = """.line-scale {
+    animation: fade-in 1s ease-in-out;
+    -o-animation: fade-in 1s ease-in-out;
+    -ms-animation: fade-in 1s ease-in-out;
+    -moz-animation: fade-in 1s ease-in-out;
+    -khtml-animation: fade-in 1s ease-in-out;
+    -webkit-animation: fade-in 1s ease-in-out;
+}
+"""
+        buffer = legacy.BytesIO(input)
+        result = stylesheets.cleanup_properties(
+            buffer,
+            windows_newline = False,
+            property_order = (
+                "animation",
+                "-o-animation",
+                "-ms-animation",
+                "-moz-animation",
+                "-khtml-animation",
+                "-webkit-animation",
+            )
+        )
+        result.seek(0)
+        result = result.read()
+        self.assertEqual(result, expected)
