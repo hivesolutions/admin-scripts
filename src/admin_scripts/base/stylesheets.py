@@ -74,13 +74,13 @@ AT_RULES_REGEX = re.compile(AT_RULES_REGEX_VALUE)
 """ The at rules regex """
 
 URL_REGEX_VALUE = r"url\([\"'](.*)[\"']\)"
-""" The url regex value """
+""" The URL regex value """
 
 URL_REGEX = re.compile(URL_REGEX_VALUE)
-""" The url regex """
+""" The URL regex """
 
 URL_REPLACEMENT_VALUE = "url(\g<1>)"
-""" The url replacement regex value """
+""" The URL replacement regex value """
 
 PROPERTY_LINE_REGEX_VALUE = r"^[ ]*([\w\-]*)[ ]*:[ ]*(\S*)"
 """ The property line regex value """
