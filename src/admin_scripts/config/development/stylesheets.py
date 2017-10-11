@@ -337,6 +337,7 @@ configurations = (
             "-webkit-text-fill-color",
             "text-indent",
             "text-overflow",
+            "text-rendering",
             "text-shadow",
             "-o-text-shadow",
             "-ms-text-shadow",
