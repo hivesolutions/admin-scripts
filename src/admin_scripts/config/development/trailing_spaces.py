@@ -61,6 +61,7 @@ configurations = (
             "pch",
             "lua",
             "cs",
+            "sol",
             "st",
             "ctp",
             "xml",

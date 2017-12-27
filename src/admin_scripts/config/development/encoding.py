@@ -79,6 +79,7 @@ configurations = (
             "vcproj",
             "csproj",
             "sln",
+            "sol",
             "strings",
             "conf",
             "luquid",
