@@ -223,6 +223,7 @@ configurations = (
             "-moz-hyphens",
             "-khtml-hyphens",
             "-webkit-hyphens",
+            "justify-content",
             "left",
             "letter-spacing",
             "line-height",
