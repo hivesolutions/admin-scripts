@@ -43,6 +43,7 @@ configurations = (
         "windows_newline" : True,
         "fix_extra_newlines" : True,
         "property_order" : (
+            "align-items",
             "animation",
             "-o-animation",
             "-ms-animation",
