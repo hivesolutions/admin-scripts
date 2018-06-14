@@ -158,6 +158,13 @@ def join_files(file_path):
         # the proper care to avoid unwanted results
         string_value = string_buffer.getvalue()
 
+        # ensures proper line ending on the contents of the file
+        # tries naive detection and then ensures that the proper
+        # line ending is applied
+        is_windows = b"\r\n" in string_value
+        line_end = b"\r\n" if is_windows else b"\n"
+        string_value = string_value.strip() + line_end
+
         # minifies and compresses the string value according
         # to the provided specification, some of this operations
         # may use complex third-party code
@@ -165,8 +172,8 @@ def join_files(file_path):
         string_value = minify == "css" and extra.css_slimmer(string_value) or string_value
         string_value = compress == "gzip" and gzip_contents(string_value) or string_value
 
-        # iterates over all the target directories for
-        # to write the contents
+        # iterates over all the target directories for the write the contents
+        # and writes the resolved contents to each of them
         for target_directory in target_directories:
             # "calculates" the (current) base file path
             base_file_directory = os.path.join(directory_path, target_directory)
@@ -176,7 +183,6 @@ def join_files(file_path):
             # in case the base file directory does not exists
             # it must be created
             if not os.path.exists(base_file_directory):
-                # creates the base file directory
                 os.makedirs(base_file_directory)
 
             # opens the base file for writing in binary
