@@ -212,7 +212,6 @@ def config(target_path):
     paths = (home_path, base_path, current_path)
 
     for path in paths:
-        print(paths)
         if not os.path.exists(path): continue
 
         file = open(path, "rb")
@@ -225,6 +224,7 @@ def config(target_path):
 
     scripts = config.get("scripts", [])
     disabled = config.get("disabled", [])
+    disabled += config.get("excluded", [])
 
     for name in disabled:
         if not name in scripts: continue
