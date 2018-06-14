@@ -39,6 +39,7 @@ __license__ = "Apache License, Version 2.0"
 
 import os
 import sys
+import json
 import subprocess
 
 import admin_scripts.extra as extra
@@ -79,7 +80,8 @@ CONFIGURATION_RELATIVE_PATH = "../config/"
 """ The relative path to the configuration directory """
 
 PYTHON_COMMAND = "python"
-""" The python (execution) command """
+""" The python (execution) command that is going to
+be run in the execution shell (should be globally accessible) """
 
 CONFIGURATION_FLAG = "-c"
 """ The flag name for the configuration control """
@@ -117,12 +119,14 @@ def run():
     # going to be used at the end of the cleanup operation
     exit_code = 0
 
+    info = config(target_path)
+
     # iterates over all the scripts for execution, passing
     # the proper script values into each script for execution
-    for script in SCRIPTS_LIST:
+    for script in info["scripts"]:
         # retrieves the script configuration file name in case
         # no configuration path is found no value is provided
-        script_configuration_file_name = SCRIPTS_CONFIGURATION_MAP.get(script, None)
+        script_configuration_file_name = info["configuration"].get(script, None)
 
         # creates both the script and the configuration paths
         # note that there's a path normalization process
@@ -139,7 +143,7 @@ def run():
 
         # creates the arguments list from the various
         # processed arguments
-        arguments = [PYTHON_COMMAND]
+        arguments = [info["command"]]
         arguments.append(script_path)
         arguments.append(target_path)
         if configuration_path:
@@ -181,6 +185,52 @@ def run():
     # exits the current process with the code that has been calculated
     # from the execution of the various sub-scripts
     sys.exit(exit_code)
+
+def config(target_path):
+    config = dict(
+        scripts = list(SCRIPTS_LIST),
+        disabled = [],
+        configuration = dict(SCRIPTS_CONFIGURATION_MAP),
+        command = PYTHON_COMMAND
+    )
+
+    home_path = "~/.cleanup.json"
+    home_path = os.path.expanduser(home_path)
+    home_path = os.path.abspath(home_path)
+    home_path = os.path.normpath(home_path)
+
+    base_path = ".cleanup.json"
+    base_path = os.path.expanduser(base_path)
+    base_path = os.path.abspath(base_path)
+    base_path = os.path.normpath(base_path)
+
+    current_path = target_path + "/.cleanup.json"
+    current_path = os.path.expanduser(current_path)
+    current_path = os.path.abspath(current_path)
+    current_path = os.path.normpath(current_path)
+
+    paths = (home_path, base_path, current_path)
+
+    for path in paths:
+        print(paths)
+        if not os.path.exists(path): continue
+
+        file = open(path, "rb")
+        try: data = file.read()
+        finally: file.close()
+        data = data.decode("utf-8")
+        data_j = json.loads(data)
+
+        config.update(data_j)
+
+    scripts = config.get("scripts", [])
+    disabled = config.get("disabled", [])
+
+    for name in disabled:
+        if not name in scripts: continue
+        scripts.remove(name)
+
+    return config
 
 if __name__ == "__main__":
     run()
