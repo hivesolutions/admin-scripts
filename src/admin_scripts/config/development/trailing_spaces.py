@@ -91,7 +91,8 @@ configurations = (
             "go",
             "gitignore",
             "swift",
-            "Dockerfile"
+            "Dockerfile",
+            "vue"
         ),
         "file_exclusion" : ("android-sdk",)
     },
