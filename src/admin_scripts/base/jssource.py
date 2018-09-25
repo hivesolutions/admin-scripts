@@ -86,7 +86,7 @@ def jssource_file(file_path, beautifty = True, encoding = "utf-8"):
         opts.wrap_line_length = 120
         opts.end_with_newline = True
         opts.preserve_newlines = True
-        opts.operator_position = "preserve-newline"
+        opts.operator_position = "after_newline"
         opts.eol = "\r\n"
         result = jsbeautifier.beautify(contents, opts = opts)
 
