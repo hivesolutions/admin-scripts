@@ -87,7 +87,8 @@ configurations = (
             "md",
             "swift",
             "Dockerfile",
-            "vue"
+            "vue",
+            "gradle"
         ),
         "file_exclusion" : ("android-sdk",)
     },

@@ -92,7 +92,8 @@ configurations = (
             "gitignore",
             "swift",
             "Dockerfile",
-            "vue"
+            "vue",
+            "gradle"
         ),
         "file_exclusion" : ("android-sdk",)
     },
