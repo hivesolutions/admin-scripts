@@ -413,6 +413,7 @@ configurations = (
             "-khtml-transition-timing-function",
             "-webkit-transition-timing-function",
             "unicode-bidi",
+            "user-drag",
             "-webkit-user-drag",
             "user-select",
             "-o-user-select",
