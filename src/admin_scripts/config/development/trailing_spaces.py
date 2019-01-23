@@ -72,6 +72,7 @@ configurations = (
             "wik",
             "prl",
             "json",
+            "yml",
             "txt",
             "hxml",
             "hx",
