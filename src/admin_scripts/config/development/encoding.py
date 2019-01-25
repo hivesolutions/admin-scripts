@@ -49,6 +49,7 @@ configurations = (
             "php",
             "cs",
             "java",
+            "kt",
             "cpp",
             "c",
             "m",

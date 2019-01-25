@@ -50,6 +50,7 @@ configurations = (
             "php",
             "cs",
             "java",
+            "kt",
             "css",
             "cpp",
             "c",
