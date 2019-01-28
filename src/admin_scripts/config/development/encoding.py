@@ -49,7 +49,6 @@ configurations = (
             "php",
             "cs",
             "java",
-            "kt",
             "cpp",
             "c",
             "m",
@@ -173,7 +172,8 @@ configurations = (
             "sh",
             "drg",
             "am",
-            "m4"
+            "m4",
+            "kt"
         ),
         "file_exclusion" : ("android-sdk",)
     }
