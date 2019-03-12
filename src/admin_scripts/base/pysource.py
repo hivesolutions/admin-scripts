@@ -66,7 +66,7 @@ def pysource_file(file_path, run_pep8 = True, ignores = ()):
     """
 
     try: import pep8
-    except: pep8 = None
+    except ImportError: pep8 = None
 
     if pep8:
         class ErrorReport(pep8.StandardReport):

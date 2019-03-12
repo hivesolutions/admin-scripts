@@ -78,7 +78,7 @@ def has_encoding(string_buffer, encoding):
         # setting the has encoding flag to valid in case nothing fails
         string_buffer.decode(encoding)
         has_encoding = True
-    except:
+    except Exception:
         # sets the has encoding flag as false as there was an error while
         # trying to decode the buffer with the requested encoding
         has_encoding = False
@@ -246,7 +246,7 @@ def convert_encoding_walker(arguments, directory_name, names):
                 windows_newline,
                 replacements_list
             )
-        except:
+        except Exception:
             extra.warn(
                 "Failed converting encoding in file: %s (%s to %s)" %\
                 (

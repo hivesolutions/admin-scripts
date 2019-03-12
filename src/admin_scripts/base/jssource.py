@@ -66,7 +66,7 @@ def jssource_file(file_path, beautifty = True, encoding = "utf-8"):
     """
 
     try: import jsbeautifier
-    except: jsbeautifier = None
+    except ImportError: jsbeautifier = None
 
     is_min = file_path.endswith("min.js")
 
