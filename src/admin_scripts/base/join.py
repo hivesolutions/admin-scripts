@@ -66,7 +66,7 @@ def join_files(file_path):
 
     :type file_path: String
     :param file_path: The path to the file that contains the
-    json based specification for the joining operation.
+    JSON based specification for the joining operation.
     """
 
     # normalizes the file path value so that it
@@ -79,7 +79,7 @@ def join_files(file_path):
     try: file_contents = file.read()
     finally: file.close()
 
-    # uses the default encoding for json to decode
+    # uses the default encoding for JSON to decode
     # the complete set of contents in the file
     file_contents = file_contents.decode("utf-8")
 
