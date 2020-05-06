@@ -69,7 +69,7 @@ def misc_file(file_path, configuration):
     with the provided path.
 
     This operation should fail with an exception in case the
-    structure of the xml document is not the expected one.
+    structure of the XML document is not the expected one.
 
     :type file_path: String
     :param file_path: The path to the file that is going to

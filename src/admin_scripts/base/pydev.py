@@ -66,14 +66,14 @@ are considered valid under the current pydev specification """
 def pydev_file(file_path, fix = True):
     """
     Runs the pydev configuration file normalization that consists
-    in the definition in order of each of the xml lines.
+    in the definition in order of each of the XML lines.
 
     This operation should fail with an exception in case the
-    structure of the xml document is not the expected one.
+    structure of the XML document is not the expected one.
 
     :type file_path: String
     :param file_path: The path to the file that contains the
-    pydev configuration specification in xml.
+    pydev configuration specification in XML.
     :type fix: bool
     :param fix: If any "fixable" error in the pydev project
     file should be automatically fixes using the known heuristics,
@@ -167,7 +167,7 @@ def fix_values(paths, properties):
 
 def text_value(node):
     """
-    Retrieves the text/xml string value for the provided
+    Retrieves the text/XML string value for the provided
     node, this is a recursive approach and the child nodes
     are used as the entry point.
 
@@ -175,7 +175,7 @@ def text_value(node):
     :param node: The base element node from which the values
     are going to be retrieved.
     :rtype: String
-    :return: The string/textual part of the xml element node
+    :return: The string/textual part of the XML element node
     provided.
     """
 
