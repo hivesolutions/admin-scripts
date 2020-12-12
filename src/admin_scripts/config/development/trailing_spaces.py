@@ -110,7 +110,8 @@ configurations = (
             "m4",
             "md",
             "csv",
-            "kt"
+            "kt",
+            "asm"
         ),
         "file_exclusion" : ("android-sdk",)
     }

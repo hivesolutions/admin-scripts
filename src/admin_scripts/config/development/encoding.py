@@ -173,7 +173,8 @@ configurations = (
             "drg",
             "am",
             "m4",
-            "kt"
+            "kt",
+            "asm"
         ),
         "file_exclusion" : ("android-sdk",)
     }
