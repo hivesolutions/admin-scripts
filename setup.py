@@ -42,7 +42,7 @@ import setuptools
 
 setuptools.setup(
     name = "admin_scripts",
-    version = "0.5.16",
+    version = "0.6.0",
     author = "Hive Solutions Lda.",
     author_email = "development@hive.pt",
     description = "Administration Scripts",
