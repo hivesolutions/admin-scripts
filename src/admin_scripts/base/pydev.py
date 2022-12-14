@@ -108,7 +108,7 @@ def pydev_file(file_path, fix = True):
 
     python_version = properties.get("org.python.pydev.PYTHON_PROJECT_VERSION", None)
     if not python_version: extra.warn("No python version defined")
-    elif not python_version == "python 2.6": extra.warn("Python version not 2.6")
+    elif not python_version == "python 3.6": extra.warn("Python version not 3.6")
 
     for path in paths:
         if path.startswith("/${PROJECT_DIR_NAME}"): continue
