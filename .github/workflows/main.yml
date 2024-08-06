@@ -29,7 +29,7 @@ jobs:
       - run: cleanup .
       - run: |
           pip install pytest
-          HTTPBIN=httpbin.bemisc.com pytest
+          pytest
       - run: python setup.py test
         if: matrix.python-version != '3.12' && matrix.python-version != 'latest'
   build-pypy:
@@ -48,6 +48,6 @@ jobs:
       - run: cleanup .
       - run: |
           pip install pytest
-          HTTPBIN=httpbin.bemisc.com pytest
+          pytest
       - run: pypy setup.py test
         if: matrix.python-version != '3.12' && matrix.python-version != 'latest'
