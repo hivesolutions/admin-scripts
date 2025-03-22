@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -43,6 +34,7 @@ USE_STDERR = True
 FLUSH_STREAM = True
 STDOUT = sys.stdout
 STDERR = sys.stderr if USE_STDERR else STDOUT
+
 
 class StreamWrapper(object):
 
@@ -57,7 +49,8 @@ class StreamWrapper(object):
 
     @classmethod
     def wrap(cls, stream):
-        if hasattr(stream, "counter"): return stream
+        if hasattr(stream, "counter"):
+            return stream
         return cls(stream)
 
     def write(self, *args, **kwargs):
@@ -67,25 +60,31 @@ class StreamWrapper(object):
     def written(self):
         return self.counter > 0
 
+
 def echo(message):
     STDOUT.write(message + "\n")
     STDOUT.flush()
+
 
 def warn(message):
     STDERR.write("WARNING: " + message + "\n")
     STDERR.flush()
 
+
 def error(message):
     STDERR.write("ERROR: " + message + "\n")
     STDERR.flush()
 
+
 def has_errors():
     return STDERR.written()
+
 
 def wrap_all():
     global STDOUT
     global STDERR
     STDOUT = StreamWrapper.wrap(STDOUT)
     STDERR = StreamWrapper.wrap(STDERR)
+
 
 wrap_all()

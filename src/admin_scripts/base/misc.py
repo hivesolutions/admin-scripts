@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -49,6 +40,7 @@ USAGE_MESSAGE = "misc [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
 
+
 def chmod_file(file_path, mode):
     """
     Runs the change permission operation file process
@@ -62,6 +54,7 @@ def chmod_file(file_path, mode):
     """
 
     os.chmod(file_path, mode)
+
 
 def misc_file(file_path, configuration):
     """
@@ -82,7 +75,9 @@ def misc_file(file_path, configuration):
     chmod = configuration.get("chmod", {})
     _base, extension = os.path.splitext(file_path)
     mode = chmod.get(extension.lstrip("."), None)
-    if not mode == None: chmod_file(file_path, mode)
+    if not mode == None:
+        chmod_file(file_path, mode)
+
 
 def misc_walker(arguments, directory_name, names):
     """
@@ -110,22 +105,30 @@ def misc_walker(arguments, directory_name, names):
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
-    if extra.handle_ignore(names): return
+    if extra.handle_ignore(names):
+        return
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
     for exclusion in file_exclusion:
-        if not exclusion in names: continue
+        if not exclusion in names:
+            continue
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names\
-        if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [
+        directory_name + "/" + name
+        for name in names
+        if not os.path.isdir(directory_name + "/" + name)
+    ]
 
     # filters the names with non valid file extensions so that only the
     # ones that conform with the misc source ones are selected
-    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if name.endswith(tuple(extensions))]
+    valid_complete_names = [
+        os.path.normpath(name)
+        for name in valid_complete_names
+        if name.endswith(tuple(extensions))
+    ]
 
     # iterates over all the valid complete names with valid structure
     # as defined by the misc file structure definition
@@ -135,6 +138,7 @@ def misc_walker(arguments, directory_name, names):
         # then runs the operation with the correct path
         extra.echo("Running the misc operations on file: %s" % valid_complete_name)
         misc_file(valid_complete_name, configuration)
+
 
 def misc_recursive(directory_path, file_exclusion, configuration):
     """
@@ -153,6 +157,7 @@ def misc_recursive(directory_path, file_exclusion, configuration):
 
     legacy.walk(directory_path, misc_walker, (file_exclusion, configuration))
 
+
 def _config(name):
     base_path = os.path.dirname(__file__)
     base_path = os.path.abspath(base_path)
@@ -161,6 +166,7 @@ def _config(name):
     name_path = os.path.join(extra_path, name)
     name_path = os.path.normpath(name_path)
     return name_path
+
 
 def main():
     """
@@ -208,9 +214,9 @@ def main():
     # retrieves the configurations from the command line arguments
     # either from the command line or configuration file
     configurations = extra.configuration(
-        file_path = configuration_file_path,
-        recursive = recursive,
-        file_exclusion = file_exclusion
+        file_path=configuration_file_path,
+        recursive=recursive,
+        file_exclusion=file_exclusion,
     )
 
     # iterates over all the configurations, executing them
@@ -221,14 +227,17 @@ def main():
 
         # in case the recursive flag is set, normalizes the multiple
         # found misc source configuration file
-        if recursive: misc_recursive(path, file_exclusion, configuration)
+        if recursive:
+            misc_recursive(path, file_exclusion, configuration)
         # otherwise it's a "normal" iteration and runs the
         # misc normalization process in it
-        else: misc_file(path, configuration)
+        else:
+            misc_file(path, configuration)
 
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
     sys.exit(1 if extra.has_errors() else 0)
+
 
 if __name__ == "__main__":
     main()

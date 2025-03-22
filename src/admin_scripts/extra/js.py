@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,22 +22,14 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
 import legacy
+
 
 class JavascriptMinify(object):
     """
@@ -172,7 +164,7 @@ class JavascriptMinify(object):
 
         if action <= 2:
             self.theA = self.theB
-            if self.theA == "'" or self.theA == "\"":
+            if self.theA == "'" or self.theA == '"':
                 while True:
                     self._out_a()
                     self.theA = self._get()
@@ -187,13 +179,21 @@ class JavascriptMinify(object):
         if action <= 3:
             self.theB = self._next()
 
-            if self.theB == "/" and (self.theA == "(" or self.theA == "," or
-                self.theA == "=" or self.theA == ":" or
-                self.theA == "[" or self.theA == "?" or
-                self.theA == "!" or self.theA == "&" or
-                self.theA == "|" or self.theA == ";" or
-                self.theA == "{" or self.theA == "}" or
-                self.theA == "\n"):
+            if self.theB == "/" and (
+                self.theA == "("
+                or self.theA == ","
+                or self.theA == "="
+                or self.theA == ":"
+                or self.theA == "["
+                or self.theA == "?"
+                or self.theA == "!"
+                or self.theA == "&"
+                or self.theA == "|"
+                or self.theA == ";"
+                or self.theA == "{"
+                or self.theA == "}"
+                or self.theA == "\n"
+            ):
                 self._out_a()
                 self._out_b()
 
@@ -245,7 +245,7 @@ class JavascriptMinify(object):
                     else:
                         self._action(3)
                 elif self.theB == "\n":
-                    if self.theA in ["}", "]", ")", "+", "-", "\"", "'"]:
+                    if self.theA in ["}", "]", ")", "+", "-", '"', "'"]:
                         self._action(1)
                     else:
                         if is_alpha(self.theA):
@@ -271,6 +271,7 @@ class JavascriptMinify(object):
         # closes the input file
         self.input_file.close()
 
+
 def javascript_minify(string_value):
     """
     "Minifies" the given string value assuming it
@@ -289,7 +290,8 @@ def javascript_minify(string_value):
     # value in case it's bytes it must be decoded
     # using the pre-defined fallback decoder
     is_bytes = type(string_value) == legacy.BYTES
-    if is_bytes: string_value = string_value.decode("utf-8")
+    if is_bytes:
+        string_value = string_value.decode("utf-8")
 
     # creates a new string buffer with the given
     # string value (for the input) and then creates
@@ -317,6 +319,7 @@ def javascript_minify(string_value):
     string_value_result = string_value_result.encode("utf-8")
     return string_value_result
 
+
 def is_alpha(character):
     """
     Checks if the given character represents an alphabet
@@ -329,10 +332,11 @@ def is_alpha(character):
     """
 
     return (
-        (character >= "a" and character <= "z") or\
-        (character >= "0" and character <= "9") or\
-        (character >= "A" and character <= "Z") or\
-        character == "_" or character == "$" or\
-        character == "\\" or
-        (character is not None and ord(character) > 126)
+        (character >= "a" and character <= "z")
+        or (character >= "0" and character <= "9")
+        or (character >= "A" and character <= "Z")
+        or character == "_"
+        or character == "$"
+        or character == "\\"
+        or (character is not None and ord(character) > 126)
     )

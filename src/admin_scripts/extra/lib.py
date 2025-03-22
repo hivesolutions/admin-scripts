@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -63,6 +54,7 @@ IGNORE_FILE = ".cignore"
 if a path tree should be ignored and no operation should be
 performed for any of its children """
 
+
 def handle_ignore(names):
     """
     Tries to handle the ignore operation for the provided
@@ -77,9 +69,11 @@ def handle_ignore(names):
     the current list of names.
     """
 
-    if not IGNORE_FILE in names: return False
+    if not IGNORE_FILE in names:
+        return False
     del names[:]
     return True
+
 
 def normalize_path(path):
     """
@@ -124,7 +118,9 @@ def normalize_path(path):
 
     # in case the current operative system is windows based and
     # the normalized path does not start with the long path prefix
-    if os_name in WINDOWS_PLATFORMS and not normalized_path.startswith(LONG_PATH_PREFIX):
+    if os_name in WINDOWS_PLATFORMS and not normalized_path.startswith(
+        LONG_PATH_PREFIX
+    ):
         # creates the path in the windows mode, adds
         # the support for long path names with the prefix token
         normalized_path = LONG_PATH_PREFIX + normalized_path
@@ -133,7 +129,8 @@ def normalize_path(path):
     # the various normalization processes applied to original path
     return normalized_path
 
-def configuration(file_path = None, **kwargs):
+
+def configuration(file_path=None, **kwargs):
     """
     Retrieves the configuration map(s) for the given arguments,
     the keyword based arguments are used as the configuration

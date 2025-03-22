@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt> & Luís Martinho <lmartinho@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -39,10 +30,10 @@ __license__ = "Apache License, Version 2.0"
 
 configurations = (
     {
-        "recursive" : True,
-        "windows_newline" : True,
-        "fix_extra_newlines" : True,
-        "property_order" : (
+        "recursive": True,
+        "windows_newline": True,
+        "fix_extra_newlines": True,
+        "property_order": (
             "align-items",
             "animation",
             "-o-animation",
@@ -444,14 +435,10 @@ configurations = (
             "-ms-zoom",
             "-moz-zoom",
             "-khtml-zoom",
-            "-webkit-zoom"
+            "-webkit-zoom",
         ),
-        "rules_skip" : (
-            "@-",
-        ),
-        "file_extensions" : (
-            "css",
-        ),
-        "file_exclusion" : ("android-sdk",)
+        "rules_skip": ("@-",),
+        "file_extensions": ("css",),
+        "file_exclusion": ("android-sdk",),
     },
 )

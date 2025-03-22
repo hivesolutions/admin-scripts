@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -58,12 +49,13 @@ part of the source directory file path """
 
 VALID_PROPERTIES = (
     "org.python.pydev.PYTHON_PROJECT_VERSION",
-    "org.python.pydev.PYTHON_PROJECT_INTERPRETER"
+    "org.python.pydev.PYTHON_PROJECT_INTERPRETER",
 )
 """ The sequence that defines the complete set of properties that
 are considered valid under the current pydev specification """
 
-def pydev_file(file_path, fix = True):
+
+def pydev_file(file_path, fix=True):
     """
     Runs the pydev configuration file normalization that consists
     in the definition in order of each of the XML lines.
@@ -97,43 +89,56 @@ def pydev_file(file_path, fix = True):
 
     for node in nodes:
         value = text_value(node)
-        if not value: continue
+        if not value:
+            continue
         paths.append(value)
 
     for key in legacy.keys(properties):
-        if key in VALID_PROPERTIES: continue
+        if key in VALID_PROPERTIES:
+            continue
         raise RuntimeError("Invalid property '%s'" % key)
 
-    if fix: paths, properties = fix_values(paths, properties)
+    if fix:
+        paths, properties = fix_values(paths, properties)
 
     python_version = properties.get("org.python.pydev.PYTHON_PROJECT_VERSION", None)
-    if not python_version: extra.warn("No python version defined")
-    elif not python_version == "python 3.6": extra.warn("Python version not 3.6")
+    if not python_version:
+        extra.warn("No python version defined")
+    elif not python_version == "python 3.6":
+        extra.warn("Python version not 3.6")
 
     for path in paths:
-        if path.startswith("/${PROJECT_DIR_NAME}"): continue
+        if path.startswith("/${PROJECT_DIR_NAME}"):
+            continue
         extra.warn("Project directory path not normalized '%s'" % path)
 
     property_keys = legacy.keys(properties)
     property_keys.sort()
 
-    buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n")
-    buffer.append("<?eclipse-pydev version=\"1.0\"?><pydev_project>\n")
-    if paths: buffer.append("<pydev_pathproperty name=\"org.python.pydev.PROJECT_SOURCE_PATH\">\n")
+    buffer.append('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
+    buffer.append('<?eclipse-pydev version="1.0"?><pydev_project>\n')
+    if paths:
+        buffer.append(
+            '<pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">\n'
+        )
     for path in paths:
         buffer.append("<path>%s</path>\n" % path)
-    if paths: buffer.append("</pydev_pathproperty>\n")
+    if paths:
+        buffer.append("</pydev_pathproperty>\n")
     for key in property_keys:
         value = properties[key]
-        buffer.append("<pydev_property name=\"%s\">%s</pydev_property>\n" % (key, value))
+        buffer.append('<pydev_property name="%s">%s</pydev_property>\n' % (key, value))
     buffer.append("</pydev_project>\n")
 
     result = "".join(buffer)
     result = result.encode("utf-8")
 
     file = open(file_path, "wb")
-    try: file.write(result)
-    finally: file.close()
+    try:
+        file.write(result)
+    finally:
+        file.close()
+
 
 def fix_values(paths, properties):
     """
@@ -158,12 +163,17 @@ def fix_values(paths, properties):
     _paths = []
 
     for path in paths:
-        if not path: continue
-        if not "/" in path: _paths.append(path)
-        elif path.startswith("/${PROJECT_DIR_NAME}"): _paths.append(path)
-        else: _paths.append(PREFIX_REGEX.sub("/${PROJECT_DIR_NAME}", path, 1))
+        if not path:
+            continue
+        if not "/" in path:
+            _paths.append(path)
+        elif path.startswith("/${PROJECT_DIR_NAME}"):
+            _paths.append(path)
+        else:
+            _paths.append(PREFIX_REGEX.sub("/${PROJECT_DIR_NAME}", path, 1))
 
     return _paths, properties
+
 
 def text_value(node):
     """
@@ -183,10 +193,12 @@ def text_value(node):
 
     data = []
     for node in nodes:
-        if not node.nodeType == node.TEXT_NODE: continue
+        if not node.nodeType == node.TEXT_NODE:
+            continue
         data.append(node.data)
 
     return "".join(data)
+
 
 def pydev_walker(arguments, directory_name, names):
     """
@@ -207,22 +219,30 @@ def pydev_walker(arguments, directory_name, names):
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
-    if extra.handle_ignore(names): return
+    if extra.handle_ignore(names):
+        return
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
     for exclusion in file_exclusion:
-        if not exclusion in names: continue
+        if not exclusion in names:
+            continue
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names\
-        if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [
+        directory_name + "/" + name
+        for name in names
+        if not os.path.isdir(directory_name + "/" + name)
+    ]
 
     # filters the names with non valid file extensions so that only the
     # ones that conform with the pydev project ones are selected
-    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if name.endswith(".pydevproject")]
+    valid_complete_names = [
+        os.path.normpath(name)
+        for name in valid_complete_names
+        if name.endswith(".pydevproject")
+    ]
 
     # iterates over all the valid complete names with valid structure
     # as defined by the pydev project specification
@@ -231,9 +251,10 @@ def pydev_walker(arguments, directory_name, names):
         # operation that is going to be performed and
         # then runs the operation with the correct path
         extra.echo("Normalizing pydev configuration file: %s" % valid_complete_name)
-        pydev_file(valid_complete_name, fix = fix)
+        pydev_file(valid_complete_name, fix=fix)
 
-def pydev_recursive(directory_path, file_exclusion, fix = True):
+
+def pydev_recursive(directory_path, file_exclusion, fix=True):
     """
     Normalizes pydev in recursive mode.
     All the options are arguments to be passed to the
@@ -250,6 +271,7 @@ def pydev_recursive(directory_path, file_exclusion, fix = True):
     """
 
     legacy.walk(directory_path, pydev_walker, (file_exclusion, fix))
+
 
 def main():
     """
@@ -297,9 +319,9 @@ def main():
     # retrieves the configurations from the command line arguments
     # either from the command line or configuration file
     configurations = extra.configuration(
-        file_path = configuration_file_path,
-        recursive = recursive,
-        file_exclusion = file_exclusion
+        file_path=configuration_file_path,
+        recursive=recursive,
+        file_exclusion=file_exclusion,
     )
 
     # iterates over all the configurations, executing them
@@ -311,14 +333,17 @@ def main():
 
         # in case the recursive flag is set, normalizes the multiple
         # found pydev configuration file
-        if recursive: pydev_recursive(path, file_exclusion, fix = fix)
+        if recursive:
+            pydev_recursive(path, file_exclusion, fix=fix)
         # otherwise it's a "normal" iteration and runs the
         # pydev normalization process in it
-        else: pydev_file(path, fix = fix)
+        else:
+            pydev_file(path, fix=fix)
 
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
     sys.exit(1 if extra.has_errors() else 0)
+
 
 if __name__ == "__main__":
     main()

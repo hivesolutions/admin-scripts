@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -41,6 +32,7 @@ import legacy
 import unittest
 
 import admin_scripts.base.stylesheets as stylesheets
+
 
 class StylesheetsTest(unittest.TestCase):
 
@@ -74,8 +66,8 @@ class StylesheetsTest(unittest.TestCase):
         buffer = legacy.BytesIO(input)
         result = stylesheets.cleanup_properties(
             buffer,
-            windows_newline = False,
-            property_order = (
+            windows_newline=False,
+            property_order=(
                 "border",
                 "border-radius",
                 "-o-border-radius",
@@ -85,8 +77,8 @@ class StylesheetsTest(unittest.TestCase):
                 "-webkit-border-radius",
                 "margin",
                 "max-width",
-                "padding"
-            )
+                "padding",
+            ),
         )
         result.seek(0)
         result = result.read()
@@ -127,8 +119,8 @@ main,
         buffer = legacy.BytesIO(input)
         result = stylesheets.cleanup_properties(
             buffer,
-            windows_newline = False,
-            property_order = (
+            windows_newline=False,
+            property_order=(
                 "border",
                 "border-radius",
                 "-o-border-radius",
@@ -137,8 +129,8 @@ main,
                 "-khtml-border-radius",
                 "-webkit-border-radius",
                 "max-width",
-                "padding"
-            )
+                "padding",
+            ),
         )
         result.seek(0)
         result = result.read()
@@ -180,15 +172,15 @@ main,
         buffer = legacy.BytesIO(input)
         result = stylesheets.cleanup_properties(
             buffer,
-            windows_newline = False,
-            property_order = (
+            windows_newline=False,
+            property_order=(
                 "transform",
                 "-o-transform",
                 "-ms-transform",
                 "-moz-transform",
                 "-khtml-transform",
                 "-webkit-transform",
-            )
+            ),
         )
         result.seek(0)
         result = result.read()
@@ -199,10 +191,7 @@ main,
         expected = """@charset "utf-8";
 """
         buffer = legacy.BytesIO(input)
-        result = stylesheets.cleanup_properties(
-            buffer,
-            windows_newline = False
-        )
+        result = stylesheets.cleanup_properties(buffer, windows_newline=False)
         result.seek(0)
         result = result.read()
         self.assertEqual(result, expected)
@@ -224,15 +213,15 @@ main,
         buffer = legacy.BytesIO(input)
         result = stylesheets.cleanup_properties(
             buffer,
-            windows_newline = False,
-            property_order = (
+            windows_newline=False,
+            property_order=(
                 "animation",
                 "-o-animation",
                 "-ms-animation",
                 "-moz-animation",
                 "-khtml-animation",
                 "-webkit-animation",
-            )
+            ),
         )
         result.seek(0)
         result = result.read()

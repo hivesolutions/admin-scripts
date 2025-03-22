@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -45,11 +36,14 @@ import legacy
 
 import admin_scripts.extra as extra
 
-USAGE_MESSAGE = "pysource [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
+USAGE_MESSAGE = (
+    "pysource [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
+)
 """ The usage message to be printed in case there's an
 error with the command line or help is requested. """
 
-def pysource_file(file_path, run_pep8 = True, ignores = ()):
+
+def pysource_file(file_path, run_pep8=True, ignores=()):
     """
     Runs the python source file verification/validation process
     as defined by a series of specifications.
@@ -65,28 +59,37 @@ def pysource_file(file_path, run_pep8 = True, ignores = ()):
     various tests (in pep8) that are going to be ignored.
     """
 
-    try: import pep8
-    except ImportError: pep8 = None
+    try:
+        import pep8
+    except ImportError:
+        pep8 = None
 
     if pep8:
+
         class ErrorReport(pep8.StandardReport):
             def get_file_results(self):
                 self._deferred_print.sort()
                 for line_number, offset, code, text, doc in self._deferred_print:
-                    extra.STDERR.write(self._fmt % dict(
-                        path = self.filename,
-                        row = self.line_offset + line_number,
-                        col = offset + 1,
-                        code = code,
-                        text = text,
-                    ) + "\n")
-                    if self._show_pep8 and doc: extra.STDERR.write("    " + doc.strip() + "\n")
+                    extra.STDERR.write(
+                        self._fmt
+                        % dict(
+                            path=self.filename,
+                            row=self.line_offset + line_number,
+                            col=offset + 1,
+                            code=code,
+                            text=text,
+                        )
+                        + "\n"
+                    )
+                    if self._show_pep8 and doc:
+                        extra.STDERR.write("    " + doc.strip() + "\n")
                     extra.STDERR.flush()
                 return self.file_errors
 
     if pep8 and run_pep8:
-        checker = pep8.Checker(file_path, reporter = ErrorReport)
-        checker.check_all(expected = ignores)
+        checker = pep8.Checker(file_path, reporter=ErrorReport)
+        checker.check_all(expected=ignores)
+
 
 def pysource_walker(arguments, directory_name, names):
     """
@@ -107,22 +110,28 @@ def pysource_walker(arguments, directory_name, names):
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
-    if extra.handle_ignore(names): return
+    if extra.handle_ignore(names):
+        return
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
     for exclusion in file_exclusion:
-        if not exclusion in names: continue
+        if not exclusion in names:
+            continue
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names\
-        if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [
+        directory_name + "/" + name
+        for name in names
+        if not os.path.isdir(directory_name + "/" + name)
+    ]
 
     # filters the names with non valid file extensions so that only the
     # ones that conform with the python source ones are selected
-    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if name.endswith(".py")]
+    valid_complete_names = [
+        os.path.normpath(name) for name in valid_complete_names if name.endswith(".py")
+    ]
 
     # iterates over all the valid complete names with valid structure
     # as defined by the python file structure definition
@@ -131,9 +140,10 @@ def pysource_walker(arguments, directory_name, names):
         # operation that is going to be performed and
         # then runs the operation with the correct path
         extra.echo("Validation python source file: %s" % valid_complete_name)
-        pysource_file(valid_complete_name, ignores = ignores)
+        pysource_file(valid_complete_name, ignores=ignores)
 
-def pysource_recursive(directory_path, file_exclusion, ignores = ()):
+
+def pysource_recursive(directory_path, file_exclusion, ignores=()):
     """
     Normalizes pysource in recursive mode.
     All the options are arguments to be passed to the
@@ -149,6 +159,7 @@ def pysource_recursive(directory_path, file_exclusion, ignores = ()):
     """
 
     legacy.walk(directory_path, pysource_walker, (file_exclusion, ignores))
+
 
 def main():
     """
@@ -196,9 +207,9 @@ def main():
     # retrieves the configurations from the command line arguments
     # either from the command line or configuration file
     configurations = extra.configuration(
-        file_path = configuration_file_path,
-        recursive = recursive,
-        file_exclusion = file_exclusion
+        file_path=configuration_file_path,
+        recursive=recursive,
+        file_exclusion=file_exclusion,
     )
 
     # iterates over all the configurations, executing them
@@ -210,14 +221,17 @@ def main():
 
         # in case the recursive flag is set, normalizes the multiple
         # found pysource configuration file
-        if recursive: pysource_recursive(path, file_exclusion, ignores = ignores)
+        if recursive:
+            pysource_recursive(path, file_exclusion, ignores=ignores)
         # otherwise it's a "normal" iteration and runs the
         # pysource normalization process in it
-        else: pysource_file(path, ignores = ignores)
+        else:
+            pysource_file(path, ignores=ignores)
 
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
     sys.exit(1 if extra.has_errors() else 0)
+
 
 if __name__ == "__main__":
     main()

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "Luís Martinho <lmartinho@hive.pt> & João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -116,37 +107,19 @@ SPACE_REGEX = re.compile(SPACE_REGEX_VALUE)
 note that multiple characters are allowed """
 
 RULES_MAP = {
-    "left" : ("zero_to_zero_px",),
-    "top" : ("zero_to_zero_px",),
-    "right" : ("zero_to_zero_px",),
-    "bottom" : ("zero_to_zero_px",),
-    "border" : ("zero_to_none",),
-    "margin" : (
-        "zero_to_multiple",
-        "one_to_multiple",
-        "two_to_multiple"
-    ),
-    "padding" : (
-        "zero_to_multiple",
-        "one_to_multiple",
-        "two_to_multiple"
-    ),
-    "border-radius" : (
-        "zero_to_multiple",
-        "one_to_multiple",
-        "two_to_multiple"
-    )
+    "left": ("zero_to_zero_px",),
+    "top": ("zero_to_zero_px",),
+    "right": ("zero_to_zero_px",),
+    "bottom": ("zero_to_zero_px",),
+    "border": ("zero_to_none",),
+    "margin": ("zero_to_multiple", "one_to_multiple", "two_to_multiple"),
+    "padding": ("zero_to_multiple", "one_to_multiple", "two_to_multiple"),
+    "border-radius": ("zero_to_multiple", "one_to_multiple", "two_to_multiple"),
 }
 """ The map that associates various property names
 with the various rules that should be applied to them """
 
-BROWSER_PREFIXES = (
-    "-o",
-    "-ms",
-    "-moz",
-    "-khtml",
-    "-webkit"
-)
+BROWSER_PREFIXES = ("-o", "-ms", "-moz", "-khtml", "-webkit")
 """ The sequence that defines the complete set of accepted
 browser prefixes for the stylesheet usage """
 
@@ -190,10 +163,11 @@ PREFIXED_NAMES = (
     "transition-property",
     "transition-timing-function",
     "user-select",
-    "zoom"
+    "zoom",
 )
 """ The complete set of property names that should be prefixed
 with proper browser prefixes (complex properties) """
+
 
 def get_property_index(property_line, property_order, line_number):
     """
@@ -218,7 +192,8 @@ def get_property_index(property_line, property_order, line_number):
 
     # in case the property line did not correctly split must
     # returns immediately with the provided property order
-    if len(property_line_splitted) < 2: return len(property_order)
+    if len(property_line_splitted) < 2:
+        return len(property_order)
 
     # runs a second split operation that limits the number of splits
     # in the line to two so that no extra problems are raised and then
@@ -230,16 +205,18 @@ def get_property_index(property_line, property_order, line_number):
 
     # in case the property name or value are empty, raises an exception indicating
     # the problem to be handled at the top layers
-    if not property_name: raise Exception("property name is empty")
-    if not property_value: raise Exception("property value is empty")
+    if not property_name:
+        raise Exception("property name is empty")
+    if not property_value:
+        raise Exception("property value is empty")
 
     # in case the property is not in the order
     if not property_name in property_order:
         # warns about the missing property name and returns the
         # largest possible index value for any property name
         extra.warn(
-            "Order for property %s not defined at line %d" %\
-            (property_name, line_number)
+            "Order for property %s not defined at line %d"
+            % (property_name, line_number)
         )
         return len(property_order)
 
@@ -255,7 +232,8 @@ def get_property_index(property_line, property_order, line_number):
     property_index = property_order.index(property_name)
     return property_index
 
-def write_lines(output_buffer, lines, windows_newline = True, avoid_empty = False):
+
+def write_lines(output_buffer, lines, windows_newline=True, avoid_empty=False):
     """
     Writes the provided lines to the output buffer, considering the windows
     newline option.
@@ -273,14 +251,16 @@ def write_lines(output_buffer, lines, windows_newline = True, avoid_empty = Fals
 
     # iterates over the complete set of lines that are going
     # to be written to the buffer and writes their value
-    for line in lines: write_line(
-        output_buffer,
-        line,
-        windows_newline = windows_newline,
-        avoid_empty = avoid_empty
-    )
+    for line in lines:
+        write_line(
+            output_buffer,
+            line,
+            windows_newline=windows_newline,
+            avoid_empty=avoid_empty,
+        )
 
-def write_line(output_buffer, line, windows_newline = True, avoid_empty = False):
+
+def write_line(output_buffer, line, windows_newline=True, avoid_empty=False):
     """
     Writes the provided line to the output buffer, considering the windows
     newline option. This is considered a normalization operation.
@@ -304,19 +284,20 @@ def write_line(output_buffer, line, windows_newline = True, avoid_empty = False)
 
     # in case the avoid empty flag is set and the line value
     # is considered invalid/empty, it's ignored
-    if avoid_empty and not line: return
+    if avoid_empty and not line:
+        return
 
     # in case the newline mode is of type windows writes the
     # typical carriage return new line values otherwise writes
     # the unix simpler value with just a newline character
-    if windows_newline: output_buffer.write("\r\n")
-    else: output_buffer.write("\n")
+    if windows_newline:
+        output_buffer.write("\r\n")
+    else:
+        output_buffer.write("\n")
+
 
 def process_property_lines(
-    property_lines,
-    line_number,
-    indentation = 0,
-    avoid_empty = False
+    property_lines, line_number, indentation=0, avoid_empty=False
 ):
     """
     Processes the property lines, this process should be
@@ -340,12 +321,17 @@ def process_property_lines(
     # processes the property lines one by one so that the
     # properly represent the same semantic value but with
     # a better/standard representation of the value
-    processed_property_lines = [process_property_line(property_line, line_number, indentation)\
-        for property_line in property_lines if not avoid_empty or property_line.strip()]
+    processed_property_lines = [
+        process_property_line(property_line, line_number, indentation)
+        for property_line in property_lines
+        if not avoid_empty or property_line.strip()
+    ]
 
     # runs the initial process of simplifying the property lines
     # by running the various rules for the current property lines
-    processed_property_lines = process_rules_g(processed_property_lines, line_number, indentation)
+    processed_property_lines = process_rules_g(
+        processed_property_lines, line_number, indentation
+    )
 
     # runs an extra step to check for any duplicated line
     # in the set of processed property lines
@@ -353,6 +339,7 @@ def process_property_lines(
 
     # returns the processed property lines
     return processed_property_lines
+
 
 def process_rules_g(property_lines, line_number, indentation):
     # creates the dictionary that is going to hold the multiple
@@ -363,7 +350,8 @@ def process_rules_g(property_lines, line_number, indentation):
     # them into name and value and populate the map of properties
     for property_line in property_lines:
         parts = property_line.split(":", 1)
-        if len(parts) == 1: parts += [""]
+        if len(parts) == 1:
+            parts += [""]
         name, value = parts
         name = name.strip()
         value = value.strip()
@@ -373,11 +361,16 @@ def process_rules_g(property_lines, line_number, indentation):
     # lines map so that it gets properly updated, running then the
     # re-creation of the properly lines list (should re-run ordering)
     process_rule_all_g(property_lines_m)
-    property_lines = ["%s%s: %s" % (indentation * " " * 4, name, value) for name, value in legacy.items(property_lines_m)]
+    property_lines = [
+        "%s%s: %s" % (indentation * " " * 4, name, value)
+        for name, value in legacy.items(property_lines_m)
+    ]
     return property_lines
+
 
 def process_rule_all_g(property_lines_m):
     process_rule_prefixes_g(property_lines_m)
+
 
 def process_rule_prefixes_g(property_lines_m):
     prefixes = [""] + list(BROWSER_PREFIXES)
@@ -387,11 +380,13 @@ def process_rule_prefixes_g(property_lines_m):
 
         for prefix in prefixes:
             name_p = prefix + "-" + name if prefix else name
-            if not name_p in property_lines_m: continue
+            if not name_p in property_lines_m:
+                continue
             exists = True
             break
 
-        if not exists: continue
+        if not exists:
+            continue
 
         value = property_lines_m[name_p]
 
@@ -400,6 +395,7 @@ def process_rule_prefixes_g(property_lines_m):
             property_lines_m[name_p] = value
 
     return property_lines_m
+
 
 def check_duplicates(property_lines, line_number):
     # retrieves the complete set of names for the rules, this is
@@ -413,11 +409,10 @@ def check_duplicates(property_lines, line_number):
     # iterates over the complete set of names to detect any duplicated
     # value printing a warning message for such situation
     for name in names:
-        if name in visited: extra.warn(
-            "Duplicated property line '%s' at line %s" %\
-            (name, line_number)
-        )
+        if name in visited:
+            extra.warn("Duplicated property line '%s' at line %s" % (name, line_number))
         visited.append(name)
+
 
 def process_property_line(property_line, line_number, indentation):
     # in case the property line is empty, when stripped the property
@@ -447,15 +442,15 @@ def process_property_line(property_line, line_number, indentation):
     # the property name and value are correctly separated
     padding = indentation * " " * 4
     property_line = PROPERTY_LINE_REGEX.sub(
-        padding + PROPERTY_LINE_REPLACEMENT_VALUE,
-        property_line
+        padding + PROPERTY_LINE_REPLACEMENT_VALUE, property_line
     )
 
     # ensures the property line and an ending semicolon
     # adding it to the property line in case it does not
     # exists (for processing)
     is_valid = property_line.endswith(";")
-    if not is_valid: property_line += ";"
+    if not is_valid:
+        property_line += ";"
 
     # replaces the urls so that no double quotes are used in
     # them and instead the value is used directly
@@ -468,29 +463,42 @@ def process_property_line(property_line, line_number, indentation):
     # returns the processed property line
     return property_line
 
+
 def rule_zero_to_zero_px(name, value):
-    if not value in ("0",): return
+    if not value in ("0",):
+        return
     return "%s: 0px;" % name
 
+
 def rule_zero_to_multiple(name, value):
-    if not value in ("0", "0px"): return
+    if not value in ("0", "0px"):
+        return
     return "%s: 0px 0px 0px 0px;" % name
 
+
 def rule_zero_to_none(name, value):
-    if not value in ("0", "0px"): return
+    if not value in ("0", "0px"):
+        return
     return "%s: none;" % name
+
 
 def rule_one_to_multiple(name, value):
     parts = value.split()
-    if not len(parts) == 1: return
-    if value in ("initial", "inherit"): return
+    if not len(parts) == 1:
+        return
+    if value in ("initial", "inherit"):
+        return
     return "%s: %s %s %s %s;" % (name, value, value, value, value)
+
 
 def rule_two_to_multiple(name, value):
     parts = value.split()
-    if not len(parts) == 2: return
-    if value in ("initial", "inherit"): return
+    if not len(parts) == 2:
+        return
+    if value in ("initial", "inherit"):
+        return
     return "%s: %s %s;" % (name, value, value)
+
 
 def process_rules(property_line, line_number):
     # retrieves the initial value for the property name
@@ -504,8 +512,9 @@ def process_rules(property_line, line_number):
     # the basis for the retrieval of rules (wildcard retrieval)
     base_name = property_name
     for prefix in BROWSER_PREFIXES:
-        if not base_name.startswith(prefix): continue
-        base_name = base_name[len(prefix) + 1:]
+        if not base_name.startswith(prefix):
+            continue
+        base_name = base_name[len(prefix) + 1 :]
 
     # tries to retrieve the set of rules (as strings) that are
     # going to be applied to the current property and then runs
@@ -518,7 +527,8 @@ def process_rules(property_line, line_number):
         # continues the current loop (nothing to be done)
         method_name = "rule_" + rule
         method = globals().get(method_name, None)
-        if not method: continue
+        if not method:
+            continue
 
         # unpacks the property line into name and value so that proper
         # per name rule application is possible for the line
@@ -531,12 +541,14 @@ def process_rules(property_line, line_number):
         # and value and verifies if a valid result is returned in case
         # it does replaces the property line value with the new value
         result = method(property_name, property_value)
-        if not result: continue
+        if not result:
+            continue
         property_line = result
 
     # returns the "final" processed line according to the defined
     # set of rules for the property (name)
     return property_line
+
 
 def process_color_definition(property_line, line_number):
     # tries to match the color regex and retrieves the resulting
@@ -544,7 +556,8 @@ def process_color_definition(property_line, line_number):
     # the control flow is returned immediately to the caller
     line_match = COLOR_REGEX.match(property_line)
     line_groups = line_match.groups() if line_match else None
-    if not line_groups: return property_line
+    if not line_groups:
+        return property_line
 
     # unpacks the various line groups into the appropriate
     # variables to be used in the processing of the color
@@ -564,6 +577,7 @@ def process_color_definition(property_line, line_number):
 
     # returns the property line
     return property_line
+
 
 def fix_color(color):
     # computes the color length and the runs the lowercase
@@ -585,6 +599,7 @@ def fix_color(color):
     # returns the fixed color
     return color
 
+
 def skip_rule(start_line, rules_skip):
     """
     Determines if the rule started by the provided line should be skipped.
@@ -603,17 +618,19 @@ def skip_rule(start_line, rules_skip):
         # checks if the rule is to be skipped
         # and if that's the case breaks the loop
         skip_rule = rule_skip in start_line
-        if skip_rule: break
+        if skip_rule:
+            break
 
     # returns the skip rule value
     return skip_rule
 
+
 def cleanup_properties(
     input_buffer,
-    windows_newline = True,
-    fix_extra_newlines = True,
-    property_order = (),
-    rules_skip = ()
+    windows_newline=True,
+    fix_extra_newlines=True,
+    property_order=(),
+    rules_skip=(),
 ):
     """
     Cleans up the property lines. Sorts the css properties in the file,
@@ -666,9 +683,7 @@ def cleanup_properties(
 
         # updates the comparison key function
         get_comparison_key = lambda property_line: get_property_index(
-            property_line,
-            property_order,
-            line_number
+            property_line, property_order, line_number
         )
 
         # in case the line contains a single line comment,
@@ -680,15 +695,16 @@ def cleanup_properties(
         elif "*/" in line:
             # in case the comment mode is currently not enabled prints
             # a warning as we're trying to close a comment without opening
-            if not comments_started: extra.error(
-                "Found closing comment without corresponding opening at line %d" % line_number
-            )
+            if not comments_started:
+                extra.error(
+                    "Found closing comment without corresponding opening at line %d"
+                    % line_number
+                )
 
             # in case there's more that one closing comment defined under
             # the same line prints an error as this is not allowed
-            if line.count("*/") > 1: extra.error(
-                "More that one closing comment at line %d" % line_number
-            )
+            if line.count("*/") > 1:
+                extra.error("More that one closing comment at line %d" % line_number)
 
             # decrements the comments started counter and then
             # enables the needs newline flag
@@ -699,15 +715,15 @@ def cleanup_properties(
         elif "/*" in line:
             # in case the comment mode is already enabled (at least one)
             # prints a waning about the double opening
-            if comments_started: extra.warn(
-                "Found opening comment inside open comment at line %d" % line_number
-            )
+            if comments_started:
+                extra.warn(
+                    "Found opening comment inside open comment at line %d" % line_number
+                )
 
             # in case there's more that one opening comment defined under
             # the same line prints an error as this is not allowed
-            if line.count("/*") > 1: extra.error(
-                "More that one opening comment at line %d" % line_number
-            )
+            if line.count("/*") > 1:
+                extra.error("More that one opening comment at line %d" % line_number)
 
             # increments the comments started counter
             comments_started += 1
@@ -772,7 +788,8 @@ def cleanup_properties(
 
             # in case there is a mismatch in open and closed rules
             # must raise an exception indicating the problem
-            if open_rule_count < 0: raise Exception("mismatched rules found")
+            if open_rule_count < 0:
+                raise Exception("mismatched rules found")
 
             # strips the current line removing any extra (not expected)
             # values and simplifying the current line value
@@ -789,24 +806,24 @@ def cleanup_properties(
             rule_started = False
 
             # sorts the various property lines and the processes them
-            property_lines = sorted(rule_lines, key = get_comparison_key)
+            property_lines = sorted(rule_lines, key=get_comparison_key)
             property_lines = process_property_lines(
                 property_lines,
                 line_number,
-                indentation = open_rule_count + 1,
-                avoid_empty = fix_extra_newlines
+                indentation=open_rule_count + 1,
+                avoid_empty=fix_extra_newlines,
             )
-            property_lines = sorted(property_lines, key = get_comparison_key)
+            property_lines = sorted(property_lines, key=get_comparison_key)
 
             # writes the lines to the buffer, considering the windows newline
             # and then writes the line
             write_lines(
                 output_buffer,
                 property_lines,
-                windows_newline = windows_newline,
-                avoid_empty = fix_extra_newlines
+                windows_newline=windows_newline,
+                avoid_empty=fix_extra_newlines,
             )
-            write_line(output_buffer, line, windows_newline = windows_newline)
+            write_line(output_buffer, line, windows_newline=windows_newline)
 
             # resets the newlines counter and then
             # enables the needs newline flag
@@ -840,8 +857,10 @@ def cleanup_properties(
             # otherwise in case this is an extra newline, must either
             # remove it or print a warning message depending on mode
             if not needs_newline and newlines > 1:
-                if fix_extra_newlines: continue
-                else: extra.warn("Found extra newline at line %d" % line_number)
+                if fix_extra_newlines:
+                    continue
+                else:
+                    extra.warn("Found extra newline at line %d" % line_number)
 
             # disables the needs newline flag
             needs_newline = False
@@ -863,7 +882,8 @@ def cleanup_properties(
 
     # in case there is a mismatch in open and closed rules
     # must raise an exception indicating the problem
-    if not open_rule_count == 0: raise Exception("mismatched rules found")
+    if not open_rule_count == 0:
+        raise Exception("mismatched rules found")
 
     # retrieves the output buffer value and then counts the
     # number of lines contained in it (assertion validation)
@@ -872,18 +892,19 @@ def cleanup_properties(
 
     if not number_lines == number_original_lines and not fix_extra_newlines:
         raise Exception(
-            "number of lines in processed file (%d) is different from original file (%d)" %\
-            (number_lines, number_original_lines)
+            "number of lines in processed file (%d) is different from original file (%d)"
+            % (number_lines, number_original_lines)
         )
 
     return output_buffer
+
 
 def cleanup_stylesheets(
     file_path_normalized,
     windows_newline,
     fix_extra_newlines,
     property_order,
-    rules_skip
+    rules_skip,
 ):
     """
     Cleans up stylesheets. Sorts the css properties in the file, by the specified property order.
@@ -910,10 +931,10 @@ def cleanup_stylesheets(
         # complete set of rules and clean the file
         string_buffer = cleanup_properties(
             file,
-            windows_newline = windows_newline,
-            fix_extra_newlines = fix_extra_newlines,
-            property_order = property_order,
-            rules_skip = rules_skip
+            windows_newline=windows_newline,
+            fix_extra_newlines=fix_extra_newlines,
+            property_order=property_order,
+            rules_skip=rules_skip,
         )
 
         # retrieves the string value from the output
@@ -927,7 +948,7 @@ def cleanup_stylesheets(
         # the complete traceback messages to the same output
         exception_string = legacy.UNICODE(exception)
         extra.error("%s. Skipping file %s" % (exception_string, file_path_normalized))
-        traceback.print_exc(file = sys.stdout)
+        traceback.print_exc(file=sys.stdout)
 
         # skips writing to the file
         return
@@ -938,8 +959,11 @@ def cleanup_stylesheets(
     # opens the file for writing and then outputs the
     # final normalized stylesheet contents into it
     file = open(file_path_normalized, "wb")
-    try: file.write(string_value)
-    finally: file.close()
+    try:
+        file.write(string_value)
+    finally:
+        file.close()
+
 
 def cleanup_stylesheets_walker(arguments, directory_name, names):
     """
@@ -955,30 +979,41 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    windows_newline, fix_extra_newlines, property_order,\
-    rules_skip, file_extensions, file_exclusion = arguments
+    (
+        windows_newline,
+        fix_extra_newlines,
+        property_order,
+        rules_skip,
+        file_extensions,
+        file_exclusion,
+    ) = arguments
 
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
-    if extra.handle_ignore(names): return
+    if extra.handle_ignore(names):
+        return
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
     for exclusion in file_exclusion:
-        if not exclusion in names: continue
+        if not exclusion in names:
+            continue
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
     valid_complete_names = [
-        directory_name + "/" + name for name in names\
+        directory_name + "/" + name
+        for name in names
         if not os.path.isdir(directory_name + "/" + name)
     ]
 
     # filters the names with non valid file extensions so that
     valid_complete_names = [
-        os.path.normpath(name) for name in valid_complete_names\
-        if file_extensions == None or os.path.split(name)[-1].split(".")[-1] in file_extensions
+        os.path.normpath(name)
+        for name in valid_complete_names
+        if file_extensions == None
+        or os.path.split(name)[-1].split(".")[-1] in file_extensions
     ]
 
     # iterates over all the valid complete names with extension filter
@@ -991,17 +1026,18 @@ def cleanup_stylesheets_walker(arguments, directory_name, names):
             windows_newline,
             fix_extra_newlines,
             property_order,
-            rules_skip
+            rules_skip,
         )
+
 
 def cleanup_stylesheets_recursive(
     directory_path,
     windows_newline,
     fix_extra_newlines,
-    property_order = [],
-    rules_skip = [],
-    file_extensions = None,
-    file_exclusion = None
+    property_order=[],
+    rules_skip=[],
+    file_extensions=None,
+    file_exclusion=None,
 ):
     """
     Cleans up stylesheets in recursive mode.
@@ -1033,9 +1069,10 @@ def cleanup_stylesheets_recursive(
             property_order,
             rules_skip,
             file_extensions,
-            file_exclusion
-        )
+            file_exclusion,
+        ),
     )
+
 
 def main():
     """
@@ -1096,14 +1133,14 @@ def main():
 
     # retrieves the configurations from the command line arguments
     configurations = extra.configuration(
-        file_path = configuration_file_path,
-        recursive = recursive,
-        windows_newline = windows_newline,
-        fix_extra_newlines = fix_extra_newlines,
-        property_order = property_order,
-        rules_skip = rules_skip,
-        file_extensions = file_extensions,
-        file_exclusion = file_exclusion
+        file_path=configuration_file_path,
+        recursive=recursive,
+        windows_newline=windows_newline,
+        fix_extra_newlines=fix_extra_newlines,
+        property_order=property_order,
+        rules_skip=rules_skip,
+        file_extensions=file_extensions,
+        file_exclusion=file_exclusion,
     )
 
     # iterates over all the configurations, executing them
@@ -1127,22 +1164,19 @@ def main():
                 property_order,
                 rules_skip,
                 file_extensions,
-                file_exclusion
+                file_exclusion,
             )
         # otherwise it's a "normal" iteration, removes the trailing
         # spaces (for only one file)
         else:
             cleanup_stylesheets(
-                path,
-                windows_newline,
-                fix_extra_newlines,
-                property_order,
-                rules_skip
+                path, windows_newline, fix_extra_newlines, property_order, rules_skip
             )
 
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
     sys.exit(1 if extra.has_errors() else 0)
+
 
 if __name__ == "__main__":
     main()

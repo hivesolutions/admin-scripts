@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "Luís Martinho <lmartinho@hive.pt> & João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -60,6 +51,7 @@ BOM_SEQUENCE = b"\xef\xbb\xbf"
 """ The byte based sequence that defines the start of
 an utf-8 bom encoded text file """
 
+
 def has_encoding(string_buffer, encoding):
     """
     Determines if the provided buffer is encoded in the provided encoding.
@@ -86,6 +78,7 @@ def has_encoding(string_buffer, encoding):
     # returns the has encoding flag
     return has_encoding
 
+
 def apply_replacements_list(string_buffer, replacements_list):
     """
     Applies a list of replacements to the provided string buffer.
@@ -109,12 +102,13 @@ def apply_replacements_list(string_buffer, replacements_list):
     # returns the replaced string buffer
     return string_buffer
 
+
 def convert_encoding(
     file_path,
     source_encoding,
     target_encoding,
-    windows_newline = True,
-    replacements_list = None
+    windows_newline=True,
+    replacements_list=None,
 ):
     """
     Converts the encoding of the specified file.
@@ -148,28 +142,38 @@ def convert_encoding(
         # (byte order mark) sequence it's removed as it's considered
         # deprecated as a method of detecting utf encoding
         if string_value.startswith(BOM_SEQUENCE):
-            string_value = string_value[len(BOM_SEQUENCE):]
+            string_value = string_value[len(BOM_SEQUENCE) :]
 
         # decodes the string value from the specified source encoding, this
         # operation may fail as the source encoding may only be a guess on
         # the true encoding of the file, the encodes the string value again
         # in the target encoding for the file
-        string_value_decoded = not has_target_encoding and\
-            string_value.decode(source_encoding) or string_value
-        string_value_encoded = not has_target_encoding and\
-            string_value_decoded.encode(target_encoding) or string_value_decoded
+        string_value_decoded = (
+            not has_target_encoding
+            and string_value.decode(source_encoding)
+            or string_value
+        )
+        string_value_encoded = (
+            not has_target_encoding
+            and string_value_decoded.encode(target_encoding)
+            or string_value_decoded
+        )
 
         # applies the replacements if they're requested to be applied
         # so that the final string value is "normalized"
-        string_value_encoded_replaced = replacements_list and\
-            apply_replacements_list(string_value_encoded, replacements_list) or\
-            string_value_encoded
+        string_value_encoded_replaced = (
+            replacements_list
+            and apply_replacements_list(string_value_encoded, replacements_list)
+            or string_value_encoded
+        )
 
         # applies the windows newline if specified, it does so by replacing
         # the simple newline character with the windows specific newline
-        string_value_encoded_replaced = windows_newline and\
-            string_value_encoded_replaced.replace(b"\n", b"\r\n") or\
-            string_value_encoded_replaced
+        string_value_encoded_replaced = (
+            windows_newline
+            and string_value_encoded_replaced.replace(b"\n", b"\r\n")
+            or string_value_encoded_replaced
+        )
     finally:
         # closes the file for reading (as it's not longer required)
         file.close()
@@ -178,8 +182,11 @@ def convert_encoding(
     # with the proper string values replaced and re-encoded into the
     # target character encoding (as expected)
     file = open(file_path_normalized, "wb")
-    try: file.write(string_value_encoded_replaced)
-    finally: file.close()
+    try:
+        file.write(string_value_encoded_replaced)
+    finally:
+        file.close()
+
 
 def convert_encoding_walker(arguments, directory_name, names):
     """
@@ -194,27 +201,42 @@ def convert_encoding_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    source_encoding, target_encoding, windows_newline,\
-    replacements_list, file_extensions, file_exclusion = arguments
+    (
+        source_encoding,
+        target_encoding,
+        windows_newline,
+        replacements_list,
+        file_extensions,
+        file_exclusion,
+    ) = arguments
 
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
-    if extra.handle_ignore(names): return
+    if extra.handle_ignore(names):
+        return
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
     for exclusion in file_exclusion:
-        if not exclusion in names: continue
+        if not exclusion in names:
+            continue
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name\
-        for name in names if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [
+        directory_name + "/" + name
+        for name in names
+        if not os.path.isdir(directory_name + "/" + name)
+    ]
 
     # filters the names with non valid file extensions
-    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if file_extensions == None or os.path.split(name)[-1].split(".")[-1] in file_extensions]
+    valid_complete_names = [
+        os.path.normpath(name)
+        for name in valid_complete_names
+        if file_extensions == None
+        or os.path.split(name)[-1].split(".")[-1] in file_extensions
+    ]
 
     # creates the string based value of the windows newline taking into
     # account the boolean value of it
@@ -226,13 +248,8 @@ def convert_encoding_walker(arguments, directory_name, names):
         # prints a message about the file that is not going to be converted
         # into the proper target encoding as defined in the specification
         extra.echo(
-            "Convert encoding in file: %s (%s to %s) (%s)" %\
-            (
-                valid_complete_name,
-                source_encoding,
-                target_encoding,
-                windows_newline_s
-            )
+            "Convert encoding in file: %s (%s to %s) (%s)"
+            % (valid_complete_name, source_encoding, target_encoding, windows_newline_s)
         )
 
         try:
@@ -244,26 +261,23 @@ def convert_encoding_walker(arguments, directory_name, names):
                 source_encoding,
                 target_encoding,
                 windows_newline,
-                replacements_list
+                replacements_list,
             )
         except Exception:
             extra.warn(
-                "Failed converting encoding in file: %s (%s to %s)" %\
-                (
-                    valid_complete_name,
-                    source_encoding,
-                    target_encoding
-                )
+                "Failed converting encoding in file: %s (%s to %s)"
+                % (valid_complete_name, source_encoding, target_encoding)
             )
+
 
 def convert_encoding_recursive(
     directory_path,
     source_encoding,
     target_encoding,
     windows_newline,
-    replacements_list = None,
-    file_extensions = None,
-    file_exclusion = None
+    replacements_list=None,
+    file_extensions=None,
+    file_exclusion=None,
 ):
     """
     Converts the file encoding in recursive mode.
@@ -295,9 +309,10 @@ def convert_encoding_recursive(
             windows_newline,
             replacements_list,
             file_extensions,
-            file_exclusion
-        )
+            file_exclusion,
+        ),
     )
+
 
 def main():
     """
@@ -355,14 +370,14 @@ def main():
 
     # retrieves the configurations from the command line arguments
     configurations = extra.configuration(
-        file_path = configuration_file_path,
-        recursive = recursive,
-        source_encoding = source_encoding,
-        target_encoding = target_encoding,
-        windows_newline = windows_newline,
-        replacements_list = replacements_list,
-        file_extensions = file_extensions,
-        file_exclusion = file_exclusion
+        file_path=configuration_file_path,
+        recursive=recursive,
+        source_encoding=source_encoding,
+        target_encoding=target_encoding,
+        windows_newline=windows_newline,
+        replacements_list=replacements_list,
+        file_extensions=file_extensions,
+        file_exclusion=file_exclusion,
     )
 
     # iterates over all the configurations, executing them
@@ -386,7 +401,7 @@ def main():
                 windows_newline,
                 replacements_list,
                 file_extensions,
-                file_exclusion
+                file_exclusion,
             )
         # otherwise it's a "normal" iteration, must converts the
         # encoding (for only one file)
@@ -396,12 +411,13 @@ def main():
                 source_encoding,
                 target_encoding,
                 windows_newline,
-                replacements_list
+                replacements_list,
             )
 
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
     sys.exit(1 if extra.has_errors() else 0)
+
 
 if __name__ == "__main__":
     main()

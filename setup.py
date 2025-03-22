@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -41,43 +32,29 @@ import os
 import setuptools
 
 setuptools.setup(
-    name = "admin-scripts",
-    version = "0.6.1",
-    author = "Hive Solutions Lda.",
-    author_email = "development@hive.pt",
-    description = "Administration Scripts",
-    license = "Apache License, Version 2.0",
-    keywords = "scripts admin public",
-    url = "http://admin-scripts.hive.pt",
-    zip_safe = False,
-    packages = [
+    name="admin-scripts",
+    version="0.6.1",
+    author="Hive Solutions Lda.",
+    author_email="development@hive.pt",
+    description="Administration Scripts",
+    license="Apache License, Version 2.0",
+    keywords="scripts admin public",
+    url="http://admin-scripts.hive.pt",
+    zip_safe=False,
+    packages=[
         "admin_scripts",
         "admin_scripts.base",
         "admin_scripts.config",
         "admin_scripts.config.development",
         "admin_scripts.extra",
-        "admin_scripts.test"
+        "admin_scripts.test",
     ],
-    test_suite = "admin_scripts.test",
-    package_dir = {
-        "" : os.path.normpath("src")
-    },
-    package_data = {
-        "admin_scripts" : [
-            "config/extra/*"
-        ]
-    },
-    entry_points = {
-        "console_scripts" : [
-            "cleanup = admin_scripts.base.cleanup:run"
-        ]
-    },
-    install_requires = [
-        "legacy",
-        "pep8",
-        "jsbeautifier"
-    ],
-    classifiers = [
+    test_suite="admin_scripts.test",
+    package_dir={"": os.path.normpath("src")},
+    package_data={"admin_scripts": ["config/extra/*"]},
+    entry_points={"console_scripts": ["cleanup = admin_scripts.base.cleanup:run"]},
+    install_requires=["legacy", "pep8", "jsbeautifier"],
+    classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Topic :: Utilities",
         "License :: OSI Approved :: Apache Software License",
@@ -92,8 +69,10 @@ setuptools.setup(
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7"
+        "Programming Language :: Python :: 3.7",
     ],
-    long_description = open(os.path.join(os.path.dirname(__file__), "README.md"), "rb").read().decode("utf-8"),
-    long_description_content_type = "text/markdown"
+    long_description=open(os.path.join(os.path.dirname(__file__), "README.md"), "rb")
+    .read()
+    .decode("utf-8"),
+    long_description_content_type="text/markdown",
 )

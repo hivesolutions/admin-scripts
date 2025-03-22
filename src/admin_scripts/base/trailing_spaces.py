@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -54,7 +45,8 @@ USAGE_MESSAGE = "remove-trailing-spaces-python path [-r] [-t] [-n] [-u]\
 SPACE_TAB = b"    "
 """ The space tab string """
 
-def remove_trailing_newlines(file_path, windows_newline = True):
+
+def remove_trailing_newlines(file_path, windows_newline=True):
     """
     Removes the extra newlines in the file with the given
     file path.
@@ -89,7 +81,8 @@ def remove_trailing_newlines(file_path, windows_newline = True):
         for line in file_lines:
             # in case the line is not just a newline character
             # breaks the current loop as no extra newlines exist
-            if not line == b"\n" and not line == b"\r\n": break
+            if not line == b"\n" and not line == b"\r\n":
+                break
 
             # decrements the index
             index -= 1
@@ -100,8 +93,10 @@ def remove_trailing_newlines(file_path, windows_newline = True):
         # in case the original index is set (no extra new lines found)
         # all the lines are considered valid, otherwise only the valid
         # (non extra lines) are used as valid
-        if index == 0: valid_file_lines = file_lines
-        else: valid_file_lines = file_lines[:index]
+        if index == 0:
+            valid_file_lines = file_lines
+        else:
+            valid_file_lines = file_lines[:index]
 
         # iterates over all the file lines
         for valid_file_line in valid_file_lines:
@@ -114,8 +109,10 @@ def remove_trailing_newlines(file_path, windows_newline = True):
             # in case the newline mode is of type windows, writes the
             # carriage return character and the new line character,
             # otherwise, writes only the new line character
-            if windows_newline: string_buffer.write(b"\r\n")
-            else: string_buffer.write(b"\n")
+            if windows_newline:
+                string_buffer.write(b"\r\n")
+            else:
+                string_buffer.write(b"\n")
     finally:
         # closes the file for reading
         file.close()
@@ -126,10 +123,13 @@ def remove_trailing_newlines(file_path, windows_newline = True):
     # opens the file for writing and outputs the complete
     # set of normalized generated contents into it
     file = open(file_path_normalized, "wb")
-    try: file.write(string_value)
-    finally: file.close()
+    try:
+        file.write(string_value)
+    finally:
+        file.close()
 
-def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
+
+def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline=True):
     """
     Removes the extra spaces or tabs in every line of the
     file contents.
@@ -171,8 +171,10 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
 
             # writes the proper line ending sequence taking into
             # account if the windows newline should be used or not
-            if windows_newline: string_buffer.write(b"\r\n")
-            else: string_buffer.write(b"\n")
+            if windows_newline:
+                string_buffer.write(b"\r\n")
+            else:
+                string_buffer.write(b"\n")
     finally:
         # closes the file for reading
         file.close()
@@ -184,8 +186,11 @@ def remove_trailing_spaces(file_path, tab_to_spaces, windows_newline = True):
     # opens the file for writing and writes the complete
     # set of generated contents into it (output operation)
     file = open(file_path_normalized, "wb")
-    try: file.write(string_value)
-    finally: file.close()
+    try:
+        file.write(string_value)
+    finally:
+        file.close()
+
 
 def remove_trailing_spaces_walker(arguments, directory_name, names):
     """
@@ -201,30 +206,40 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    tab_to_spaces, trailing_newlines, windows_newline,\
-    file_extensions, file_exclusion = arguments
+    (
+        tab_to_spaces,
+        trailing_newlines,
+        windows_newline,
+        file_extensions,
+        file_exclusion,
+    ) = arguments
 
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
-    if extra.handle_ignore(names): return
+    if extra.handle_ignore(names):
+        return
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
     for exclusion in file_exclusion:
-        if not exclusion in names: continue
+        if not exclusion in names:
+            continue
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
     valid_complete_names = [
-        directory_name + "/" + name for name in names\
+        directory_name + "/" + name
+        for name in names
         if not os.path.isdir(directory_name + "/" + name)
     ]
 
     # filters the names with non valid file extensions
     valid_complete_names = [
-        os.path.normpath(name) for name in valid_complete_names\
-        if file_extensions == None or os.path.split(name)[-1].split(".")[-1] in file_extensions
+        os.path.normpath(name)
+        for name in valid_complete_names
+        if file_extensions == None
+        or os.path.split(name)[-1].split(".")[-1] in file_extensions
     ]
 
     # creates the string based value of the windows newline taking into
@@ -234,7 +249,9 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
     # iterates over all the valid complete names with extension filter
     for valid_complete_name in valid_complete_names:
         # prints a message about the operation to be performed
-        extra.echo("Removing trail in file: %s (%s)" % (valid_complete_name, windows_newline_s))
+        extra.echo(
+            "Removing trail in file: %s (%s)" % (valid_complete_name, windows_newline_s)
+        )
 
         # removes the trailing spaces for the (path) name
         remove_trailing_spaces(valid_complete_name, tab_to_spaces, windows_newline)
@@ -247,13 +264,14 @@ def remove_trailing_spaces_walker(arguments, directory_name, names):
             # removes the trailing newlines for the(path) name
             remove_trailing_newlines(valid_complete_name, windows_newline)
 
+
 def remove_trailing_spaces_recursive(
     directory_path,
     tab_to_spaces,
     trailing_newlines,
     windows_newline,
-    file_extensions = None,
-    file_exclusion = None
+    file_extensions=None,
+    file_exclusion=None,
 ):
     """
     Removes the trailing spaces in recursive mode.
@@ -283,9 +301,10 @@ def remove_trailing_spaces_recursive(
             trailing_newlines,
             windows_newline,
             file_extensions,
-            file_exclusion
-        )
+            file_exclusion,
+        ),
     )
+
 
 def main():
     """
@@ -343,13 +362,13 @@ def main():
 
     # retrieves the configurations from the command line arguments
     configurations = extra.configuration(
-        file_path = configuration_file_path,
-        recursive = recursive,
-        tab_to_spaces = tab_to_spaces,
-        trailing_newlines = trailing_newlines,
-        windows_newline = windows_newline,
-        file_extensions = file_extensions,
-        file_exclusion = file_exclusion
+        file_path=configuration_file_path,
+        recursive=recursive,
+        tab_to_spaces=tab_to_spaces,
+        trailing_newlines=trailing_newlines,
+        windows_newline=windows_newline,
+        file_extensions=file_extensions,
+        file_exclusion=file_exclusion,
     )
 
     # iterates over all the configurations, executing them
@@ -371,7 +390,7 @@ def main():
                 trailing_newlines,
                 windows_newline,
                 file_extensions,
-                file_exclusion
+                file_exclusion,
             )
         # otherwise it's a "normal" iteration
         else:
@@ -386,6 +405,7 @@ def main():
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
     sys.exit(1 if extra.has_errors() else 0)
+
 
 if __name__ == "__main__":
     main()

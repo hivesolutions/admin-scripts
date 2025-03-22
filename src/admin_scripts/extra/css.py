@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -44,10 +35,13 @@ import legacy
 CSS_COMMENTS = re.compile(r"/\*.*?\*/", re.MULTILINE | re.DOTALL)
 HEX_COLOR = re.compile(r"#\w{2}\w{2}\w{2}")
 
+
 def uniqify(all):
     unique = dict()
-    for each in all: unique[each] = 1
+    for each in all:
+        unique[each] = 1
     return unique.keys()
+
 
 def simplify_hex_colors(text):
     """
@@ -74,6 +68,7 @@ def simplify_hex_colors(text):
 
     return text
 
+
 def css_slimmer(css):
     """
     Removes repeating whitespace characters like tab, newline
@@ -91,7 +86,8 @@ def css_slimmer(css):
     # value in case it's bytes it must be decoded
     # using the pre-defined fallback decoder
     is_bytes = type(css) == legacy.BYTES
-    if is_bytes: css = css.decode("utf-8")
+    if is_bytes:
+        css = css.decode("utf-8")
 
     remove_next_comment = 1
     for css_comment in CSS_COMMENTS.findall(css):
@@ -109,7 +105,7 @@ def css_slimmer(css):
     for char in ("{", "}", ":", ";", ","):
         css = re.sub(char + r"\s", char, css)
         css = re.sub(r"\s" + char, char, css)
-    css = re.sub(r"\s+</",r"</", css)
+    css = re.sub(r"\s+</", r"</", css)
     css = re.sub(r"}\s(#|\w)", r"}\1", css)
     css = re.sub(r";}", r"}", css)
     css = re.sub(r"}//-->", r"}\n//-->", css)

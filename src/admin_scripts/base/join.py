@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -56,6 +47,7 @@ for the compression of gzip based files """
 USAGE_MESSAGE = "join [-r] [-w exclusion_1, exclusion_2, ...] [-c configuration_file]"
 """ The usage message """
 
+
 def join_files(file_path):
     """
     Runs the joining operation according to the specification
@@ -76,8 +68,10 @@ def join_files(file_path):
     # opens the file for reading and then reads the
     # complete set of data contained in it
     file = open(file_path_normalized, "rb")
-    try: file_contents = file.read()
-    finally: file.close()
+    try:
+        file_contents = file.read()
+    finally:
+        file.close()
 
     # uses the default encoding for JSON to decode
     # the complete set of contents in the file
@@ -127,10 +121,12 @@ def join_files(file_path):
         for file in files:
             # in case it's the first file
             # no need to write the separator
-            if is_first: is_first = False
+            if is_first:
+                is_first = False
             # otherwise the separator must
             # be written
-            else: string_buffer.write(b"\r\n")
+            else:
+                string_buffer.write(b"\r\n")
 
             # retrieves the complete file path by joining the
             # directory path and the current "file"
@@ -146,8 +142,10 @@ def join_files(file_path):
             # in binary format and reads the complete
             # set of contents into the current buffer
             _file = open(file_path, "rb")
-            try: file_contents = _file.read()
-            finally: _file.close()
+            try:
+                file_contents = _file.read()
+            finally:
+                _file.close()
 
             # writes the file contents into the string
             # buffer, appending the contents to the same file
@@ -168,9 +166,17 @@ def join_files(file_path):
         # minifies and compresses the string value according
         # to the provided specification, some of this operations
         # may use complex third-party code
-        string_value = minify == "javascript" and extra.javascript_minify(string_value) or string_value
-        string_value = minify == "css" and extra.css_slimmer(string_value) or string_value
-        string_value = compress == "gzip" and gzip_contents(string_value) or string_value
+        string_value = (
+            minify == "javascript"
+            and extra.javascript_minify(string_value)
+            or string_value
+        )
+        string_value = (
+            minify == "css" and extra.css_slimmer(string_value) or string_value
+        )
+        string_value = (
+            compress == "gzip" and gzip_contents(string_value) or string_value
+        )
 
         # iterates over all the target directories for the write the contents
         # and writes the resolved contents to each of them
@@ -196,7 +202,8 @@ def join_files(file_path):
                 # closes the base file
                 base_file.close()
 
-def gzip_contents(contents_string, file_name = None):
+
+def gzip_contents(contents_string, file_name=None):
     """
     Compresses the given contents using the deflate compression
     algorithm and encapsulating it into the gzip file format.
@@ -234,7 +241,9 @@ def gzip_contents(contents_string, file_name = None):
     file_name and string_buffer.write(file_name + b"\0")
 
     # compresses the contents with the zlib
-    contents_string_compressed = zlib.compress(contents_string, DEFAULT_COMPRESSION_LEVEL)
+    contents_string_compressed = zlib.compress(
+        contents_string, DEFAULT_COMPRESSION_LEVEL
+    )
 
     # writes the the contents string compressed into the string buffer
     string_buffer.write(contents_string_compressed[2:-4])
@@ -259,6 +268,7 @@ def gzip_contents(contents_string, file_name = None):
     # returns the string value
     return string_value
 
+
 def _unsigned(number):
     """
     Converts the given number to unsigned assuming
@@ -281,6 +291,7 @@ def _unsigned(number):
     # to convert it to unsigned
     return number + 4294967296
 
+
 def join_files_walker(arguments, directory_name, names):
     """
     Walker method to be used by the path walker for the joining of the files.
@@ -294,28 +305,37 @@ def join_files_walker(arguments, directory_name, names):
     """
 
     # unpacks the arguments tuple
-    file_exclusion, = arguments
+    (file_exclusion,) = arguments
 
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
-    if extra.handle_ignore(names): return
+    if extra.handle_ignore(names):
+        return
 
     # removes the complete set of names that are meant to be excluded from the
     # current set names to be visit (avoid visiting them)
     for exclusion in file_exclusion:
-        if not exclusion in names: continue
+        if not exclusion in names:
+            continue
         names.remove(exclusion)
 
     # retrieves the valid names for the names list (removes directory entries)
-    valid_complete_names = [directory_name + "/" + name for name in names\
-        if not os.path.isdir(directory_name + "/" + name)]
+    valid_complete_names = [
+        directory_name + "/" + name
+        for name in names
+        if not os.path.isdir(directory_name + "/" + name)
+    ]
 
     # filters the names with non valid file extensions so that only the
     # ones that contain the join extension are used
-    valid_complete_names = [os.path.normpath(name) for name in valid_complete_names\
-        if len(name.split(".")) > 1 and name.split(".")[-2] == "join"\
-        and name.split(".")[-1] == "json"]
+    valid_complete_names = [
+        os.path.normpath(name)
+        for name in valid_complete_names
+        if len(name.split(".")) > 1
+        and name.split(".")[-2] == "join"
+        and name.split(".")[-1] == "json"
+    ]
 
     # iterates over all the valid complete names with extension filter
     for valid_complete_name in valid_complete_names:
@@ -324,6 +344,7 @@ def join_files_walker(arguments, directory_name, names):
         # then runs the operation with the correct path
         extra.echo("Joining files defined in file: %s" % valid_complete_name)
         join_files(valid_complete_name)
+
 
 def join_files_recursive(directory_path, file_exclusion):
     """
@@ -338,6 +359,7 @@ def join_files_recursive(directory_path, file_exclusion):
     """
 
     legacy.walk(directory_path, join_files_walker, (file_exclusion,))
+
 
 def main():
     """
@@ -383,9 +405,9 @@ def main():
     # retrieves the configurations from the command line arguments
     # either from the command line or configuration file
     configurations = extra.configuration(
-        file_path = configuration_file_path,
-        recursive = recursive,
-        file_exclusion = file_exclusion
+        file_path=configuration_file_path,
+        recursive=recursive,
+        file_exclusion=file_exclusion,
     )
 
     # iterates over all the configurations, executing them
@@ -396,14 +418,17 @@ def main():
 
         # in case the recursive flag is set, joins the files in
         # recursive mode (multiple files)
-        if recursive: join_files_recursive(path, file_exclusion)
+        if recursive:
+            join_files_recursive(path, file_exclusion)
         # otherwise it's a "normal" iteration and joins the
         # files (for only one file)
-        else: join_files(path)
+        else:
+            join_files(path)
 
     # verifies if there were messages printed to the standard
     # error output and if that's the case exits in error
     sys.exit(1 if extra.has_errors() else 0)
+
 
 if __name__ == "__main__":
     main()

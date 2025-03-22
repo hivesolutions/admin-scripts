@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Administration Scripts
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2025 Hive Solutions Lda.
 #
 # This file is part of Hive Administration Scripts.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -39,7 +30,7 @@ __license__ = "Apache License, Version 2.0"
 
 configurations = (
     {
-        "ignores" : (
+        "ignores": (
             "E501",
             "E203",
             "W293",
@@ -68,9 +59,9 @@ configurations = (
             "E123",
             "E402",
             "E731",
-            "E704"
+            "E704",
         ),
-        "recursive" : True,
-        "file_exclusion" : ("android-sdk",)
+        "recursive": True,
+        "file_exclusion": ("android-sdk",),
     },
 )
