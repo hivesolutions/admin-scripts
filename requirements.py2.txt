@@ -1,3 +1,4 @@
 legacy
-pep8<1.7
+pep8
 jsbeautifier<1.8
+editorconfig<0.17.0
