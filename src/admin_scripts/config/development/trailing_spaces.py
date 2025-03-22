@@ -45,6 +45,7 @@ configurations = (
         "windows_newline" : True,
         "file_extensions" : (
             "py",
+            "pyi",
             "js",
             "rb",
             "php",

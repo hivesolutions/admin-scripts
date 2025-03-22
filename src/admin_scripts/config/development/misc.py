@@ -47,7 +47,8 @@ configurations = (
             "gif" : 0o644,
             "tiff" : 0o644,
             "webp" : 0o644,
-            "py" : 0o644
+            "py" : 0o644,
+            "pyi" : 0o644
         },
         "recursive" : True,
         "file_exclusion" : ("android-sdk",)
