@@ -1,0 +1,3 @@
+legacy
+pep8<1.7
+jsbeautifier<1.8

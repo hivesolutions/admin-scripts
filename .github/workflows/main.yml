@@ -24,7 +24,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python --version
-      - run: pip install -r requirements.txt
+      - run: |
+          pip install -r requirements.txt
+          pip install -r extra.txt
+        if: matrix.python-version != '2.7'
+      - run: |
+          pip install -r requirements.py2.txt
+          pip install -r extra.py2.txt
+        if: matrix.python-version == '2.7'
       - run: |
           pip install black
           black . --check
@@ -45,7 +52,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pypy --version
-      - run: pip install -r requirements.txt
+      - run: |
+          pip install -r requirements.txt
+          pip install -r extra.txt
+        if: matrix.python-version != '2.7'
+      - run: |
+          pip install -r requirements.py2.txt
+          pip install -r extra.py2.txt
+        if: matrix.python-version == '2.7'
       - run: |
           pip install black
           black . --check
