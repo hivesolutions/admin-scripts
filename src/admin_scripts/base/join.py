@@ -100,9 +100,17 @@ def join_files(file_path):
         # sets the default target directories
         target_directories = (".",)
 
+    # in case theres an order defined, uses the order to iterate
+    # over the files, otherwise uses the default iteration
+    if "$order" in files_map:
+        order = files_map.pop("$order")
+        files_entries = [(file_key, files_map[file_key]) for file_key in order]
+    else:
+        files_entries = files_map.items()
+
     # iterates over all the files (composition of joined files)
-    # from the files map
-    for file_key, file_value in files_map.items():
+    # from the files map, respects `$order` if defined
+    for file_key, file_value in files_entries:
         # creates the string buffer for temporary
         # file holding, this is bytes based
         string_buffer = legacy.BytesIO()
