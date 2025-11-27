@@ -139,7 +139,7 @@ def pysource_walker(arguments, directory_name, names):
         # print a message a message about the pysource
         # operation that is going to be performed and
         # then runs the operation with the correct path
-        extra.echo("Validation python source file: %s" % valid_complete_name)
+        extra.echo("Validation Python source file: %s" % valid_complete_name)
         pysource_file(valid_complete_name, ignores=ignores)
 
 
