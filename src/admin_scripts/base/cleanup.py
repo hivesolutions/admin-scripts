@@ -70,8 +70,8 @@ the proper values are passed to each script """
 CONFIGURATION_RELATIVE_PATH = "../config/"
 """ The relative path to the configuration directory """
 
-PYTHON_COMMAND = "python"
-""" The python (execution) command that is going to
+PYTHON_COMMANDS = ("python", "python3")
+""" The python (execution) commands that are going to
 be run in the execution shell (should be globally accessible) """
 
 CONFIGURATION_FLAG = "-c"
@@ -197,11 +197,25 @@ def run():
 
 
 def config(target_path):
+    executable = None
+
+    for command in PYTHON_COMMANDS:
+        for path_dir in os.environ.get("PATH", "").split(os.pathsep):
+            full_path = os.path.join(path_dir, command)
+            if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
+                executable = full_path
+                break
+        if executable:
+            break
+
+    if not executable:
+        raise Exception("No python executable found")
+
     config = dict(
         scripts=list(SCRIPTS_LIST),
         disabled=[],
         configuration=dict(SCRIPTS_CONFIGURATION_MAP),
-        command=PYTHON_COMMAND,
+        command=executable,
     )
 
     home_path = "~/.cleanup.json"
