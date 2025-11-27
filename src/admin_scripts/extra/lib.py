@@ -30,6 +30,7 @@ __license__ = "Apache License, Version 2.0"
 
 import os
 import sys
+import json
 
 import legacy
 
@@ -76,14 +77,26 @@ def handle_ignore(directory_name, names, token=None):
 
     if not IGNORE_FILE in names:
         return False
-    if (
-        token
-        and token
-        in open(os.path.join(directory_name, IGNORE_FILE), encoding="utf-8").read()
-    ):
-        return False
-    del names[:]
-    return True
+
+    ignore_file = open(os.path.join(directory_name, IGNORE_FILE), encoding="utf-8")
+    is_full_ignore = False
+
+    try:
+        ignore_data = json.load(ignore_file)
+    except json.JSONDecodeError:
+        is_full_ignore = True
+
+    if is_full_ignore:
+        del names[:]
+        return True
+
+    for key, value in ignore_data.items():
+        if not isinstance(value, list):
+            value = [value]
+        if value == None or token in value:
+            names.remove(key)
+
+    return False
 
 
 def normalize_path(path):
