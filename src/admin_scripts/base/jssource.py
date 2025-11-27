@@ -43,7 +43,7 @@ USAGE_MESSAGE = (
 error with the command line or help is requested. """
 
 
-def jssource_file(file_path, beautifty=True, encoding="utf-8"):
+def jssource_file(file_path, beautify=True, encoding="utf-8"):
     """
     Runs the javascript source file verification/validation process
     as defined by a series of specifications.
@@ -51,8 +51,8 @@ def jssource_file(file_path, beautifty=True, encoding="utf-8"):
     :type file_path: String
     :param file_path: The path to the file that is going to be
     changed according to the jssource operation.
-    :type beautifier: bool
-    :param beautifier: If the beautification process should be
+    :type beautify: bool
+    :param beautify: If the beautification process should be
     run for the provided file for verification.
     :type encoding: String
     :param encoding: The encoding that is going to be used as the
@@ -66,7 +66,7 @@ def jssource_file(file_path, beautifty=True, encoding="utf-8"):
 
     is_min = file_path.endswith("min.js")
 
-    if jsbeautifier and beautifty and not is_min:
+    if jsbeautifier and beautify and not is_min:
         # reads the complete set of contents from the original
         # file and then tries to decode such contents using the
         # default encoding (as expected by the processor)
@@ -151,7 +151,7 @@ def jssource_walker(arguments, directory_name, names):
         # print a message a message about the jssource
         # operation that is going to be performed and
         # then runs the operation with the correct path
-        extra.echo("Transforming javascript source file: %s" % valid_complete_name)
+        extra.echo("Transforming javascript source file (beautify): %s" % valid_complete_name)
         jssource_file(valid_complete_name)
 
 
