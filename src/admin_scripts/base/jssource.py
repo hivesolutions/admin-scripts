@@ -120,7 +120,7 @@ def jssource_walker(arguments, directory_name, names):
     # tries to run the handle ignore operation for the current set of names and
     # in case there's a processing returns the control flow immediately as no
     # more handling is meant to occur for the current operation (ignored)
-    if extra.handle_ignore(names, token="jssource"):
+    if extra.handle_ignore(directory_name, names, token="jssource"):
         return
 
     # removes the complete set of names that are meant to be excluded from the

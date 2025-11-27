@@ -29,7 +29,6 @@ __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
 import os
-from pickle import NONE
 import sys
 
 import legacy
@@ -56,12 +55,14 @@ if a path tree should be ignored and no operation should be
 performed for any of its children """
 
 
-def handle_ignore(names, token=None):
+def handle_ignore(directory_name, names, token=None):
     """
     Tries to handle the ignore operation for the provided
     set of names, this should include the changing of the
     names list in case its required.
 
+    :type directory_name: String
+    :param directory_name: The name of the current directory in the walk.
     :type names: List
     :param names: The list of directory names that are meant
     to be verified/handled for the ignore file.
@@ -75,7 +76,11 @@ def handle_ignore(names, token=None):
 
     if not IGNORE_FILE in names:
         return False
-    if token and token in open(IGNORE_FILE, encoding="utf-8").read():
+    if (
+        token
+        and token
+        in open(os.path.join(directory_name, IGNORE_FILE), encoding="utf-8").read()
+    ):
         return False
     del names[:]
     return True
