@@ -33,7 +33,7 @@ import setuptools
 
 setuptools.setup(
     name="admin-scripts",
-    version="0.6.1",
+    version="0.6.2",
     author="Hive Solutions Lda.",
     author_email="development@hive.pt",
     description="Administration Scripts",
