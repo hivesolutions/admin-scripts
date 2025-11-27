@@ -152,7 +152,7 @@ def jssource_walker(arguments, directory_name, names):
         # operation that is going to be performed and
         # then runs the operation with the correct path
         extra.echo(
-            "Transforming javascript source file (beautify): %s" % valid_complete_name
+            "Transforming JavaScript source file (beautify): %s" % valid_complete_name
         )
         jssource_file(valid_complete_name)
 
