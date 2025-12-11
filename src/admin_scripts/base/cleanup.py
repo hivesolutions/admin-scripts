@@ -208,6 +208,23 @@ def config(target_path):
         if executable:
             break
 
+    for command in PYTHON_COMMANDS:
+        try:
+            result = subprocess.run(
+                "%s --version" % command,
+                capture_output=True,
+                text=True,
+                timeout=30,
+                creationflags=(
+                    subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+                ),
+            )
+            if result.returncode == 0:
+                executable = command
+                break
+        except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+            continue
+
     if not executable:
         raise Exception("No python executable found")
 
