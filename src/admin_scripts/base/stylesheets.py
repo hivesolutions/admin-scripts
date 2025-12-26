@@ -70,7 +70,7 @@ URL_REGEX_VALUE = r"url\([\"'](.*)[\"']\)"
 URL_REGEX = re.compile(URL_REGEX_VALUE)
 """ The URL regex """
 
-URL_REPLACEMENT_VALUE = "url(\g<1>)"
+URL_REPLACEMENT_VALUE = r"url(\g<1>)"
 """ The URL replacement regex value """
 
 PROPERTY_LINE_REGEX_VALUE = r"^[ ]*([\w\-]*)[ ]*:[ ]*(\S*)"
@@ -79,7 +79,7 @@ PROPERTY_LINE_REGEX_VALUE = r"^[ ]*([\w\-]*)[ ]*:[ ]*(\S*)"
 PROPERTY_LINE_REGEX = re.compile(PROPERTY_LINE_REGEX_VALUE)
 """ The property line regex """
 
-PROPERTY_LINE_REPLACEMENT_VALUE = "\g<1>: \g<2>"
+PROPERTY_LINE_REPLACEMENT_VALUE = r"\g<1>: \g<2>"
 """ The property line replacement value """
 
 TOKEN_REGEX_VALUE = r"\s*([>\+\s])\s*"
