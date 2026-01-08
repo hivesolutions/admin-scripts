@@ -32,8 +32,8 @@ import os
 import setuptools
 
 setuptools.setup(
-    name="admin_scripts",
-    version="0.6.9",
+    name="admin-scripts",
+    version="0.7.0",
     author="Hive Solutions Lda.",
     author_email="development@hive.pt",
     description="Administration Scripts",
