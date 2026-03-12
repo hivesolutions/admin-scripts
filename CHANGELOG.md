@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 *
 
+## [0.7.1] - 2026-03-12
+
+### Added
+
+* `__main__.py` entry point to allow running the package with `python -m admin_scripts`
+
 ## [0.7.0] - 2026-01-08
 
 ### Added
